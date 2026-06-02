@@ -1,0 +1,22 @@
+# Skill-creator validation scratch (eval runs, optimizer output, logs).
+# Convention: <skill-name>-workspace/ sits beside each skill and is local-only.
+*-workspace/
+
+# Logs and temp
+*.log
+*.tmp
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python caches (skill-creator scripts, ad hoc tooling)
+__pycache__/
+*.pyc
+.venv/
