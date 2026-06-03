@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "repertoire",
   "displayName": "Repertoire",
-  "description": "Self-authored Claude Code skills. Ships Maestro — subagent-driven plan execution behind an adversarial review panel.",
-  "version": "1.0.2",
+  "description": "Self-authored Claude Code skills. Ships Libretto (idea-to-spec design dialogue with a subagent review panel) and Maestro (subagent-driven plan execution behind an adversarial review panel).",
+  "version": "1.1.0",
   "author": {
     "name": "PythonShe",
     "email": "dev@zheng-she.com"
@@ -16,6 +16,9 @@
     "subagents",
     "orchestration",
     "code-review",
-    "maestro"
+    "maestro",
+    "libretto",
+    "brainstorming",
+    "spec"
   ]
 }
