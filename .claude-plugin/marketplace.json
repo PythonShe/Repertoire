@@ -2,7 +2,8 @@
   "name": "repertoire",
   "description": "A growing repertoire of self-authored Claude Code skills.",
   "owner": {
-    "name": "PythonShe"
+    "name": "PythonShe",
+    "email": "dev@zheng-she.com"
   },
   "plugins": [
     {
