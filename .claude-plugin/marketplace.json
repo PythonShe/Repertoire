@@ -1,0 +1,14 @@
+{
+  "name": "repertoire",
+  "description": "A growing repertoire of self-authored Claude Code skills.",
+  "owner": {
+    "name": "PythonShe"
+  },
+  "plugins": [
+    {
+      "name": "repertoire",
+      "source": "./",
+      "description": "A growing repertoire of self-authored Claude Code skills. Ships Maestro — a subagent-driven plan-execution conductor with an adversarial review panel and an evidence-based merge gate."
+    }
+  ]
+}

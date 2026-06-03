@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "repertoire",
+  "displayName": "Repertoire",
+  "description": "A growing repertoire of self-authored Claude Code skills. Ships Maestro — a subagent-driven plan-execution conductor that builds a plan group by group, then gates the whole branch behind an adversarial review panel and an evidence-based merge check.",
+  "version": "1.0.0",
+  "author": {
+    "name": "PythonShe"
+  },
+  "homepage": "https://github.com/PythonShe/Repertoire",
+  "repository": "https://github.com/PythonShe/Repertoire",
+  "keywords": [
+    "skills",
+    "subagents",
+    "orchestration",
+    "code-review",
+    "maestro"
+  ]
+}
