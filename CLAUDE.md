@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Repertoire is a single Claude Code **plugin** that bundles self-authored skills and ships through its own one-entry **marketplace**. The repo root is simultaneously the marketplace root, the plugin root, and the source tree: `.claude-plugin/marketplace.json` lists exactly one plugin whose `source` is `"./"`, and `.claude-plugin/plugin.json` is that plugin's manifest. There is no build step and no compiled artifact — skills are Markdown, and installing the plugin ships the repo as-is.
 
-One topology fact drives everything else: **adding a skill never touches the marketplace.** A new `skills/<name>/SKILL.md` is discovered automatically because the entire repo is one plugin. The only lever that makes existing installs update is `version` in `.claude-plugin/plugin.json` — bump it to publish.
+One topology fact drives everything else: **adding a skill never touches the marketplace.** A new `skills/<name>/SKILL.md` is discovered automatically because the entire repo is one plugin. What *does* live in `marketplace.json` is the plugin's **catalog entry** — the display surface the `/plugin` browse/manage list reads (description, version, author, homepage, category, tags), mirrored from `plugin.json`.
+
+The lever that makes existing installs update is the plugin `version`, and it lives in **two** places that must be bumped together: `version` in `.claude-plugin/plugin.json` drives resolution and caching (it wins silently), while `version` in the `marketplace.json` entry drives the number the `/plugin` UI shows. Keep them identical — if they drift, the UI shows one version while installs resolve another. Bumping either reaches users only after they run `/plugin marketplace update`.
 
 ## Commands
 
@@ -43,7 +45,7 @@ To add a skill (keep this in sync with the README's process section):
 1. Create `skills/<name>/SKILL.md` with `name` + `description` frontmatter; bundle any prompt/reference files alongside it.
 2. Add a row to the **Skills** table in `README.md`.
 3. `claude plugin validate .`, then commit.
-4. Bump `version` in `.claude-plugin/plugin.json` when you want existing installs to pick it up.
+4. Bump `version` in **both** `.claude-plugin/plugin.json` and the `marketplace.json` plugin entry — same value — when you want existing installs to pick it up. If you changed the plugin's user-facing `description`, edit it in both places too: the `marketplace.json` entry is what the `/plugin` UI displays.
 
 Keep the skill name consistent across `plugin.json` keywords, `SKILL.md` frontmatter, the README table, and the invocation path.
 
