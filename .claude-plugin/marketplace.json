@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "repertoire",
   "description": "A growing repertoire of self-authored Claude Code skills.",
   "owner": {
@@ -9,8 +10,21 @@
     {
       "name": "repertoire",
       "source": "./",
-      "version": "1.0.1",
-      "description": "A growing repertoire of self-authored Claude Code skills. Ships Maestro — a subagent-driven plan-execution conductor with an adversarial review panel and an evidence-based merge gate."
+      "version": "1.0.2",
+      "description": "Self-authored Claude Code skills. Ships Maestro — subagent-driven plan execution behind an adversarial review panel.",
+      "author": {
+        "name": "PythonShe",
+        "email": "dev@zheng-she.com"
+      },
+      "homepage": "https://github.com/PythonShe/Repertoire",
+      "category": "development",
+      "tags": [
+        "skills",
+        "subagents",
+        "orchestration",
+        "code-review",
+        "maestro"
+      ]
     }
   ]
 }
