@@ -9,6 +9,7 @@
     {
       "name": "repertoire",
       "source": "./",
+      "version": "1.0.1",
       "description": "A growing repertoire of self-authored Claude Code skills. Ships Maestro — a subagent-driven plan-execution conductor with an adversarial review panel and an evidence-based merge gate."
     }
   ]
