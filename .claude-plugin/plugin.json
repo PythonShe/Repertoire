@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "repertoire",
   "displayName": "Repertoire",
-  "description": "Self-authored Claude Code skills. Ships Libretto (idea-to-spec design dialogue with a subagent review panel), Score (spec-to-plan decomposition behind the same panel), and Maestro (subagent-driven plan execution behind an adversarial review panel).",
-  "version": "1.2.0",
+  "description": "Self-authored Claude Code skills. Ships Libretto (idea-to-spec design dialogue with a subagent review panel), Score (spec-to-plan decomposition behind the same panel), Maestro (subagent-driven plan execution behind an adversarial review panel), and Coda (PR review feedback verified, fixed, re-reviewed, and answered behind one publish gate).",
+  "version": "1.3.0",
   "author": {
     "name": "PythonShe",
     "email": "dev@zheng-she.com"
@@ -19,8 +19,10 @@
     "maestro",
     "libretto",
     "score",
+    "coda",
     "brainstorming",
     "spec",
-    "planning"
+    "planning",
+    "pr-review"
   ]
 }
