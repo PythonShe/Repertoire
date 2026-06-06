@@ -14,6 +14,20 @@ as the collection grows.
 Then restart or run `/reload-plugins`. Skills are namespaced under the plugin,
 e.g. `/repertoire:maestro`.
 
+## Recommended setup
+
+These skills are deliberately token-heavy: every run conducts an ensemble of
+fresh Opus subagents (implementers, investigators, review panels, QC gates),
+and that is where their reliability comes from. Plan accounts accordingly:
+
+- **Claude Max (5x or 20x), or API billing** — expected. Lighter plans are
+  likely to hit usage limits mid-run.
+- **A Codex account with OpenAI's `codex-cc` plugin installed** — strongly
+  suggested. Every skill dispatches a cross-model Codex agent (reviewer or
+  investigator) through it. Skills degrade gracefully without Codex — they run
+  the Opus-only panel and say so in their report — but the cross-model check
+  is part of the design.
+
 ## Skills
 
 | Skill | Invoke | What it does |
