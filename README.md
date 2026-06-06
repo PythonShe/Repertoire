@@ -1,5 +1,7 @@
 # Repertoire
 
+**English** | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
+
 A growing **repertoire** of self-authored [Claude Code](https://code.claude.com/docs)
 skills, distributed as a single plugin. Install once, get every skill — and more
 as the collection grows.
