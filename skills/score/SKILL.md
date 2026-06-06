@@ -1,6 +1,6 @@
 ---
 name: score
-description: Turn an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then harden that plan with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Score authors the plan itself; it delegates only context-scouting and the adversarial review. The terminal artifact is an approved plan — never code, and never a spec. MANUAL-ONLY — invoke only when the user explicitly asks for Score by name or runs /score (e.g. "score this spec", "run Score on the spec", "turn this spec into a plan with Score", "Score, plan the implementation"). Do NOT auto-trigger on generic "write an implementation plan / plan this out" requests; if the user has not named Score, stay silent and leave the request to other workflows.
+description: Turn an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then harden that plan with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Score authors the plan itself; it delegates only context-scouting and the adversarial review. The terminal artifact is an approved plan — never code, and never a spec. MANUAL-ONLY — invoke only when the user explicitly asks for Score by name or runs /score (e.g. "score this spec", "run Score on the spec", "turn this spec into a plan with Score", "resume the Score run"). Do NOT auto-trigger on generic "write an implementation plan / plan this out / break this into tasks" requests, and never on other senses of the word "score" (test/coverage/quality scores, "score this PR 1-10", ratings); if the user has not named Score as this skill, stay silent and leave the request to other workflows.
 ---
 
 # Score
@@ -179,8 +179,8 @@ build/test commands in the header where Maestro's Phase 0 looks for them.
   Interfaces, signatures, schemas, and data shapes are decisions and belong in
   the plan; function bodies are the implementer's job.
 
-**Self-check, then commit.** Re-read the spec with fresh eyes and walk it
-section by section — can you point at the task that implements each
+**Self-check, then commit.** Re-read the spec (or, with no written spec, the
+clarified requirements) with fresh eyes and walk it section by section — can you point at the task that implements each
 requirement? Scan the plan for the failure patterns above. Check that
 signatures and names used in later movements match where they were defined.
 Fix inline, then commit. This self-check catches the cheap mistakes so the
@@ -189,7 +189,10 @@ panel can spend its attention on the expensive ones.
 ### Phase 4 — Adversarial review panel
 
 The headline gate. Dispatch the panel **in parallel** against the committed
-plan, giving every reviewer both the plan path and the spec path:
+plan, giving every reviewer both the plan path and the spec path. If there is
+no written spec (the clarify-pass branch), paste the clarified requirements
+into each reviewer's spec slot instead and say so — never send an
+unsubstituted placeholder:
 
 - **2-3 Opus reviewers**, each with one lens from *Choosing review lenses*,
   using `plan-reviewer-prompt.md`. Use 3 by default; 2 is fine for a genuinely

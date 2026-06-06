@@ -39,7 +39,10 @@ batch** as the Opus reviewer dispatches so they all run together.
 **Substitute `[PLAN_FILE_PATH]`, `[SPEC_FILE_PATH]`, and the `[one line]`
 summary with real values before sending** — the runtime receives the prompt as
 literal text, so an unsubstituted placeholder makes it review nothing. Keep
-both full paths in the prompt so the runtime knows which files to read.
+both full paths in the prompt so the runtime knows which files to read. If no
+written spec exists (the clarify-pass branch), drop the "against the spec at
+…" clause and fold the clarified requirements into the `[one line]` summary
+instead.
 
 ```bash
 node "$COMPANION" adversarial-review --wait "review the implementation plan at [PLAN_FILE_PATH] against the spec at [SPEC_FILE_PATH] for gaps that would derail a fresh implementer: spec requirements with no task, undefined interfaces or placeholder steps, tasks out of dependency order, and scope the spec never asked for: [one line on what the plan should deliver]"
@@ -65,9 +68,11 @@ reviewers use and fold it into the consolidated findings:
 
 If the plugin companion is absent but the `codex` CLI exists, run a headless
 review with an inline adversarial prompt. **Replace `[PLAN_FILE_PATH]`,
-`[SPEC_FILE_PATH]`, and the repo dir before sending** (the single-quoted
-heredoc does not expand variables). Verify flags with `codex exec --help` —
-they vary by version.
+`[SPEC_FILE_PATH]`, the `[PASTE one paragraph …]` block, and the repo dir
+before sending** (the single-quoted heredoc does not expand variables). With
+no written spec, set the spec line to `Spec file: none — requirements follow`
+and put the clarified requirements in the paragraph block. Verify flags with
+`codex exec --help` — they vary by version.
 
 ```bash
 codex exec --cd "[repo dir]" "$(cat <<'PROMPT'
