@@ -42,9 +42,9 @@ ruinously expensive once it is baked into code.
   skeptics with distinct lenses, told to assume it is flawed until proven sound.
   A trusting review is worthless.
 - **The spec is the terminal artifact.** Libretto ends at an approved spec. It
-  does not write an implementation plan and it does not build. Point to an
-  implementation plan and then `/repertoire:maestro` as the next steps — but never
-  invoke them, and never write the plan yourself.
+  does not write an implementation plan and it does not build. Point to
+  `/repertoire:score` (spec → plan) and then `/repertoire:maestro` as the next
+  steps — but never invoke them, and never write the plan yourself.
 - **Opus for skeptics, plus one cross-model voice.** Every review-lens subagent
   runs on Opus; one more reviewer is Codex, cross-model by design. Context
   scouting uses the read-only Explore agent.
@@ -174,9 +174,9 @@ Ask the user to read the committed spec:
 - **Changes requested** → revise (re-open the design dialogue if the change is
   structural; otherwise just edit), re-commit, and re-review if warranted.
 - **Approved** → you're done. Tell the user the spec is ready, and that the
-  natural next steps are an implementation plan and then `/repertoire:maestro` to
-  build it. **Do not write that plan, invoke Maestro, or touch any implementation
-  skill** — the handoff is the user's call.
+  natural next steps are `/repertoire:score` to turn it into a plan and then
+  `/repertoire:maestro` to build it. **Do not write that plan, invoke Score or
+  Maestro, or touch any implementation skill** — the handoff is the user's call.
 
 ## Decomposing oversized requests
 
