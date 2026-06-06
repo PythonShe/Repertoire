@@ -59,8 +59,10 @@ Repertoire/                       repo root = plugin root = marketplace root
 1. Create `skills/<name>/SKILL.md` (with YAML frontmatter: `name`, `description`).
    Bundle any supporting prompt/reference files alongside it.
 2. Add a row to the **Skills** table above.
-3. `claude plugin validate .` then commit. Existing installs pick it up on the
-   next `/plugin update` — no marketplace change needed, since the whole repo is
-   one plugin.
+3. `claude plugin validate .` then commit. New skills are discovered
+   automatically — the whole repo is one plugin, so the catalog never needs a
+   new entry.
 
-Bump `version` in `.claude-plugin/plugin.json` when you want installs to update.
+Bump `version` — same value in **both** `.claude-plugin/plugin.json` and the
+plugin entry in `.claude-plugin/marketplace.json` — when you want existing
+installs to pick the change up (they see it after `/plugin marketplace update`).
