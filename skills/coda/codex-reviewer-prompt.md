@@ -1,11 +1,14 @@
-# Codex Reviewer (cross-model, whole-PR, final verdict)
+# Codex Reviewer (cross-model, whole-PR, last reviewer)
 
-The second half of the final-verdict pair. A different model sees different
-things — it catches what a room full of Claudes will agree to overlook — so
-Coda spends it where it counts: on the merge call, with **global scope**. Its
-range is always the whole PR (`BASE..HEAD`), never just the fix range, and it
-runs **in parallel with the QC agent** (both are read-only). The PR clears only
-if QC says MERGEABLE *and* Codex raises no critical or important finding.
+The last reviewer in the pipeline. A different model sees different things —
+it catches what a room full of Claudes will agree to overlook — so Coda spends
+it **exactly once**, where it counts most: **after the QC agent has returned
+MERGEABLE**, with **global scope**. Its range is always the whole PR
+(`BASE..HEAD`), never just the fix range. It never runs before or alongside QC
+(no cross-model pass on a branch same-model QC would bounce), and it never
+re-runs on strike rounds — if its findings get fixed, one confirming QC re-run
+closes the loop; re-dispatch Codex only if those fixes were themselves big or
+risky. The PR clears only if Codex raises no critical or important finding.
 
 ## Use the adversarial-review runtime, not codex-rescue
 
@@ -37,9 +40,9 @@ Pass flags as **separate shell arguments** (do not cram `--wait`/`--base` into
 one quoted string — they would be read as positional text and ignored).
 `$BASE` is the merge-base you captured in Phase 0 — the *whole-PR* base, not
 `FIXBASE`. Put the PR's purpose and the items the fixes claim to resolve into
-the prompt string, so Codex can judge resolution and not just code quality. Run
-this Bash call **in the same batch** as the QC dispatch so the pair runs
-together.
+the prompt string, so Codex can judge resolution and not just code quality.
+Dispatch this only after QC has returned MERGEABLE — never alongside QC, and
+never again on later rounds.
 
 ```bash
 node "$COMPANION" adversarial-review --wait --base "$BASE" "final merge-verdict review of this whole PR: [one line on the PR's purpose]. The branch also claims to resolve this review feedback: [F-id one-liners]."

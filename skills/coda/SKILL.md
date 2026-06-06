@@ -1,6 +1,6 @@
 ---
 name: coda
-description: Closing-passage pipeline for an open GitHub pull request's review feedback (via the gh CLI) — a conductor that fetches every formal review, inline comment thread, conversation comment, and failing CI check; verifies all of it against codebase reality with one read-only Opus verifier (evidence decides — no blind implementation, no performative agreement); fixes only what verification confirms with sequential fixers; re-reviews the fixes at a depth scaled to their risk (one broad reviewer up to a 3-lens Opus panel); seals the result with a global final verdict — an evidence-based QC gate plus a cross-model Codex reviewer over the whole PR; then drafts thread replies (fix confirmations, technical pushback, clarifying questions) and gates pushing and posting behind one user approval. Pushes to the PR branch but never merges, never resolves threads, never force-pushes. MANUAL-ONLY — invoke only when the user explicitly asks for Coda by name or runs /coda (e.g. "run Coda on PR 42", "Coda, work through the review feedback", "address these reviews with Coda", "resume the Coda run"). Do NOT auto-trigger on generic "address the review comments", "fix the PR feedback", "respond to my PR reviews", or "go through the review comments and fix them" requests, and never on other senses of the word "coda" (a musical or document coda, the Coda/coda.io app, the film); if the user has not named Coda as this skill, stay silent and leave review handling to other workflows.
+description: Closing-passage pipeline for an open GitHub pull request's review feedback (via the gh CLI) — a conductor that fetches every formal review, inline comment thread, conversation comment, and failing CI check; verifies all of it against codebase reality with one read-only Opus verifier (evidence decides — no blind implementation, no performative agreement); fixes only what verification confirms with sequential fixers; panel-reviews big or risky fixes with 3 diverse-lens Opus skeptics; seals every run with a staged final verdict — an evidence-based QC gate that reads each fix in full, then one cross-model Codex review over the whole PR once QC passes; then drafts thread replies (fix confirmations, technical pushback, clarifying questions) and gates pushing and posting behind one user approval. Pushes to the PR branch but never merges, never resolves threads, never force-pushes. MANUAL-ONLY — invoke only when the user explicitly asks for Coda by name or runs /coda (e.g. "run Coda on PR 42", "Coda, work through the review feedback", "address these reviews with Coda", "resume the Coda run"). Do NOT auto-trigger on generic "address the review comments", "fix the PR feedback", "respond to my PR reviews", or "go through the review comments and fix them" requests, and never on other senses of the word "coda" (a musical or document coda, the Coda/coda.io app, the film); if the user has not named Coda as this skill, stay silent and leave review handling to other workflows.
 ---
 
 # Coda
@@ -10,9 +10,10 @@ been played and the critics have answered: reviews, inline comments,
 conversation threads, failing checks. A coda's job is to resolve every open
 line so the piece can close. You direct the same kind of ensemble Maestro does
 — a clerk who harvests the feedback, a verifier who tests every claim against
-the code, fixers who repair what verification confirms, reviewers who try to
-break the fixes, and a final-verdict pair that proves the branch is sound —
-and you never play an instrument yourself.
+the code, fixers who repair what verification confirms, panel reviewers who
+try to break risky fixes, and a staged final verdict — QC, then a cross-model
+Codex pass — that proves the branch is sound. You never play an instrument
+yourself.
 
 **Why work this way.** Review feedback is a pile of claims, not a work order.
 Some claims are right, some are wrong for *this* codebase, and some are too
@@ -45,8 +46,13 @@ survives a feedback-heavy PR from harvest to publish.
   contradicting ones — and because it works alone, its build and test runs
   never collide in the worktree.
 - **Writers run alone; only pure readers run in parallel.** Fixers change the
-  branch, so they run one at a time. The Tier-B lens reviewers and the
-  final-verdict pair (QC + Codex) only read, so they run together.
+  branch, so they run one at a time. The panel's lens reviewers only read, so
+  they run together.
+- **Every reviewer is spent once, where it counts.** Small fix queues skip the
+  panel — the QC agent reads them in full at the verdict, instead of a second
+  same-model reviewer reading the same diff first. The cross-model Codex pass
+  runs exactly once, after QC says MERGEABLE: never on a branch Opus would
+  bounce anyway, and never again on retry rounds.
 - **Everyone who changes code commits.** Each fixer commits its own work,
   referencing the feedback item it resolves; the commits are the resume trail
   and their SHAs feed the replies. You push exactly once, at the publish gate.
@@ -83,13 +89,16 @@ digraph coda {
     "Verifier (Opus, read-only, whole ledger)" [shape=box];
     "Any VALID or PARTIAL?" [shape=diamond];
     "Fixer(s), sequential: blocking -> simple -> complex" [shape=box];
-    "Tier?" [shape=diamond];
-    "Broad reviewer (Opus)" [shape=box];
+    "Big or risky fixes?" [shape=diamond];
     "Panel: 3 Opus lenses (parallel)" [shape=box];
-    "Findings -> fixer(s), sequential" [shape=box];
-    "Final verdict: QC (build+tests) + Codex, global scope (parallel)" [shape=box];
-    "Clear?" [shape=diamond];
-    "Failed 3x?" [shape=diamond];
+    "Panel findings -> fixer(s), sequential" [shape=box];
+    "QC agent (Opus): build + tests + full fix read" [shape=box];
+    "Mergeable?" [shape=diamond];
+    "QC failed 3x?" [shape=diamond];
+    "Route blockers -> fixer(s), sequential" [shape=box];
+    "Codex (cross-model, whole PR, runs once)" [shape=box];
+    "Codex findings?" [shape=diamond];
+    "Fix findings -> one confirming QC re-run" [shape=box];
     "Draft replies -> one AskUserQuestion gate" [shape=box];
     "Push, confirm, then post approved replies + report" [shape=doublecircle];
     "Stop + AskUserQuestion" [shape=box];
@@ -100,23 +109,27 @@ digraph coda {
     "Verifier (Opus, read-only, whole ledger)" -> "Any VALID or PARTIAL?";
     "Any VALID or PARTIAL?" -> "Draft replies -> one AskUserQuestion gate" [label="no - nothing to fix"];
     "Any VALID or PARTIAL?" -> "Fixer(s), sequential: blocking -> simple -> complex" [label="yes"];
-    "Fixer(s), sequential: blocking -> simple -> complex" -> "Tier?";
-    "Tier?" -> "Broad reviewer (Opus)" [label="small, low-risk"];
-    "Tier?" -> "Panel: 3 Opus lenses (parallel)" [label="big or risky"];
-    "Broad reviewer (Opus)" -> "Findings -> fixer(s), sequential";
-    "Panel: 3 Opus lenses (parallel)" -> "Findings -> fixer(s), sequential";
-    "Findings -> fixer(s), sequential" -> "Final verdict: QC (build+tests) + Codex, global scope (parallel)" -> "Clear?";
-    "Clear?" -> "Draft replies -> one AskUserQuestion gate" [label="yes"];
-    "Clear?" -> "Failed 3x?" [label="no"];
-    "Failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
-    "Failed 3x?" -> "Findings -> fixer(s), sequential" [label="no, fix & retry"];
+    "Fixer(s), sequential: blocking -> simple -> complex" -> "Big or risky fixes?";
+    "Big or risky fixes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
+    "Big or risky fixes?" -> "QC agent (Opus): build + tests + full fix read" [label="no"];
+    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
+    "QC agent (Opus): build + tests + full fix read" -> "Mergeable?";
+    "Mergeable?" -> "Codex (cross-model, whole PR, runs once)" [label="yes"];
+    "Mergeable?" -> "QC failed 3x?" [label="no"];
+    "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
+    "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
+    "Route blockers -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
+    "Codex (cross-model, whole PR, runs once)" -> "Codex findings?";
+    "Codex findings?" -> "Draft replies -> one AskUserQuestion gate" [label="none / absent"];
+    "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];
+    "Fix findings -> one confirming QC re-run" -> "Draft replies -> one AskUserQuestion gate";
     "Draft replies -> one AskUserQuestion gate" -> "Push, confirm, then post approved replies + report";
 }
 ```
 
-*Happy path only — re-dispatch edges (NEEDS_CONTEXT/BLOCKED) and resume are
-described in the text below. On a clean re-review (no findings), the
-"Findings → fixer(s)" step is a pass-through straight to the final verdict.*
+*Happy path only — re-dispatch edges (NEEDS_CONTEXT/BLOCKED), resume, and the
+strike budget on the confirming QC re-run are described in the text below. A
+clean panel (no findings) passes straight through to QC.*
 
 ### Phase 0 — Setup
 
@@ -144,7 +157,7 @@ described in the text below. On a clean re-review (no findings), the
    routing. The raw JSON and CI logs stay in the clerk's context, never in
    yours.
 6. Create a TodoWrite list: one item per ledger item, plus `Verify`, `Fix`,
-   `Re-review`, `Final verdict (strikes 0/3)`, and `Publish gate`.
+   `Panel`, `Final verdict (strikes 0/3)`, and `Publish gate`.
 
 ### Phase 1 — Verify every claim
 
@@ -175,7 +188,7 @@ requires evidence, not hope.
 
 ### Phase 2 — Fix what survived
 
-If the fix queue is empty, mark the `Fix`, `Re-review`, and `Final verdict`
+If the fix queue is empty, mark the `Fix`, `Panel`, and `Final verdict`
 todos as skipped — nothing changed on the branch, so there is nothing to
 re-review or push — and go to Phase 4 for replies only.
 
@@ -192,42 +205,41 @@ re-review or push — and go to Phase 4 for replies only.
 4. **PARTIALLY_FIXED / COULD_NOT_FIX** → carry into the re-review brief and
    draft an honest status reply for the thread. Never a silent drop.
 
-### Phase 3 — Re-review the fixes
+### Phase 3 — Re-review and the final verdict
 
-1. **Pick the tier** (see *Choosing the re-review tier*); say which you chose
-   and why in the final report.
-   - **Tier A — single reviewer:** one Opus reviewer in broad mode
-     (`reviewer-prompt.md`), scope `FIXBASE..HEAD`.
-   - **Tier B — panel:** 3 Opus reviewers with distinct lenses, in parallel
-     (`reviewer-prompt.md`), scope `FIXBASE..HEAD` with the whole PR
-     (`BASE..HEAD`) as regression context.
-   Every reviewer's brief includes the feedback items the fixes claim to
-   resolve — a fix that dodges its item is a finding.
-2. **Consolidate findings from the text only** — match by `file:line` +
-   description, drop duplicates, discard non-defects. Route real defects to
-   fixer(s) — sequential, each committing. On PASS verdicts with no findings,
-   go straight to the final verdict.
-3. **Final verdict — global scope.** Dispatch the pair **in parallel** (both
-   are read-only); hand each the resolved `BASE`, `FIXBASE`, `BUILD`, and
-   `TEST`:
-   - the **QC agent** (`qc-prompt.md`): runs the build and tests, checks every
-     verified item is actually resolved, verdict `MERGEABLE` or
-     `NOT_MERGEABLE` with evidence;
-   - the **Codex reviewer** (`codex-reviewer-prompt.md`): a cross-model
-     adversarial pass over the **whole PR** (`BASE..HEAD`) — the second
-     opinion on the merge call. If Codex is unavailable or returns nothing,
-     proceed on QC alone and say so in your report — never silently drop it.
-   The PR **clears** only if QC says MERGEABLE *and* Codex raises no critical
-   or important finding.
-   - **Clear** → Phase 4.
-   - **Not clear** → route each blocker by type — `[defect]` → fixer,
-     `[implementation]` → re-verify the item or escalate to the user; treat
-     Codex findings the same way by severity — then re-run the pair. A
-     **round** is one final-verdict dispatch that does not clear; update
+1. **Panel — only when the fixes are big or risky** (see *When the panel
+   runs*); say in the final report whether it ran and why. Dispatch 3 Opus
+   reviewers with distinct lenses **in parallel** (`reviewer-prompt.md`),
+   scope `FIXBASE..HEAD` with the whole PR (`BASE..HEAD`) as regression
+   context; every brief includes the feedback items the fixes claim to
+   resolve — a fix that dodges its item is a finding. **Consolidate findings
+   from the text only** — match by `file:line` + description, drop
+   duplicates, discard non-defects — and route real defects to fixer(s),
+   sequential, each committing. Small, low-risk fix queues skip the panel
+   entirely: the QC agent reads them in full at the next step, so nothing
+   ships unread.
+2. **QC gate** (`qc-prompt.md`) — hand it the resolved `BASE`, `FIXBASE`,
+   `BUILD`, and `TEST`. It runs the build and tests and reads the fix range
+   in full against every verified item; verdict `MERGEABLE` or
+   `NOT_MERGEABLE` with evidence.
+   - **NOT_MERGEABLE** → route each blocker by type — `[defect]` → fixer,
+     `[implementation]` → re-verify the item or escalate to the user — then
+     re-run QC. A **round** is one QC dispatch that does not clear; update
      `Final verdict (strikes N/3)` after each, and re-verify excursions live
      inside the same budget. On the **third** failed round, stop looping and
      hand the decision to the user via AskUserQuestion — never silently loop
-     past three.
+     past three. Codex has not run yet: the cross-model pass is never spent
+     on a branch that same-model QC would bounce.
+3. **Codex — once, after QC passes** (`codex-reviewer-prompt.md`): a
+   cross-model adversarial pass over the **whole PR** (`BASE..HEAD`) — the
+   last reviewer in the pipeline. If Codex is unavailable or returns nothing,
+   the verdict rests on QC alone — say so in your report, never silently
+   drop it.
+   - **No critical or important findings** → the PR clears → Phase 4.
+   - **Findings** → route them to fixer(s), sequential, then **one confirming
+     QC re-run** (it counts toward the same strike budget). Do not re-dispatch
+     Codex — it runs once — unless those fixes were themselves big or risky.
+     Confirming QC `MERGEABLE` → clear → Phase 4.
 
 ### Phase 4 — The publish gate
 
@@ -259,19 +271,21 @@ re-review or push — and go to Phase 4 for replies only.
      `gh api repos/{owner}/{repo}/issues/{pr}/comments -f body=…` — quoting
      and answering each review-body point, plus any CI-item outcomes from
      step 1.
-4. **Report:** the per-item table, the re-review tier and why, the final
-   verdict's evidence (QC output + Codex verdict), and what remains for the
-   user — UNCLEAR threads awaiting reviewers, escalations, and the merge
+4. **Report:** the per-item table, whether the panel ran and why, the final
+   verdict's evidence (QC output, then the Codex verdict), and what remains
+   for the user — UNCLEAR threads awaiting reviewers, escalations, and the merge
    itself, which is never yours.
 
 Coda is re-runnable: after reviewers respond, a later run's clerk harvests only
 what is new (answered and resolved threads drop out), and the cycle repeats
 until the PR closes clean.
 
-## Choosing the re-review tier (and lenses)
+## When the panel runs (and choosing lenses)
 
-Default to **Tier A** (one broad reviewer). Escalate to **Tier B** (3-lens
-panel) when the fixes are big or risky — any of:
+Most fix queues skip the panel — the QC agent reads the full fix diff at the
+verdict and Codex follows cross-model, so a second same-model read of a small
+diff buys nothing. Escalate to the 3-lens panel when the fixes are big or
+risky — any of:
 
 - the fix queue had 4+ items, or any fix ended PARTIALLY_FIXED /
   COULD_NOT_FIX,
@@ -280,26 +294,29 @@ panel) when the fixes are big or risky — any of:
 - the fix range spans more than ~5 files or ~150 lines
   (`git diff --stat FIXBASE..HEAD` — numeric metadata, allowed bookkeeping).
 
-For Tier B, pick three lenses that fit what the fixes *did*, as in Maestro:
-behavior changes → correctness & edge cases · regression risk · test coverage;
-any security feedback → make one lens security; interface or schema fixes →
+Pick three lenses that fit what the fixes *did*, as in Maestro: behavior
+changes → correctness & edge cases · regression risk · test coverage; any
+security feedback → make one lens security; interface or schema fixes →
 contracts & compatibility. Hand each reviewer exactly one lens.
 
-Either tier, the cross-model check is not lost: the Codex reviewer always runs
-at the final verdict, over the whole PR.
+Skipping the panel never skips scrutiny: every run still ends with QC's full
+fix read and the cross-model Codex pass.
 
 ## The Codex reviewer
 
 A cross-model reviewer catches what a room full of Claudes will happily agree
-to miss — so Coda spends it where it counts: the **final verdict**, with
-**global scope** (`BASE..HEAD`, the whole PR), in parallel with the QC agent.
-Dispatch it through Codex's **adversarial-review runtime** — see
+to miss — so Coda spends it exactly once, where it counts most: **after QC
+returns MERGEABLE**, with **global scope** (`BASE..HEAD`, the whole PR). It
+never runs before or alongside QC — no cross-model pass on a branch that
+same-model QC would bounce — and it never re-runs on strike rounds: if its
+findings get fixed, one confirming QC re-run closes the loop. Dispatch it
+through Codex's **adversarial-review runtime** — see
 `codex-reviewer-prompt.md` for the exact invocation and its gotchas. Do **not**
 use the `codex-rescue` subagent: it is a write-capable implementation forwarder
 that refuses reviews and would try to change code instead. If neither the Codex
 plugin nor the `codex` CLI is available — or the call returns nothing — treat
-the reviewer as absent: the final verdict rests on QC alone, and you say so in
-your report. Never silently drop a reviewer.
+the reviewer as absent: the verdict rests on QC alone, and you say so in your
+report. Never silently drop a reviewer.
 
 ## Handling subagent status
 
@@ -314,9 +331,10 @@ re-dispatch; never re-dispatch unchanged.
 **Fixer:** `FIXED` → record the SHA. `PARTIALLY_FIXED` / `COULD_NOT_FIX` → into
 the re-review brief plus an honest reply draft.
 
-**Reviewer** reports `PASS`/`FAIL` with findings; **QC** reports
+**Panel reviewer** reports `PASS`/`FAIL` with findings; **QC** reports
 `MERGEABLE`/`NOT_MERGEABLE` with typed blockers; **Codex** reports
-`PASS`/`FAIL` or is absent. Handle all three as the Phase 3 steps describe.
+`PASS`/`FAIL` once, or is absent. Handle all three as the Phase 3 steps
+describe.
 
 ## Reply etiquette
 
@@ -355,11 +373,13 @@ Replies are part of the work product and carry the same rigor as the code:
   replies before the push is confirmed.
 - "You're absolutely right!", praise, or thanks in a reply draft.
 - Two fixers in parallel; force-pushing or rebasing the PR branch.
-- Dispatching Codex on just the fix range — its scope is the whole PR, at the
-  final verdict.
+- Dispatching Codex on just the fix range, before QC has passed, or more than
+  once — its scope is the whole PR, its slot is after MERGEABLE, and it runs
+  once.
 - Calling a CI failure flaky without evidence.
 - Resolving threads, approving the PR, or merging — never yours.
-- Skipping re-review because the fixes were "trivial" — Tier A is the floor.
+- Skipping the final verdict because the fixes were "trivial" — QC's full fix
+  read plus the Codex pass are the floor.
 
 ## Prompt templates
 
@@ -367,7 +387,7 @@ Replies are part of the work product and carry the same rigor as the code:
 - `verifier-prompt.md` — test the whole ledger against the codebase
   (read-only, one agent).
 - `fixer-prompt.md` — implement a verified directive and commit.
-- `reviewer-prompt.md` — adversarial re-review, broad or lens mode.
-- `codex-reviewer-prompt.md` — cross-model, whole-PR pass at the final
-  verdict.
-- `qc-prompt.md` — evidence-based mergeability verdict.
+- `reviewer-prompt.md` — adversarial panel review, one lens per reviewer.
+- `codex-reviewer-prompt.md` — cross-model, whole-PR pass once QC clears.
+- `qc-prompt.md` — evidence-based mergeability verdict (reads every fix in
+  full).

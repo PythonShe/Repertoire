@@ -1,29 +1,26 @@
-# Re-reviewer Prompt Template (skeptical, lens-parameterized)
+# Panel Reviewer Prompt Template (skeptical, one lens each)
 
-One template for both tiers:
+Dispatched only when the fixes are big or risky: three fresh **Opus**
+reviewers **in parallel**, each with one lens you chose for what the fixes
+did. Small fix queues never see this panel — the QC agent reads the full fix
+diff at the final verdict instead, so a small diff is never paid for twice by
+the same model.
 
-- **Tier A** — one reviewer, lens `overall correctness of the fixes` (this is
-  **broad mode**: cover everything in the fix range).
-- **Tier B panel** — three reviewers in parallel, each with one lens you chose
-  for what the fixes did. (The cross-model Codex reviewer is not part of this
-  panel — it runs later, at the final verdict, over the whole PR.)
-
-Dispatch as a fresh **Opus** subagent. Always fill both scopes with *resolved*
-git ranges, never placeholders. Reviewers never fix — they only find.
+Always fill both scopes with *resolved* git ranges, never placeholders.
+Reviewers never fix — they only find.
 
 ```
 Agent tool (model: opus):
-  description: "Re-review fixes on PR #[N] — lens: [LENS]"
+  description: "Panel review of fixes on PR #[N] — lens: [LENS]"
   prompt: |
     You are an adversarial reviewer of fix commits on a pull-request branch.
     Your lens for this review is:
 
     ## Lens: [LENS]
 
-    If the lens is "overall correctness of the fixes", review broadly: cover
-    correctness, resolution of every item below, and obvious defects across
-    the whole fix range. For any other lens, go deep on that one angle — the
-    rest of the panel covers the others, so do not spread thin.
+    Go deep on this one angle — the rest of the panel covers the others, so
+    do not spread thin. (The cross-model Codex reviewer is not part of this
+    panel — it runs later, at the final verdict, over the whole PR.)
 
     ## What these fixes claim to resolve
 

@@ -1,13 +1,14 @@
-# Quality-Control Prompt Template (final-verdict pair, QC half)
+# Quality-Control Prompt Template (final verdict, first stage)
 
-One half of the final verdict. A fresh **Opus** subagent verifies the whole PR
-branch — original work plus review fixes — and returns a single, evidence-based
-verdict on whether it is fit to publish and merge. Dispatch it **in parallel**
-with the cross-model Codex reviewer (`codex-reviewer-prompt.md`); both are
-read-only, and the PR clears only if QC says MERGEABLE *and* Codex raises no
-critical or important finding. This is not a lens review — it is a holistic
-"is this PR now sound" judgment, backed by actually running the build and
-tests.
+The first stage of the final verdict — and on most runs (no panel) the only
+same-model close reader of the fixes. A fresh **Opus** subagent verifies the
+whole PR branch — original work plus review fixes — and returns a single,
+evidence-based verdict on whether it is fit to publish and merge. Only after
+it returns MERGEABLE is the cross-model Codex reviewer
+(`codex-reviewer-prompt.md`) dispatched; the PR clears only if Codex then
+raises no critical or important finding. This is not a lens review — it is a
+holistic "is this PR now sound" judgment, backed by actually running the build
+and tests.
 
 Always fill the scopes (`BASE..HEAD`, `FIXBASE..HEAD`), `Build`, and `Test`
 with resolved values — never placeholders. If you do not have a real build/test
@@ -44,9 +45,11 @@ Agent tool (model: opus):
        runnable build/test command is provided and you cannot discover one,
        return NOT_MERGEABLE with that as the blocking issue — never assume
        green.
-    3. **Resolution** — is each feedback item above actually resolved in the
-       code (not just claimed)? Note anything that would make the reviewer
-       re-raise it.
+    3. **Resolution** — read the fix diff ([FIXBASE..HEAD]) **in full**: is
+       each feedback item above actually resolved in the code (not just
+       claimed)? Hunt for fixes that dodge their demand while looking
+       responsive and symptom-patches that miss the cause — note anything
+       that would make the reviewer re-raise it.
     4. **Integration** — do the fixes sit coherently in the wider PR? Any
        regressions, contradictions, dead code, or half-finished seams across
        the fix boundary?
@@ -54,9 +57,10 @@ Agent tool (model: opus):
        security issues, data loss, broken core flows.
 
     Run the commands. Quote the real output (the build result and the test
-    summary line). A verdict without evidence is not acceptable. Skim the fix
-    diff against the items; rely on build + tests for the rest, and do not
-    exhaustively reread every file in the PR.
+    summary line). A verdict without evidence is not acceptable. Read the fix
+    diff in full against the items — a panel may not have run, which makes
+    you the only close reader of these fixes. Rely on build + tests for the
+    wider PR, and do not exhaustively reread every file in it.
 
     ## Report format (compact — the controller stays lean)
 
