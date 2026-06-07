@@ -1,0 +1,103 @@
+# Codex Reviewer (cross-model, whole-branch, last reviewer)
+
+The last reviewer in the pipeline. A different model sees different things —
+it catches what a room full of Claudes will agree to overlook — so Encore
+spends it **exactly once**, where it counts most: **after the QC agent has
+returned MERGEABLE**, with **global scope**. Its range is always the whole
+encore branch (`BASE..HEAD`). It never runs before or alongside QC (no
+cross-model pass on a branch same-model QC would bounce), and it never
+re-runs on strike rounds — if its findings get fixed, one confirming QC
+re-run closes the loop; re-dispatch Codex only if those fixes were themselves
+big or risky. The branch clears only if Codex raises no critical or important
+finding.
+
+## Use the adversarial-review runtime, not codex-rescue
+
+The right tool is Codex's **adversarial-review runtime**, which is
+purpose-built to "break confidence in the change": it runs a skeptical,
+evidence-grounded review and returns structured findings.
+
+Do **not** use the `codex-rescue` subagent here. It is a write-capable
+forwarder to Codex's `task` runner and explicitly refuses to run reviews — it
+would try to *implement* changes instead of reviewing them. Wrong job
+entirely.
+
+## Availability check
+
+Look for the Codex plugin's companion script first, then the bare CLI:
+
+```bash
+COMPANION=$(ls -t ~/.claude/plugins/cache/*/codex/*/scripts/codex-companion.mjs 2>/dev/null | head -1)
+[ -n "$COMPANION" ] && echo "plugin: $COMPANION"
+command -v codex >/dev/null && echo "cli: $(command -v codex)"
+```
+
+If neither prints, treat Codex as **unavailable**: the final verdict rests on
+the QC agent alone, and you note the omission in your report. That is the
+documented fallback, not a silent drop.
+
+## Preferred: the adversarial-review runtime
+
+Pass flags as **separate shell arguments** (do not cram `--wait`/`--base`
+into one quoted string — they would be read as positional text and ignored).
+`$BASE` is the SHA captured in Phase 3 — the branch's dossier commit, so the
+range under review contains code changes only. Put
+the run's intent and the set list into the prompt string, so Codex can judge
+delivery and behavior preservation, not just code quality. Dispatch this only
+after QC has returned MERGEABLE — never alongside QC, and never again on
+later rounds.
+
+```bash
+node "$COMPANION" adversarial-review --wait --base "$BASE" "final verdict on an enhancement branch over finished, previously working code: [one line on the target and intent]. The branch claims to play these verified enhancement calls: [E-id one-liners]. Unlicensed behavior change is a finding, not a note."
+```
+
+The exact argument signature can vary by companion version — if unsure,
+confirm it on a tiny scope once before relying on it. The runtime prints a
+structured result (a ship/no-ship summary plus findings with file, line
+range, confidence, and a recommendation).
+
+**Treat empty or missing stdout as a failed reviewer, not a pass.** If the
+call returns nothing, note Codex as absent (as in the fallback) — do not fold
+a blank result into the verdict as if it approved.
+
+When it does return, normalize its output to the compact shape the controller
+routes on:
+
+- **Verdict:** PASS | FAIL
+- **Issues:** `file:line · severity · one-line description`
+
+Critical or important findings block the verdict and are routed like QC
+blockers (`[defect]` → fixer, `[implementation]` → re-verify or escalate).
+
+## Fallback: bare `codex exec`
+
+If the plugin companion is absent but the `codex` CLI exists, run a headless
+review with an inline adversarial prompt. **Replace `${BASE}` with the
+resolved value before sending** (the single-quoted heredoc does not expand
+it). Verify flags with `codex exec --help` — they vary by version.
+
+```bash
+codex exec --cd "[repo dir]" "$(cat <<PROMPT
+You are an adversarial, cross-model reviewer giving the final verdict on an
+enhancement branch over finished, previously working code. Break confidence
+in it. Inspect: git diff ${BASE}..HEAD, then read the changed files in full.
+Assume the branch is wrong until the code proves otherwise. The code before
+${BASE} was shipped and working — that state is the regression baseline.
+Prioritize expensive, hard-to-detect failures: behavior changes no directive
+licensed, "improvements" that are churn, broken contracts callers rely on,
+races, empty/null/timeout paths, perf wins that don't survive measurement.
+
+This branch is for: [one line on the target and intent]
+It claims to play these verified enhancement calls:
+[PASTE the picked calls: E-id, directive gist, claimed change + SHA]
+
+Output ONLY (the controller routes on this shape):
+- Verdict: PASS | FAIL
+- Issues: file:line · severity · one-line description and why it matters
+No diffs, no restating the code.
+PROMPT
+)"
+```
+
+Either way, the controller never reads the diff itself — only the compact
+verdict returns to you.
