@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "repertoire",
   "displayName": "Repertoire",
-  "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, and debugging, with more to come.",
-  "version": "1.5.0",
+  "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, post-ship enhancement, and debugging, with more to come.",
+  "version": "1.6.0",
   "author": {
     "name": "PythonShe",
     "email": "dev@zheng-she.com"
@@ -22,11 +22,13 @@
     "coda",
     "tuner",
     "eureka",
+    "encore",
     "brainstorming",
     "ideation",
     "spec",
     "planning",
     "pr-review",
+    "enhancement",
     "debugging",
     "root-cause"
   ]
