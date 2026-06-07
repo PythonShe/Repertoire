@@ -40,6 +40,7 @@ and that is where their reliability comes from. Plan accounts accordingly:
 | **Score** | `/repertoire:score` | Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens it with the same adversarial review panel before a final user-approval gate. One structural checkpoint with the user; ends at an approved plan and points to Maestro to conduct it — never auto-chains. Manual-only; invoke it by name. |
 | **Maestro** | `/repertoire:maestro` | Conducts subagent-driven execution of an implementation plan: groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate — while the conductor keeps its own context lean. Manual-only; invoke it by name. |
 | **Coda** | `/repertoire:coda` | Works an open PR's review feedback to a close: a clerk harvests every review, inline thread, conversation comment, and failing CI check; one read-only verifier tests each item against codebase reality (fix, push back, or ask — evidence decides); sequential fixers repair what survives; big or risky fixes face a 3-lens Opus panel, and every run is sealed by a staged final verdict — an evidence-based QC that reads each fix in full, then one cross-model Codex pass over the whole PR once QC clears; one approval gate covers pushing and posting the drafted thread replies. Never merges, never resolves threads. Manual-only; invoke it by name. |
+| **Encore** | `/repertoire:encore` | Revisits a finished codebase, feature, or module and enhances what already works: a scout profiles the target and proposes a lens roster (performance, security, robustness, DX, …), parallel diverse-lens Opus hunters call out opportunities, and one read-only verifier tests every call against codebase reality — refuted calls die on the record, feature-sized ones route to Libretto or Score, never built here. Only what the user picks at the set-list gate gets implemented, on a fresh `encore/` branch by sequential fixers; big or risky changes face a 3-lens Opus panel, and every run is sealed by the staged final verdict — evidence-based QC, then one cross-model Codex pass. Pushes and offers a PR behind one approval gate, never merges. Manual-only; invoke it by name. |
 | **Tuner** | `/repertoire:tuner` | Hunts a bug to its root cause with two rival investigators — a Codex agent at xhigh reasoning effort dispatched the moment the bug brief exists, and a systematic Opus investigator primed by a triage scout's ranked fault surfaces — then cross-examines the two hypotheses as the confidence gate. The repair is test-first: a fixer commits a deliberately-red repro test before the minimal fix, a skeptical reviewer gates the fix, and a mechanical verifier proves red→green plus a green suite. Commits on a feature branch, never merges. Manual-only; invoke it by name. |
 
 ## Local development
@@ -75,6 +76,9 @@ Repertoire/                       repo root = plugin root = marketplace root
 │   │   ├── SKILL.md
 │   │   └── *-prompt.md           bundled subagent prompt templates
 │   ├── coda/
+│   │   ├── SKILL.md
+│   │   └── *-prompt.md           bundled subagent prompt templates
+│   ├── encore/
 │   │   ├── SKILL.md
 │   │   └── *-prompt.md           bundled subagent prompt templates
 │   └── tuner/
