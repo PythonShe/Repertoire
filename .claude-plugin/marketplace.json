@@ -10,8 +10,8 @@
     {
       "name": "repertoire",
       "source": "./",
-      "version": "1.4.0",
-      "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea through spec, plan, build, PR-review closure, and debugging, with more to come.",
+      "version": "1.5.0",
+      "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, and debugging, with more to come.",
       "author": {
         "name": "PythonShe",
         "email": "dev@zheng-she.com"
@@ -28,7 +28,9 @@
         "score",
         "coda",
         "tuner",
+        "eureka",
         "brainstorming",
+        "ideation",
         "spec",
         "planning",
         "pr-review",
