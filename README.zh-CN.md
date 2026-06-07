@@ -24,6 +24,7 @@
 
 | Skill | Invoke | 功能 |
 | :---- | :----- | :----------- |
+| **Eureka** | `/repertoire:eureka` | 在动工之前先寻找值得做的想法：先确立一个谈话范围（一个现有代码库、一个开放领域，或某个半成形灵感的周边），再选定聚焦维度，然后通过一场有节奏的对话来发掘候选想法——种子草图、一块持续维护的想法看板、以及按需召唤的 3-4 个多视角 Opus 创想者（ideator）集群——收敛出入围想法后，再把它们送入一条串行的审查漏斗（身份契合 → 合规 → 需求 → 可行性），其中每一个"淘汰"裁决都必须经用户确认后，想法才真正出局。产出止步于一份经过审查、排好序的想法清单，并可选地把冠军想法交给 Libretto——绝不写 spec，绝不写代码。仅手动触发；请按名调用。 |
 | **Libretto** | `/repertoire:libretto` | 通过引导式的设计对话，把一个粗略的想法变成可直接开发的 spec，随后用一个对抗性的 subagent 评审小组（2-3 个多视角的 Opus 质疑者 + 一个跨模型的 Codex 评审者）对其加固，最后经过一道用户审批闸门。它只委派上下文收集和评审；产出止步于一份获批的 spec，并指向 Maestro 去构建它——绝不自动衔接。仅手动触发；请按名调用。 |
 | **Score** | `/repertoire:score` | 把一份获批的 spec 转化为一份决策完备的实现计划——由若干 Maestro 可直接执行的任务组（乐章）构成，包含精确的路径、接口和测试预期，但不含函数体——随后用同样的对抗性评审小组对其加固，最后经过一道用户审批闸门。与用户只设一个结构性检查点；产出止步于一份获批的计划，并指向 Maestro 去执行它——绝不自动衔接。仅手动触发；请按名调用。 |
 | **Maestro** | `/repertoire:maestro` | 指挥由 subagent 驱动的实现计划执行：将相关任务分组，用全新的实现者构建每个任务组，然后把整个分支交由一个对抗性评审小组（3 个多视角的 Opus 质疑者 + 一个跨模型的 Codex 评审者）以及一道基于证据的质量管控（QC）合并闸门把关——与此同时指挥者自身的上下文保持精简。仅手动触发；请按名调用。 |
@@ -48,6 +49,9 @@ Repertoire/                       repo root = plugin root = marketplace root
 │   ├── plugin.json               plugin manifest (name: repertoire)
 │   └── marketplace.json          catalog listing this plugin (source "./")
 ├── skills/
+│   ├── eureka/
+│   │   ├── SKILL.md
+│   │   └── *-prompt.md           bundled subagent prompt templates
 │   ├── libretto/
 │   │   ├── SKILL.md
 │   │   ├── spec-template.md      bundled spec structure

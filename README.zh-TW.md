@@ -33,6 +33,7 @@
 
 | Skill | Invoke | 功能說明 |
 | :---- | :----- | :----------- |
+| **Eureka** | `/repertoire:eureka` | 在動工之前先找出值得做的想法：先確立一個談話範圍（既有的程式碼庫、一個開放領域，或某個半成形靈感的周邊），再選定聚焦維度，接著透過一場有節奏的對話來發掘候選想法——種子草圖、一塊持續維護的想法看板、以及隨需召喚的 3-4 位多元視角 Opus 創想者（ideator）齊發——收斂出入圍想法之後，讓它們通過一條循序的審核漏斗（身分契合 → 法遵 → 需求 → 可行性），其中每一個「淘汰」裁決都必須經使用者確認後，想法才真正出局。產出止於一份經過審核、排好序的想法清單，並可選擇把冠軍想法交給 Libretto——絕不寫 spec，也絕不寫程式碼。僅限手動觸發；請以名稱呼叫它。 |
 | **Libretto** | `/repertoire:libretto` | 透過一場引導式的設計對話，把一個粗略的想法轉化成可直接動工的 spec，接著在最終的使用者核可關卡之前，用一個對抗式 subagent 審查小組（2-3 個多元視角的 Opus 質疑者 + 一個跨模型的 Codex 審查員）來加以打磨。它只委派情境蒐集與審查工作；產出止於一份核可的 spec，並指向 Maestro 來實作它——絕不自動串接。僅限手動觸發；請以名稱呼叫它。 |
 | **Score** | `/repertoire:score` | 把一份核可的 spec 轉化成一份決策完整的實作計畫——由可供 Maestro 接手的任務群「樂章」組成，附上精確的路徑、介面與測試預期，但不含函式主體——接著在最終的使用者核可關卡之前，用同一個對抗式審查小組加以打磨。與使用者只有一個結構性檢查點；產出止於一份核可的計畫，並指向 Maestro 來指揮它——絕不自動串接。僅限手動觸發；請以名稱呼叫它。 |
 | **Maestro** | `/repertoire:maestro` | 指揮一份實作計畫的 subagent 驅動執行：把相關任務分組，用一個全新的實作者建立每一組，接著讓整個分支通過一個對抗式審查小組（3 個多元視角的 Opus 質疑者 + 一個跨模型的 Codex 審查員）與一道以證據為本的品質管控合併關卡——而指揮者本身則維持精簡的情境。僅限手動觸發；請以名稱呼叫它。 |
@@ -57,6 +58,9 @@ Repertoire/                       repo root = plugin root = marketplace root
 │   ├── plugin.json               plugin manifest (name: repertoire)
 │   └── marketplace.json          catalog listing this plugin (source "./")
 ├── skills/
+│   ├── eureka/
+│   │   ├── SKILL.md
+│   │   └── *-prompt.md           bundled subagent prompt templates
 │   ├── libretto/
 │   │   ├── SKILL.md
 │   │   ├── spec-template.md      bundled spec structure
