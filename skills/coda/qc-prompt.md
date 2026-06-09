@@ -1,7 +1,7 @@
 # Quality-Control Prompt Template (final verdict, first stage)
 
 The first stage of the final verdict — and on most runs (no panel) the only
-same-model close reader of the fixes. A fresh **Opus** subagent verifies the
+same-model close reader of the fixes. A fresh **Fable 5** subagent verifies the
 whole PR branch — original work plus review fixes — and returns a single,
 evidence-based verdict on whether it is fit to publish and merge. Only after
 it returns MERGEABLE is the cross-model Codex reviewer
@@ -15,7 +15,7 @@ with resolved values — never placeholders. If you do not have a real build/tes
 command, do not dispatch QC with a guess — find it first.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "QC verdict for PR #[N]"
   prompt: |
     You are the final quality gate before review fixes are pushed to this pull

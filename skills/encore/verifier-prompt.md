@@ -1,6 +1,6 @@
 # Verifier Prompt (read-only, whole board)
 
-The skeptic between the hunt and the user. **One** fresh Opus verifier
+The skeptic between the hunt and the user. **One** fresh Fable 5 verifier
 receives the entire merged call board and judges it call by call — it sees
 the full picture, so two lenses flagging the same hot spot get one coherent
 verdict, and because it works alone, its build and test runs never collide in
@@ -12,7 +12,7 @@ Only for an unusually large board (roughly 15+ calls) split the dispatch into
 **sequential** batches — never parallel verifiers.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Verify encore calls E1–E[N]"
   prompt: |
     You are verifying proposed enhancements to a finished piece of code

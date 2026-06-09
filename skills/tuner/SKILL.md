@@ -1,13 +1,15 @@
 ---
 name: tuner
-description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — dispatches a Codex investigator at xhigh reasoning effort the moment the bug brief is assembled, runs a fast triage scout whose ranked fault surfaces prime a systematic Opus investigator beside it, cross-examines the two rival root-cause hypotheses as the confidence gate, then repairs on a feature branch (created with consent if needed) through a failing-test-first fixer that commits a deliberately-red repro test before the fix, a skeptical fix reviewer, and a mechanical red→green verifier — committing as it goes, never merging, pushing only on request, and keeping the conductor's own context lean (it judges and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Tuner by name or runs /tuner (e.g. "debug this with Tuner", "run Tuner on this failure", "Tuner, find the root cause", "resume the Tuner run"). Do NOT auto-trigger on generic "fix this bug", "debug this", or "why is this test failing" requests, nor on audio/instrument tuning, performance tuning, or ML hyperparameter-tuning requests (tuner homonyms); if the user has not named Tuner, leave debugging to other workflows.
+description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — dispatches a Codex investigator at xhigh reasoning effort the moment the bug brief is assembled, runs a fast triage scout whose ranked fault surfaces prime a systematic Fable 5 investigator (also xhigh effort) beside it, cross-examines the two rival root-cause hypotheses as the confidence gate, then repairs on a feature branch (created with consent if needed) through a failing-test-first fixer that commits a deliberately-red repro test before the fix, a skeptical fix reviewer, and a mechanical red→green verifier — committing as it goes, never merging, pushing only on request, and keeping the conductor's own context lean (it judges and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Tuner by name or runs /tuner (e.g. "debug this with Tuner", "run Tuner on this failure", "Tuner, find the root cause", "resume the Tuner run"). Do NOT auto-trigger on generic "fix this bug", "debug this", or "why is this test failing" requests, nor on audio/instrument tuning, performance tuning, or ML hyperparameter-tuning requests (tuner homonyms); if the user has not named Tuner, leave debugging to other workflows.
 ---
 
 # Tuner
 
 Something in the codebase is off-pitch. You are the tuner — but you never touch
 the strings yourself. Two rival investigators hunt the dissonance independently: a
-Codex agent reasoning at maximum effort and a fresh Opus systematic debugger. You
+Codex agent reasoning at maximum effort and a fresh Fable 5 systematic debugger,
+also at xhigh effort — root-cause hunting is the plugin's deepest reasoning seat,
+and the two rivals must duel at equal depth. You
 accept a root cause only when their evidence converges, then a fixer repairs it
 test-first, a reviewer tries to break the fix, and a verifier proves red→green.
 You dispatch, compare, and decide — you never read source code or form your own
@@ -35,7 +37,7 @@ your context, so it survives a long hunt intact.
   brief exists, in the same batch as the scout.
 - **Rivals stay blind to each other.** Independent convergence is the confidence
   gate; contaminated convergence is just an echo. The scout's ranking goes only to
-  the Opus investigator — Codex works from the brief alone.
+  the Fable 5 investigator — Codex works from the brief alone.
 - **Evidence decides.** Every claim comes with observed behavior — quoted output
   or it didn't happen. This applies to investigators, the fixer's red/green
   proofs, and the verifier's four legs alike.
@@ -65,7 +67,7 @@ digraph tuner {
     "Intake: bug brief, branch, BUILD/TEST, TodoWrite" [shape=box];
     "Codex investigator (xhigh, read-only)" [shape=box];
     "Scout: ranked fault surfaces" [shape=box];
-    "Opus investigator (scout list in hand)" [shape=box];
+    "Fable 5 investigator (scout list in hand)" [shape=box];
     "Cross-examine the two reports" [shape=box];
     "Mechanisms agree?" [shape=diamond];
     "One rebuttal round" [shape=box];
@@ -81,9 +83,9 @@ digraph tuner {
 
     "Intake: bug brief, branch, BUILD/TEST, TodoWrite" -> "Codex investigator (xhigh, read-only)";
     "Intake: bug brief, branch, BUILD/TEST, TodoWrite" -> "Scout: ranked fault surfaces";
-    "Scout: ranked fault surfaces" -> "Opus investigator (scout list in hand)";
+    "Scout: ranked fault surfaces" -> "Fable 5 investigator (scout list in hand)";
     "Codex investigator (xhigh, read-only)" -> "Cross-examine the two reports";
-    "Opus investigator (scout list in hand)" -> "Cross-examine the two reports";
+    "Fable 5 investigator (scout list in hand)" -> "Cross-examine the two reports";
     "Cross-examine the two reports" -> "Mechanisms agree?";
     "Mechanisms agree?" -> "Fixer: repro RED, commit; fix GREEN, commit" [label="yes"];
     "Mechanisms agree?" -> "One rebuttal round" [label="no"];
@@ -124,7 +126,7 @@ cross-examination, and re-dispatch edges are described in the text below.*
    Keep them as `BUILD` and `TEST`. If you cannot find them, ask the user.
 4. Confirm you are on a feature/fix branch, not main/master. If not, create one
    (or get the user's consent).
-5. Create a TodoWrite list: `Codex investigator`, `Scout`, `Opus investigator`,
+5. Create a TodoWrite list: `Codex investigator`, `Scout`, `Fable 5 investigator`,
    `Cross-examination`, `Repair (strikes 0/3)` — one item covering the whole
    fixer→reviewer loop — `Verify`, `Report`.
 6. **Dispatch immediately:** the Codex investigator
@@ -142,13 +144,13 @@ cross-examination, and re-dispatch edges are described in the text below.*
    `codex:codex-rescue` subagent at `--effort xhigh`, diagnosis-only (read-only).
    `codex-investigator-prompt.md` carries the exact contract, the bare-CLI
    fallback, and the absence rule. If Codex is unavailable or returns nothing,
-   the rival is **absent** — proceed with the Opus side alone, note it in the
+   the rival is **absent** — proceed with the Fable 5 side alone, note it in the
    final report, and let the reviewer + verifier gates carry the confidence
    burden alone. Never treat an empty reply as agreement.
-2. **Scout** (Opus, `scout-prompt.md`) — a fast triage pass, not a deep trace: it
+2. **Scout** (Fable 5, `scout-prompt.md`) — a fast triage pass, not a deep trace: it
    maps the failure's blast radius and returns ranked candidate fault surfaces,
    most→least likely, each with a one-line reason.
-3. **Opus investigator** (Opus, `investigator-prompt.md`) — dispatched as soon as
+3. **Fable 5 investigator** (Fable 5 at xhigh effort, `investigator-prompt.md`) — dispatched as soon as
    the scout returns, while Codex is still running. It gets the bug brief plus
    the scout's ranking. The ranking sets search *priorities*, never scope: the
    investigator starts at the top but follows the evidence wherever it points.
@@ -158,7 +160,7 @@ cross-examination, and re-dispatch edges are described in the text below.*
 
 ### Phase 2 — Cross-examination
 
-Enter only with both reports in hand: if the Opus investigator has returned and
+Enter only with both reports in hand: if the Fable 5 investigator has returned and
 Codex has not, wait for the backgrounded Codex agent to complete — never
 cross-examine a single report.
 
@@ -172,7 +174,7 @@ cross-examine a single report.
    unblock the hunt.
 3. **One mechanism, one empty hand** — exactly one side returns a mechanism:
    there is nothing to cross-examine, but a lone hypothesis does not pass the
-   gate unexamined. Dispatch a fresh Opus skeptic (`investigator-prompt.md` in
+   gate unexamined. Dispatch a fresh Fable 5 skeptic (`investigator-prompt.md` in
    rebuttal mode, as a lone-mechanism audit) to test it against the code.
    Confirmed → gate passed. Refuted → treat as empty-handed (step 2). Either
    way this consumes the rebuttal round.
@@ -182,7 +184,7 @@ cross-examine a single report.
      rival's pasted in — refute or concede (the rebuttal dispatch in
      `codex-investigator-prompt.md`; pasting beats resuming, which is
      recency-based and unsafe).
-   - **Claude:** a **fresh** Opus skeptic with `investigator-prompt.md` in
+   - **Claude:** a **fresh** Fable 5 skeptic with `investigator-prompt.md` in
      rebuttal mode — both reports, told to test the claims against the code.
 5. **Map the round to a decision.** The skeptic returning `SAME_MECHANISM`, or
    the skeptic and Codex's final position settling on one mechanism
@@ -192,13 +194,13 @@ cross-examine a single report.
    Skeptic and Codex still opposed → AskUserQuestion: present both mechanisms
    with their evidence; the user accepts one or directs deeper investigation
    with new hints.
-6. In a single-rival run (Codex absent), the Opus report stands alone — no
+6. In a single-rival run (Codex absent), the Fable 5 report stands alone — no
    rebuttal round exists, so record `single-investigator` for the final report
    and move on.
 
 ### Phase 3 — Repair loop (fixer → reviewer)
 
-1. **Fixer** (Opus, `fixer-prompt.md`) — receives the agreed root cause,
+1. **Fixer** (Fable 5, `fixer-prompt.md`) — receives the agreed root cause,
    evidence, fix proposal, and repro. Its discipline, in order: write the minimal
    repro test and **prove it red** (quoting the failure), commit the test; apply
    the **minimal root-cause fix**, prove the repro green and the full suite
@@ -211,7 +213,7 @@ cross-examine a single report.
      contradicts the diagnosis. This voids the cross-exam verdict: take the
      fixer's evidence back to Phase 2 (use the rebuttal round if unused,
      otherwise escalate). It also counts as a strike.
-2. **Reviewer** (Opus, `reviewer-prompt.md`) — a skeptic on the fix diff. Three
+2. **Reviewer** (Fable 5, `reviewer-prompt.md`) — a skeptic on the fix diff. Three
    questions, all must pass: does the change kill the *cause* (not the symptom)?
    does it kill *only* the cause (no collateral, no scope creep)? does the repro
    test actually pin the bug (would it catch a reintroduction)?
@@ -229,7 +231,7 @@ cross-examine a single report.
 
 ### Phase 4 — Verification
 
-1. **Verifier** (Opus, `verifier-prompt.md`) — fresh eyes, mechanical evidence,
+1. **Verifier** (Fable 5, `verifier-prompt.md`) — fresh eyes, mechanical evidence,
    four legs: **red** (with every fix commit reverted in the working tree via
    `git revert --no-commit`, the repro test must fail — and fail for the
    *diagnosed* reason, matched against the fixer's recorded red proof),

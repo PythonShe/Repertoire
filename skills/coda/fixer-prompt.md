@@ -1,13 +1,13 @@
 # Fixer Prompt Template
 
-Dispatch a fresh **Opus** subagent per verified directive — or one for the
+Dispatch a fresh **Fable 5** subagent per verified directive — or one for the
 whole queue when the items are few or interrelated. Fixers write to the branch,
 so they run **sequentially**, never in parallel. The fixer implements the
 *verifier's directive*, which is authoritative even where it deliberately
 differs from what the reviewer literally asked for (PARTIAL verdicts).
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Fix [F-id]: [short gist]"
   prompt: |
     You are implementing an already-verified fix on a pull-request branch. The

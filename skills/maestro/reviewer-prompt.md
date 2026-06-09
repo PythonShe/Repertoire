@@ -8,12 +8,12 @@ One template for both jobs:
   chose for this work (e.g. `correctness & edge cases`, `security`, `simplicity`),
   each going deep on its one lens.
 
-Dispatch as a fresh **Opus** subagent. Always fill `Scope` with a *resolved* git
+Dispatch as a fresh **Fable 5** subagent. Always fill `Scope` with a *resolved* git
 range (e.g. `a1b2c3d..HEAD`), never a placeholder. Reviewers never fix — they only
 find.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Review [group/branch] — lens: [LENS]"
   prompt: |
     You are an adversarial code reviewer. Your lens for this review is:

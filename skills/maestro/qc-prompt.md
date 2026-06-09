@@ -1,6 +1,6 @@
 # Quality-Control Prompt Template (final merge gate)
 
-The Phase 3 gate. A fresh **Opus** subagent verifies the whole branch and returns a
+The Phase 3 gate. A fresh **Fable 5** subagent verifies the whole branch and returns a
 single, evidence-based verdict on whether it is fit to merge. This is not a lens
 review — it is a holistic "is this done and safe to ship" judgment, backed by
 actually running the build and tests.
@@ -9,7 +9,7 @@ Always fill `Scope`, `Build`, and `Test` with resolved values. If you do not hav
 real build/test command, do not dispatch QC with a guess — find it first.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "QC verdict for [branch]"
   prompt: |
     You are the final quality gate before this branch goes to the user for merge.

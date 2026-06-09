@@ -1,6 +1,6 @@
 ---
 name: libretto
-description: Turn a rough idea into a build-ready spec through a guided design dialogue, then harden that spec with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Libretto runs the conversation and writes the spec itself; it delegates only context-gathering and the adversarial review. The terminal artifact is an approved spec — never code or an implementation plan. MANUAL-ONLY — invoke only when the user explicitly asks for Libretto by name or runs /libretto (e.g. "spec this out with Libretto", "run Libretto on this idea", "Libretto, design X", "draft a spec with Libretto"). Do NOT auto-trigger on generic "build/brainstorm/design/spec this out" requests; if the user has not named Libretto, stay silent and leave the request to other workflows.
+description: Turn a rough idea into a build-ready spec through a guided design dialogue, then harden that spec with an adversarial subagent review panel (2-3 diverse-lens Fable 5 skeptics + a cross-model Codex reviewer) before a final user-approval gate. Libretto runs the conversation and writes the spec itself; it delegates only context-gathering and the adversarial review. The terminal artifact is an approved spec — never code or an implementation plan. MANUAL-ONLY — invoke only when the user explicitly asks for Libretto by name or runs /libretto (e.g. "spec this out with Libretto", "run Libretto on this idea", "Libretto, design X", "draft a spec with Libretto"). Do NOT auto-trigger on generic "build/brainstorm/design/spec this out" requests; if the user has not named Libretto, stay silent and leave the request to other workflows.
 ---
 
 # Libretto
@@ -45,8 +45,8 @@ ruinously expensive once it is baked into code.
   does not write an implementation plan and it does not build. Point to
   `/repertoire:score` (spec → plan) and then `/repertoire:maestro` as the next
   steps — but never invoke them, and never write the plan yourself.
-- **Opus for skeptics, plus one cross-model voice.** Every review-lens subagent
-  runs on Opus; one more reviewer is Codex, cross-model by design. Context
+- **Fable 5 for skeptics, plus one cross-model voice.** Every review-lens subagent
+  runs on Fable 5 at high effort; one more reviewer is Codex, cross-model by design. Context
   scouting uses the read-only Explore agent.
 
 ## When to use
@@ -74,7 +74,7 @@ digraph libretto {
     "Propose 2-3 approaches + recommend" [shape=box];
     "Present design in sections; approve each" [shape=box];
     "Write spec (template) + commit" [shape=box];
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" [shape=box];
+    "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)" [shape=box];
     "Consolidate findings; revise spec; commit" [shape=box];
     "User approves spec?" [shape=diamond];
     "Done — point to plan + /maestro (never invoke)" [shape=doublecircle];
@@ -87,8 +87,8 @@ digraph libretto {
     "Clarify intent (hybrid Q&A)" -> "Propose 2-3 approaches + recommend";
     "Propose 2-3 approaches + recommend" -> "Present design in sections; approve each";
     "Present design in sections; approve each" -> "Write spec (template) + commit";
-    "Write spec (template) + commit" -> "Panel: 2-3 Opus lenses + 1 Codex (parallel)";
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" -> "Consolidate findings; revise spec; commit";
+    "Write spec (template) + commit" -> "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)";
+    "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)" -> "Consolidate findings; revise spec; commit";
     "Consolidate findings; revise spec; commit" -> "User approves spec?";
     "User approves spec?" -> "Present design in sections; approve each" [label="design changed"];
     "User approves spec?" -> "Write spec (template) + commit" [label="small edits"];
@@ -150,11 +150,11 @@ reviewers have something concrete to challenge. Commit it.
 
 The headline gate. Dispatch the panel **in parallel** against the committed spec:
 
-- **2-3 Opus reviewers**, each with one lens from *Choosing review lenses*, using
+- **2-3 Fable 5 reviewers**, each with one lens from *Choosing review lenses*, using
   `spec-reviewer-prompt.md`. Use 3 by default; 2 is fine for a genuinely small
   spec.
 - **+1 Codex reviewer** for an independent cross-model pass
-  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Opus lenses only
+  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Fable 5 lenses only
   and say so in your report — never silently drop a reviewer.
 
 When the verdicts return, **consolidate from the finding text** — match by section
@@ -209,7 +209,7 @@ Dispatch it through Codex's **adversarial-review runtime** — see
 `codex-reviewer-prompt.md` for the invocation and the availability check. Do
 **not** use the `codex-rescue` subagent: it is a write-capable forwarder that
 refuses to run reviews. If neither the Codex plugin nor the `codex` CLI is
-available, treat the reviewer as absent, proceed with the Opus lenses, and say so.
+available, treat the reviewer as absent, proceed with the Fable 5 lenses, and say so.
 
 ## Handling subagent results
 

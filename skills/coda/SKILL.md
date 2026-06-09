@@ -1,6 +1,6 @@
 ---
 name: coda
-description: Closing-passage pipeline for an open GitHub pull request's review feedback (via the gh CLI) — a conductor that fetches every formal review, inline comment thread, conversation comment, and failing CI check; verifies all of it against codebase reality with one read-only Opus verifier (evidence decides — no blind implementation, no performative agreement); fixes only what verification confirms with sequential fixers; panel-reviews big or risky fixes with 3 diverse-lens Opus skeptics; seals every run with a staged final verdict — an evidence-based QC gate that reads each fix in full, then one cross-model Codex review over the whole PR once QC passes; then drafts thread replies (fix confirmations, technical pushback, clarifying questions) and gates pushing and posting behind one user approval. Pushes to the PR branch but never merges, never resolves threads, never force-pushes. MANUAL-ONLY — invoke only when the user explicitly asks for Coda by name or runs /coda (e.g. "run Coda on PR 42", "Coda, work through the review feedback", "address these reviews with Coda", "resume the Coda run"). Do NOT auto-trigger on generic "address the review comments", "fix the PR feedback", "respond to my PR reviews", or "go through the review comments and fix them" requests, and never on other senses of the word "coda" (a musical or document coda, the Coda/coda.io app, the film); if the user has not named Coda as this skill, stay silent and leave review handling to other workflows.
+description: Closing-passage pipeline for an open GitHub pull request's review feedback (via the gh CLI) — a conductor that fetches every formal review, inline comment thread, conversation comment, and failing CI check; verifies all of it against codebase reality with one read-only Fable 5 verifier (evidence decides — no blind implementation, no performative agreement); fixes only what verification confirms with sequential fixers; panel-reviews big or risky fixes with 3 diverse-lens Fable 5 skeptics; seals every run with a staged final verdict — an evidence-based QC gate that reads each fix in full, then one cross-model Codex review over the whole PR once QC passes; then drafts thread replies (fix confirmations, technical pushback, clarifying questions) and gates pushing and posting behind one user approval. Pushes to the PR branch but never merges, never resolves threads, never force-pushes. MANUAL-ONLY — invoke only when the user explicitly asks for Coda by name or runs /coda (e.g. "run Coda on PR 42", "Coda, work through the review feedback", "address these reviews with Coda", "resume the Coda run"). Do NOT auto-trigger on generic "address the review comments", "fix the PR feedback", "respond to my PR reviews", or "go through the review comments and fix them" requests, and never on other senses of the word "coda" (a musical or document coda, the Coda/coda.io app, the film); if the user has not named Coda as this skill, stay silent and leave review handling to other workflows.
 ---
 
 # Coda
@@ -51,7 +51,7 @@ survives a feedback-heavy PR from harvest to publish.
 - **Every reviewer is spent once, where it counts.** Small fix queues skip the
   panel — the QC agent reads them in full at the verdict, instead of a second
   same-model reviewer reading the same diff first. The cross-model Codex pass
-  runs exactly once, after QC says MERGEABLE: never on a branch Opus would
+  runs exactly once, after QC says MERGEABLE: never on a branch Fable 5 would
   bounce anyway, and never again on retry rounds.
 - **Everyone who changes code commits.** Each fixer commits its own work,
   referencing the feedback item it resolves; the commits are the resume trail
@@ -61,7 +61,7 @@ survives a feedback-heavy PR from harvest to publish.
   final verdict. You never merge, never resolve threads, never approve or
   dismiss reviews, and never force-push (rewriting a shared PR branch breaks
   the line anchors that review comments hang on).
-- **Opus everywhere.** Every Claude subagent runs on Opus. The only non-Opus
+- **Fable 5 everywhere.** Every Claude subagent runs on Fable 5 at high effort. The only non-Fable 5
   agent is the Codex reviewer, which is cross-model by design.
 
 ## When to use
@@ -86,13 +86,13 @@ digraph coda {
     "Feedback clerk: harvest reviews/threads/comments/CI" [shape=box];
     "Ledger empty?" [shape=diamond];
     "Report: nothing to address" [shape=doublecircle];
-    "Verifier (Opus, read-only, whole ledger)" [shape=box];
+    "Verifier (Fable 5, read-only, whole ledger)" [shape=box];
     "Any VALID or PARTIAL?" [shape=diamond];
     "Fixer(s), sequential: blocking -> simple -> complex" [shape=box];
     "Big or risky fixes?" [shape=diamond];
-    "Panel: 3 Opus lenses (parallel)" [shape=box];
+    "Panel: 3 Fable 5 lenses (parallel)" [shape=box];
     "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC agent (Opus): build + tests + full fix read" [shape=box];
+    "QC agent (Fable 5): build + tests + full fix read" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Route blockers -> fixer(s), sequential" [shape=box];
@@ -105,20 +105,20 @@ digraph coda {
 
     "Resolve PR, checkout branch, capture BASE + BUILD/TEST, TodoWrite" -> "Feedback clerk: harvest reviews/threads/comments/CI" -> "Ledger empty?";
     "Ledger empty?" -> "Report: nothing to address" [label="yes"];
-    "Ledger empty?" -> "Verifier (Opus, read-only, whole ledger)" [label="no"];
-    "Verifier (Opus, read-only, whole ledger)" -> "Any VALID or PARTIAL?";
+    "Ledger empty?" -> "Verifier (Fable 5, read-only, whole ledger)" [label="no"];
+    "Verifier (Fable 5, read-only, whole ledger)" -> "Any VALID or PARTIAL?";
     "Any VALID or PARTIAL?" -> "Draft replies -> one AskUserQuestion gate" [label="no - nothing to fix"];
     "Any VALID or PARTIAL?" -> "Fixer(s), sequential: blocking -> simple -> complex" [label="yes"];
     "Fixer(s), sequential: blocking -> simple -> complex" -> "Big or risky fixes?";
-    "Big or risky fixes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
-    "Big or risky fixes?" -> "QC agent (Opus): build + tests + full fix read" [label="no"];
-    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
-    "QC agent (Opus): build + tests + full fix read" -> "Mergeable?";
+    "Big or risky fixes?" -> "Panel: 3 Fable 5 lenses (parallel)" [label="yes"];
+    "Big or risky fixes?" -> "QC agent (Fable 5): build + tests + full fix read" [label="no"];
+    "Panel: 3 Fable 5 lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent (Fable 5): build + tests + full fix read";
+    "QC agent (Fable 5): build + tests + full fix read" -> "Mergeable?";
     "Mergeable?" -> "Codex (cross-model, whole PR, runs once)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
     "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
+    "Route blockers -> fixer(s), sequential" -> "QC agent (Fable 5): build + tests + full fix read";
     "Codex (cross-model, whole PR, runs once)" -> "Codex findings?";
     "Codex findings?" -> "Draft replies -> one AskUserQuestion gate" [label="none / absent"];
     "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];
@@ -161,7 +161,7 @@ clean panel (no findings) passes straight through to QC.*
 
 ### Phase 1 — Verify every claim
 
-1. Dispatch **one verifier** (`verifier-prompt.md`) — fresh Opus, read-only —
+1. Dispatch **one verifier** (`verifier-prompt.md`) — fresh Fable 5, read-only —
    with the entire ledger, the PR's purpose, `BASE..HEAD`, `BUILD`, and
    `TEST`. One
    verifier sees every item, so related items get one shared verdict (noted on
@@ -208,7 +208,7 @@ re-review or push — and go to Phase 4 for replies only.
 ### Phase 3 — Re-review and the final verdict
 
 1. **Panel — only when the fixes are big or risky** (see *When the panel
-   runs*); say in the final report whether it ran and why. Dispatch 3 Opus
+   runs*); say in the final report whether it ran and why. Dispatch 3 Fable 5
    reviewers with distinct lenses **in parallel** (`reviewer-prompt.md`),
    scope `FIXBASE..HEAD` with the whole PR (`BASE..HEAD`) as regression
    context; every brief includes the feedback items the fixes claim to

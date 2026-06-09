@@ -1,7 +1,7 @@
 # Vetting Lens Prompt (evaluative, lens-parameterized, sequential)
 
 One template for the four funnel lenses. Unlike the ideator burst, these run
-**sequentially** — judgment → law → market → engineering — each a fresh **Opus**
+**sequentially** — judgment → law → market → engineering — each a fresh **Fable 5**
 subagent covering **all surviving finalists** in one dispatch. One lens across
 all finalists yields coherent relative judgments; four agents per idea would
 not. Dispatch the next lens only after the user has resolved every kill the
@@ -24,7 +24,7 @@ bottom of this file: once per idea per lens, and its verdict is final for the
 run.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Vet finalists — lens: [LENS]"
   prompt: |
     You are a vetting lens in an idea-discovery funnel. Your lens for this
@@ -104,7 +104,7 @@ with the amendment; `re-kill` → one last user gate, *confirm drop* or
 *overrule* (see SKILL.md Phase 4).
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Re-judge [IDEA NAME] — lens: [LENS]"
   prompt: |
     You are the [LENS] vetting lens in an idea-discovery funnel, re-judging ONE

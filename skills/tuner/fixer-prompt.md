@@ -1,7 +1,7 @@
 # Fixer Prompt Template (red→green, two commits)
 
 Dispatched once the cross-examination has settled the root cause. A fresh
-**Opus** subagent that repairs test-first: the red repro test is committed
+**Fable 5** subagent that repairs test-first: the red repro test is committed
 *before* the fix exists, so the verifier can later prove red→green mechanically
 from the commit history.
 
@@ -11,7 +11,7 @@ test usually already exists, so the fixer extends it only if the findings show
 it pins the bug too loosely.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Fix [bug one-liner]"
   prompt: |
     You are fixing a diagnosed bug. The investigation is done and was

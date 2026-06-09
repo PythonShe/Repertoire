@@ -1,6 +1,6 @@
 # Verifier Prompt (read-only, whole ledger)
 
-The heart of Coda. **One** fresh Opus verifier receives the entire ledger and
+The heart of Coda. **One** fresh Fable 5 verifier receives the entire ledger and
 works through it item by item — it sees the full picture, so related items get
 one coherent verdict, and because it works alone its build and test runs never
 collide in the worktree. It owes you a verdict per F-id, each backed by code it
@@ -11,7 +11,7 @@ Only for an unusually large ledger (roughly 15+ items) split the dispatch into
 **sequential** batches — never parallel verifiers.
 
 ```
-Agent tool (model: opus):
+Agent tool (model: fable, effort: high):
   description: "Verify PR feedback F1–F[N]"
   prompt: |
     You are verifying review feedback on a pull request against codebase
