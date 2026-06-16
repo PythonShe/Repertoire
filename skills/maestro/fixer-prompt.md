@@ -1,11 +1,11 @@
 # Fixer Prompt Template
 
-Dispatch a fresh **Fable 5** subagent to repair a set of review findings. Used in
+Dispatch a fresh **Opus** subagent to repair a set of review findings. Used in
 Phase 1 (general-review findings), Phase 2 (consolidated panel findings — one fixer
 for everything, or one per issue run sequentially), and Phase 3 (QC findings).
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Fix findings on [group/branch]"
   prompt: |
     You are fixing specific, already-identified defects. The diagnosis is done —

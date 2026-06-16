@@ -1,9 +1,9 @@
 # Investigator Prompt Template (systematic root-cause hunt)
 
-The Claude-side rival. A fresh **Fable 5** subagent at **xhigh effort** — root-cause
+The Claude-side rival. A fresh **Opus** subagent at **xhigh effort** — root-cause
 investigation is the most complex seat in the plugin, and the rival Codex
 investigator already reasons at xhigh, so the duel must be at equal depth. Every
-other Fable 5 seat runs at high effort; this one alone earns xhigh. It runs the systematic-debugging
+Claude seat in the plugin runs at xhigh; this one matches the rival in depth. It runs the systematic-debugging
 discipline: reproduce, read the error, check history, trace backward, compare
 with working code, one hypothesis at a time. It never fixes — a rival who has
 already written a fix argues for the fix, not the truth.
@@ -13,7 +13,7 @@ ranking) and **rebuttal** (Phase 2 deadlocks — swap in the alternate middle
 section below).
 
 ```
-Agent tool (model: fable, effort: xhigh):
+Agent tool (model: opus, effort: xhigh):
   description: "Investigate [bug one-liner]"
   prompt: |
     You are a root-cause investigator. Find WHY this bug happens — the
@@ -75,7 +75,7 @@ Agent tool (model: fable, effort: xhigh):
 
 ## Rebuttal mode (Phase 2 deadlock)
 
-A **fresh** Fable 5 subagent — not the original investigator, who would defend its
+A **fresh** Opus subagent — not the original investigator, who would defend its
 own theory. Replace the brief-and-priorities middle with the two reports, keep
 the discipline and report rules. For a **lone-mechanism audit** (one rival
 returned NO_ROOT_CAUSE), paste the found mechanism as Report A and the

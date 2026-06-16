@@ -1,6 +1,6 @@
 # Plan Reviewer Prompt (skeptical, lens-parameterized)
 
-One template for every panel reviewer. Dispatch each as a fresh **Fable 5**
+One template for every panel reviewer. Dispatch each as a fresh **Opus**
 subagent, one lens apiece, all in parallel. Reviewers never edit the plan —
 they only find. Always fill `[PLAN_FILE_PATH]` and `[SPEC_FILE_PATH]` with
 resolved file paths, never placeholders; if no written spec exists, paste the
@@ -14,7 +14,7 @@ lenses*):
 - `sequencing & decomposition`
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Review plan — lens: [LENS]"
   prompt: |
     You are an adversarial implementation-plan reviewer. Your lens for this

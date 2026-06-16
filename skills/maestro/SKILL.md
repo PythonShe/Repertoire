@@ -1,6 +1,6 @@
 ---
 name: maestro
-description: Conductor for subagent-driven execution of an implementation plan in the current session — groups related tasks, builds each group with a fresh Fable 5 implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Fable 5 skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate, all while keeping the controller's own context lean (it conducts and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Maestro by name or runs /maestro (e.g. "run Maestro on this plan", "execute this with Maestro", "Maestro, build out the plan", "resume the Maestro run"). Do NOT auto-trigger on generic "execute this plan" requests; if the user has not named Maestro, leave plan execution to other workflows.
+description: Conductor for subagent-driven execution of an implementation plan in the current session — groups related tasks, builds each group with a fresh Opus implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate, all while keeping the controller's own context lean (it conducts and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Maestro by name or runs /maestro (e.g. "run Maestro on this plan", "execute this with Maestro", "Maestro, build out the plan", "resume the Maestro run"). Do NOT auto-trigger on generic "execute this plan" requests; if the user has not named Maestro, leave plan execution to other workflows.
 ---
 
 # Maestro
@@ -35,7 +35,7 @@ you can keep coordinating clearly all the way to the end.
   when you finalize — commits its own work as it goes. Reviewers and the QC agent
   change nothing, so they commit nothing. Commits are the unit of progress and the
   same-session resume trail.
-- **Fable 5 everywhere.** Every Claude subagent runs on Fable 5 at high effort. The only non-Fable 5
+- **Opus everywhere.** Every Claude subagent runs on Opus at xhigh effort. The only non-Opus
   agent is the Codex reviewer, which is cross-model by design.
 
 ## When to use
@@ -54,24 +54,24 @@ digraph maestro {
     rankdir=TB;
     "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" [shape=box];
     "Next group" [shape=box];
-    "Implementer (Fable 5)" [shape=box];
-    "General reviewer (Fable 5, broad)" [shape=box];
-    "Fixer (Fable 5)" [shape=box];
+    "Implementer (Opus)" [shape=box];
+    "General reviewer (Opus, broad)" [shape=box];
+    "Fixer (Opus)" [shape=box];
     "More groups?" [shape=diamond];
-    "Panel: 3 Fable 5 lenses + 1 Codex (parallel)" [shape=box];
+    "Panel: 3 Opus lenses + 1 Codex (parallel)" [shape=box];
     "Consolidate issues (from finding text)" [shape=box];
     "Fixer(s), sequential" [shape=box];
-    "QC agent (Fable 5): build + tests" [shape=box];
+    "QC agent (Opus): build + tests" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Push + report (never merge)" [shape=doublecircle];
     "Stop + AskUserQuestion" [shape=box];
 
     "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" -> "Next group";
-    "Next group" -> "Implementer (Fable 5)" -> "General reviewer (Fable 5, broad)" -> "Fixer (Fable 5)" -> "More groups?";
+    "Next group" -> "Implementer (Opus)" -> "General reviewer (Opus, broad)" -> "Fixer (Opus)" -> "More groups?";
     "More groups?" -> "Next group" [label="yes"];
-    "More groups?" -> "Panel: 3 Fable 5 lenses + 1 Codex (parallel)" [label="no"];
-    "Panel: 3 Fable 5 lenses + 1 Codex (parallel)" -> "Consolidate issues (from finding text)" -> "Fixer(s), sequential" -> "QC agent (Fable 5): build + tests" -> "Mergeable?";
+    "More groups?" -> "Panel: 3 Opus lenses + 1 Codex (parallel)" [label="no"];
+    "Panel: 3 Opus lenses + 1 Codex (parallel)" -> "Consolidate issues (from finding text)" -> "Fixer(s), sequential" -> "QC agent (Opus): build + tests" -> "Mergeable?";
     "Mergeable?" -> "Push + report (never merge)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
@@ -108,15 +108,15 @@ critical+complex exception are described in the text below, not drawn.*
 
 For each group, in order:
 
-1. **Implementer** — dispatch a fresh Fable 5 subagent with `implementer-prompt.md`.
+1. **Implementer** — dispatch a fresh Opus subagent with `implementer-prompt.md`.
    Paste in the full task text, context, the branch name, and `TEST`. Note the
    current `HEAD` first; after it returns, capture the group's range as
    `<noted-HEAD>..HEAD` (read-only bookkeeping) for the reviewer.
-2. **General reviewer** — dispatch one Fable 5 subagent with `reviewer-prompt.md` in
+2. **General reviewer** — dispatch one Opus subagent with `reviewer-prompt.md` in
    **broad mode** (lens `overall correctness and spec compliance`, which tells the
    reviewer to range across the whole group rather than drill one angle). Pass the
    resolved `Scope` range from step 1. It returns a compact verdict.
-3. **Fixer** — dispatch one Fable 5 subagent with `fixer-prompt.md`, handing it the
+3. **Fixer** — dispatch one Opus subagent with `fixer-prompt.md`, handing it the
    reviewer's findings, the branch, and `TEST`. It fixes everything in one pass and
    commits. Do not re-review at this stage — one pass is the per-group gate.
    - **The one sanctioned exception:** if a finding is both *critical* and
@@ -137,10 +137,10 @@ comes at the end, over the whole branch, once all the pieces are integrated.
 Run this only after every group has passed Phase 1.
 
 1. Dispatch the panel **in parallel** against the whole branch (scope `BASE..HEAD`):
-   - **3 Fable 5 reviewers**, each with a different lens you choose for this work
+   - **3 Opus reviewers**, each with a different lens you choose for this work
      (see *Choosing lenses*). Use `reviewer-prompt.md` for each.
    - **+1 Codex reviewer** for an independent cross-model pass
-     (`codex-reviewer-prompt.md`). If Codex is unavailable, run 3 Fable 5 reviewers
+     (`codex-reviewer-prompt.md`). If Codex is unavailable, run 3 Opus reviewers
      only and say so in your report — never silently drop a reviewer.
    - Include any findings carried forward from Phase 1 in each reviewer's brief.
 2. When all verdicts return, **consolidate from the finding text only** — match by
@@ -156,7 +156,7 @@ Run this only after every group has passed Phase 1.
 
 ### Phase 3 — Quality-control gate
 
-1. Dispatch a **QC agent** (Fable 5, `qc-prompt.md`) with `BASE..HEAD`, `BUILD`, and
+1. Dispatch a **QC agent** (Opus, `qc-prompt.md`) with `BASE..HEAD`, `BUILD`, and
    `TEST`. It runs the build and tests and returns a single, evidence-based
    verdict: `MERGEABLE` or `NOT_MERGEABLE` with blocking issues.
 2. Read the verdict and decide:
@@ -210,7 +210,7 @@ see `codex-reviewer-prompt.md` for the exact invocation. Do **not** use the
 `codex-rescue` subagent for this: it is a write-capable implementation forwarder
 that refuses to run reviews and would try to change code instead. If neither the
 Codex plugin nor the `codex` CLI is available — or the call returns nothing —
-treat the reviewer as absent: proceed with the 3 Fable 5 reviewers and say so in your
+treat the reviewer as absent: proceed with the 3 Opus reviewers and say so in your
 report. Never silently drop a reviewer.
 
 ## Handling subagent status

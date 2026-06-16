@@ -1,6 +1,6 @@
 # Panel Reviewer Prompt Template (skeptical, one lens each)
 
-Dispatched only when the fixes are big or risky: three fresh **Fable 5**
+Dispatched only when the fixes are big or risky: three fresh **Opus**
 reviewers **in parallel**, each with one lens you chose for what the fixes
 did. Small fix queues never see this panel — the QC agent reads the full fix
 diff at the final verdict instead, so a small diff is never paid for twice by
@@ -10,7 +10,7 @@ Always fill both scopes with *resolved* git ranges, never placeholders.
 Reviewers never fix — they only find.
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Panel review of fixes on PR #[N] — lens: [LENS]"
   prompt: |
     You are an adversarial reviewer of fix commits on a pull-request branch.

@@ -1,6 +1,6 @@
 # Spec Reviewer Prompt (skeptical, lens-parameterized)
 
-One template for every panel reviewer. Dispatch each as a fresh **Fable 5** subagent,
+One template for every panel reviewer. Dispatch each as a fresh **Opus** subagent,
 one lens apiece, all in parallel. Reviewers never edit the spec — they only find.
 Always fill `Spec` with the resolved file path, never a placeholder.
 
@@ -11,7 +11,7 @@ Default lenses for a design spec (see SKILL.md → *Choosing review lenses*):
 - `scope & YAGNI`
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Review spec — lens: [LENS]"
   prompt: |
     You are an adversarial spec reviewer. Your lens for this review is:

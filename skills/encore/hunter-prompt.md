@@ -1,6 +1,6 @@
 # Hunter Prompt Template (one per lens, parallel, read-only)
 
-Dispatch one fresh **Fable 5** hunter per confirmed roster lens, all **in
+Dispatch one fresh **Opus** hunter per confirmed roster lens, all **in
 parallel**. Hunters only read — they never edit, and they never run builds or
 tests: they run side by side, and concurrent test runs corrupt each other's
 results. Static reading is enough to *call* an opportunity; proving it is the
@@ -10,7 +10,7 @@ A hunter owes you its best handful, not an exhaustive lint run — six calls
 maximum, each anchored in code it actually read.
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Hunt [LENS] enhancements in [target]"
   prompt: |
     You are hunting enhancement opportunities in a finished piece of code,

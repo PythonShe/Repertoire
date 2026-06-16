@@ -1,6 +1,6 @@
 ---
 name: encore
-description: Post-performance enhancement pass over a finished codebase, feature, or module — the audience demands more. A conductor that profiles the user-named target with a read-only scout, agrees an adaptive lens roster with the user (performance, security, robustness, DX, observability, …), hunts enhancement opportunities with parallel diverse-lens Fable 5 hunters, and verifies every call against codebase reality with one read-only Fable 5 verifier (evidence decides — refuted calls die, feature-sized ones route to /repertoire:libretto or /repertoire:score and never get built here). Only what the user picks at the set-list gate gets implemented — on a fresh encore/ branch by sequential fixers, panel-reviewed by 3 diverse-lens Fable 5 skeptics when big or risky, and sealed with a staged final verdict — an evidence-based QC gate, then one cross-model Codex review once QC passes. Lands a committed enhancement dossier; pushes the branch and offers a PR behind one user approval, never merges. MANUAL-ONLY — invoke only when the user explicitly asks for Encore by name or runs /encore (e.g. "run Encore on the auth module", "Encore, revisit the exporter", "do an Encore pass over this repo", "resume the Encore run"). Do NOT auto-trigger on generic "optimize this code", "improve performance", "harden security", "clean up tech debt", or "audit the codebase" requests; do NOT fire on bug reports (Tuner's territory), open-PR review feedback (Coda's), or new-feature ideation (Eureka's); and never on other senses of the word "encore" (a concert encore, the exclamation, the Encore.dev backend framework, the Encore music-notation app, the film or album); if the user has not named Encore as this skill, stay silent and leave code improvement to other workflows.
+description: Post-performance enhancement pass over a finished codebase, feature, or module — the audience demands more. A conductor that profiles the user-named target with a read-only scout, agrees an adaptive lens roster with the user (performance, security, robustness, DX, observability, …), hunts enhancement opportunities with parallel diverse-lens Opus hunters, and verifies every call against codebase reality with one read-only Opus verifier (evidence decides — refuted calls die, feature-sized ones route to /repertoire:libretto or /repertoire:score and never get built here). Only what the user picks at the set-list gate gets implemented — on a fresh encore/ branch by sequential fixers, panel-reviewed by 3 diverse-lens Opus skeptics when big or risky, and sealed with a staged final verdict — an evidence-based QC gate, then one cross-model Codex review once QC passes. Lands a committed enhancement dossier; pushes the branch and offers a PR behind one user approval, never merges. MANUAL-ONLY — invoke only when the user explicitly asks for Encore by name or runs /encore (e.g. "run Encore on the auth module", "Encore, revisit the exporter", "do an Encore pass over this repo", "resume the Encore run"). Do NOT auto-trigger on generic "optimize this code", "improve performance", "harden security", "clean up tech debt", or "audit the codebase" requests; do NOT fire on bug reports (Tuner's territory), open-PR review feedback (Coda's), or new-feature ideation (Eureka's); and never on other senses of the word "encore" (a concert encore, the exclamation, the Encore.dev backend framework, the Encore music-notation app, the film or album); if the user has not named Encore as this skill, stay silent and leave code improvement to other workflows.
 ---
 
 # Encore
@@ -58,7 +58,7 @@ context survives a whole-codebase pass from first profile to final push.
 - **Everyone who changes code commits.** Each fixer commits its own work,
   referencing the call it plays; the commits and the dossier are the resume
   trail. You push exactly once, at the publish gate — and never merge.
-- **Fable 5 everywhere.** Every Claude subagent runs on Fable 5 at high effort except the scout
+- **Opus everywhere.** Every Claude subagent runs on Opus at xhigh effort except the scout
   (Explore). The only non-Claude agent is the Codex reviewer, cross-model by
   design.
 
@@ -86,19 +86,19 @@ digraph encore {
     "Establish target + ambition; capture SCOPE; TodoWrite" [shape=box];
     "Scout (Explore): profile, BUILD/TEST, prior dossiers, lens proposal" [shape=box];
     "Roster gate (AskUserQuestion, multi-select)" [shape=box];
-    "Hunt: one Fable 5 hunter per lens (parallel, read-only)" [shape=box];
+    "Hunt: one Opus hunter per lens (parallel, read-only)" [shape=box];
     "Any calls?" [shape=diamond];
     "Report: no encore needed; bank clean bill" [shape=doublecircle];
-    "Verifier (Fable 5, read-only, whole board)" [shape=box];
+    "Verifier (Opus, read-only, whole board)" [shape=box];
     "Any CONFIRMED or ADJUSTED?" [shape=diamond];
     "Finalize dossier (audit record); stop" [shape=doublecircle];
     "Program -> dossier draft -> set-list gate (batched multi-select)" [shape=box];
     "Anything picked?" [shape=diamond];
     "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" [shape=box];
     "Big or risky changes?" [shape=diamond];
-    "Panel: 3 Fable 5 lenses (parallel)" [shape=box];
+    "Panel: 3 Opus lenses (parallel)" [shape=box];
     "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC (Fable 5): build + tests + full branch read" [shape=box];
+    "QC (Opus): build + tests + full branch read" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Route blockers -> fixer(s), sequential" [shape=box];
@@ -109,25 +109,25 @@ digraph encore {
     "Finalize dossier; publish gate (push / PR / keep local)" [shape=box];
     "Take a bow: report" [shape=doublecircle];
 
-    "Establish target + ambition; capture SCOPE; TodoWrite" -> "Scout (Explore): profile, BUILD/TEST, prior dossiers, lens proposal" -> "Roster gate (AskUserQuestion, multi-select)" -> "Hunt: one Fable 5 hunter per lens (parallel, read-only)" -> "Any calls?";
+    "Establish target + ambition; capture SCOPE; TodoWrite" -> "Scout (Explore): profile, BUILD/TEST, prior dossiers, lens proposal" -> "Roster gate (AskUserQuestion, multi-select)" -> "Hunt: one Opus hunter per lens (parallel, read-only)" -> "Any calls?";
     "Any calls?" -> "Report: no encore needed; bank clean bill" [label="no"];
-    "Any calls?" -> "Verifier (Fable 5, read-only, whole board)" [label="yes"];
-    "Verifier (Fable 5, read-only, whole board)" -> "Any CONFIRMED or ADJUSTED?";
+    "Any calls?" -> "Verifier (Opus, read-only, whole board)" [label="yes"];
+    "Verifier (Opus, read-only, whole board)" -> "Any CONFIRMED or ADJUSTED?";
     "Any CONFIRMED or ADJUSTED?" -> "Finalize dossier (audit record); stop" [label="no"];
     "Any CONFIRMED or ADJUSTED?" -> "Program -> dossier draft -> set-list gate (batched multi-select)" [label="yes"];
     "Program -> dossier draft -> set-list gate (batched multi-select)" -> "Anything picked?";
     "Anything picked?" -> "Finalize dossier (audit record); stop" [label="no"];
     "Anything picked?" -> "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" [label="yes"];
     "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" -> "Big or risky changes?";
-    "Big or risky changes?" -> "Panel: 3 Fable 5 lenses (parallel)" [label="yes"];
-    "Big or risky changes?" -> "QC (Fable 5): build + tests + full branch read" [label="no"];
-    "Panel: 3 Fable 5 lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC (Fable 5): build + tests + full branch read";
-    "QC (Fable 5): build + tests + full branch read" -> "Mergeable?";
+    "Big or risky changes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
+    "Big or risky changes?" -> "QC (Opus): build + tests + full branch read" [label="no"];
+    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC (Opus): build + tests + full branch read";
+    "QC (Opus): build + tests + full branch read" -> "Mergeable?";
     "Mergeable?" -> "Codex (cross-model, whole branch, runs once)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
     "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC (Fable 5): build + tests + full branch read";
+    "Route blockers -> fixer(s), sequential" -> "QC (Opus): build + tests + full branch read";
     "Codex (cross-model, whole branch, runs once)" -> "Codex findings?";
     "Codex findings?" -> "Finalize dossier; publish gate (push / PR / keep local)" [label="none / absent"];
     "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];
@@ -175,14 +175,14 @@ QC re-run are described in the text below.*
 5. **Roster gate.** One AskUserQuestion (multi-select): the proposed lenses as
    options — at most four; name runner-ups in the question text, reachable via
    the built-in "Other" — each with the scout's one-line rationale. Say what a
-   lens costs: one Fable 5 hunter each. The confirmed roster is final for the
+   lens costs: one Opus hunter each. The confirmed roster is final for the
    run.
 6. Create a TodoWrite list: `Scout`, `Roster`, `Hunt`, `Verify`, `Set list`,
    `Perform`, `Final verdict (strikes 0/3)`, `Publish gate`.
 
 ### Phase 1 — The hunt
 
-1. Dispatch **one Fable 5 hunter per confirmed lens, in parallel**
+1. Dispatch **one Opus hunter per confirmed lens, in parallel**
    (`hunter-prompt.md`) — each read-only, with `SCOPE`, the scout's digest,
    its lens charter, the exclusion list, and the user's ambition hints.
    Hunters never run builds or tests — they run side by side, and concurrent
@@ -203,7 +203,7 @@ QC re-run are described in the text below.*
 
 ### Phase 2 — Verify & the set list
 
-1. Dispatch **one verifier** (`verifier-prompt.md`) — fresh Fable 5, read-only —
+1. Dispatch **one verifier** (`verifier-prompt.md`) — fresh Opus, read-only —
    with the entire board, `SCOPE` (and `SINCE`, when the run is so bounded),
    `BUILD`, and `TEST`. It works alone, so it
    may run builds and tests. Only for an unusually large board (roughly 15+
@@ -265,7 +265,7 @@ QC re-run are described in the text below.*
 ### Phase 4 — The final verdict
 
 1. **Panel — only when the changes are big or risky** (see *When the panel
-   runs*); say in the final report whether it ran and why. Dispatch 3 Fable 5
+   runs*); say in the final report whether it ran and why. Dispatch 3 Opus
    reviewers with distinct lenses **in parallel** (`reviewer-prompt.md`),
    scope `BASE..HEAD`; every brief includes the calls the changes claim to
    play — an enhancement that doesn't deliver its payoff is a finding, and so
@@ -462,9 +462,9 @@ describe.
 
 - `scout-prompt.md` — read-only Explore profile of the target: stack, churn,
   constraints, BUILD/TEST, prior dossiers, lens proposal.
-- `hunter-prompt.md` — lens-parameterized Fable 5 hunter; one per roster lens,
+- `hunter-prompt.md` — lens-parameterized Opus hunter; one per roster lens,
   parallel, read-only, no build/test runs.
-- `verifier-prompt.md` — one read-only Fable 5 verifier over the whole call
+- `verifier-prompt.md` — one read-only Opus verifier over the whole call
   board; confirms, adjusts, refutes, dedupes, sizes, routes.
 - `fixer-prompt.md` — implements a verified directive for a picked call and
   commits.

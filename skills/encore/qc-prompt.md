@@ -1,7 +1,7 @@
 # Quality-Control Prompt Template (final verdict, first stage)
 
 The first stage of the final verdict — and on most runs (no panel) the only
-same-model close reader of the changes. A fresh **Fable 5** subagent verifies
+same-model close reader of the changes. A fresh **Opus** subagent verifies
 the whole encore branch and returns a single, evidence-based verdict on
 whether it is fit to publish. Only after it returns MERGEABLE is the
 cross-model Codex reviewer (`codex-reviewer-prompt.md`) dispatched; the
@@ -14,7 +14,7 @@ values — never placeholders. If you do not have a real build/test command, do
 not dispatch QC with a guess — find it first.
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "QC verdict for encore branch [branch]"
   prompt: |
     You are the final quality gate before an enhancement branch is pushed.

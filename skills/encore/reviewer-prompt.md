@@ -1,7 +1,7 @@
 # Panel Reviewer Prompt Template (skeptical, one lens each)
 
 Dispatched only when the played changes are big or risky: three fresh
-**Fable 5** reviewers **in parallel**, each with one lens you chose for what the
+**Opus** reviewers **in parallel**, each with one lens you chose for what the
 changes did. Small set lists never see this panel — the QC agent reads the
 whole branch at the final verdict instead, so a small diff is never paid for
 twice by the same model.
@@ -10,7 +10,7 @@ Always fill the scope with a *resolved* git range, never placeholders.
 Reviewers never fix — they only find.
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Panel review of encore branch — lens: [LENS]"
   prompt: |
     You are an adversarial reviewer of enhancement commits on an encore

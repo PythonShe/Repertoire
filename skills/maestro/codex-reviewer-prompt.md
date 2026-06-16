@@ -23,7 +23,7 @@ COMPANION=$(ls -t ~/.claude/plugins/cache/*/codex/*/scripts/codex-companion.mjs 
 command -v codex >/dev/null && echo "cli: $(command -v codex)"
 ```
 
-If neither prints, treat Codex as **unavailable**: run the 3 Fable 5 reviewers only
+If neither prints, treat Codex as **unavailable**: run the 3 Opus reviewers only
 and note the omission in your report. That is the documented fallback, not a silent
 drop.
 
@@ -32,7 +32,7 @@ drop.
 Pass flags as **separate shell arguments** (do not cram `--wait`/`--base` into one
 quoted string — they would be read as positional text and ignored). `$BASE` is the
 base ref you captured in Phase 0. Run this Bash call **in the same batch** as the 3
-Fable 5 reviewer dispatches so all four run together.
+Opus reviewer dispatches so all four run together.
 
 ```bash
 node "$COMPANION" adversarial-review --wait --base "$BASE" "whole-branch integration review against the plan: [one line on what the branch should do]"
@@ -47,7 +47,7 @@ recommendation).
 returns nothing, note Codex as absent (as in the fallback) — do not fold a blank
 result into the panel as if it approved.
 
-When it does return, normalize its output to the same compact shape the Fable 5
+When it does return, normalize its output to the same compact shape the Opus
 reviewers use and fold it into the consolidated findings:
 
 - **Verdict:** PASS | FAIL

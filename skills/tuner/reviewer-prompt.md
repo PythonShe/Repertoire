@@ -7,7 +7,7 @@ here sends the fix to verification; a FAIL loops back to a fresh fixer pass and
 costs a strike.
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Review fix for [bug one-liner]"
   prompt: |
     You are an adversarial reviewer of a bug fix. Assume it is wrong until the

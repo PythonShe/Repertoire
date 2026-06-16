@@ -3,7 +3,7 @@
 The cross-model panel reviewer. A different model sees different things — it
 catches the ambiguity and the unstated assumption a room full of Claudes will read
 right past. It does a **general** pass over the whole spec, so it complements the
-single-lens Fable 5 reviewers rather than repeating one of them.
+single-lens Opus reviewers rather than repeating one of them.
 
 ## Use the adversarial-review runtime, not codex-rescue
 
@@ -25,7 +25,7 @@ COMPANION=$(ls -t ~/.claude/plugins/cache/*/codex/*/scripts/codex-companion.mjs 
 command -v codex >/dev/null && echo "cli: $(command -v codex)"
 ```
 
-If neither prints, treat Codex as **unavailable**: run the Fable 5 lenses only and
+If neither prints, treat Codex as **unavailable**: run the Opus lenses only and
 note the omission in your report. That is the documented fallback, not a silent
 drop.
 
@@ -33,7 +33,7 @@ drop.
 
 Pass flags as **separate shell arguments** (don't cram them into one quoted
 string — they'd be read as positional text and ignored). Run this in the **same
-batch** as the Fable 5 reviewer dispatches so they all run together.
+batch** as the Opus reviewer dispatches so they all run together.
 
 **Substitute `[SPEC_FILE_PATH]` and the `[one line]` summary with real values
 before sending** — the runtime receives the prompt as literal text, so an
@@ -54,7 +54,7 @@ structured result (a summary plus findings).
 returns nothing, note Codex as absent — do not fold a blank result into the panel
 as if it approved.
 
-When it does return, normalize its output to the same compact shape the Fable 5
+When it does return, normalize its output to the same compact shape the Opus
 reviewers use and fold it into the consolidated findings:
 
 - **Verdict:** PASS | FAIL

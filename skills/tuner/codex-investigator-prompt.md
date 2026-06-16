@@ -4,7 +4,7 @@ The opening dispatch of every Tuner run. A different model hunts differently —
 catches what a Claude will happily walk past, and at xhigh reasoning effort it
 digs deepest and runs longest. That is why it launches **first**, in the same
 batch as the scout, before any Claude-side analysis exists: it must never wait on
-anything, and it must never be contaminated by the scout's ranking or the Fable 5
+anything, and it must never be contaminated by the scout's ranking or the Opus
 investigator's theory.
 
 ## Why codex-rescue IS the right tool here (unlike reviews)

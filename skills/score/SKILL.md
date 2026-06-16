@@ -1,6 +1,6 @@
 ---
 name: score
-description: Turn an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then harden that plan with an adversarial subagent review panel (2-3 diverse-lens Fable 5 skeptics + a cross-model Codex reviewer) before a final user-approval gate. Score authors the plan itself; it delegates only context-scouting and the adversarial review. The terminal artifact is an approved plan — never code, and never a spec. MANUAL-ONLY — invoke only when the user explicitly asks for Score by name or runs /score (e.g. "score this spec", "run Score on the spec", "turn this spec into a plan with Score", "resume the Score run"). Do NOT auto-trigger on generic "write an implementation plan / plan this out / break this into tasks" requests, and never on other senses of the word "score" (test/coverage/quality scores, "score this PR 1-10", ratings); if the user has not named Score as this skill, stay silent and leave the request to other workflows.
+description: Turn an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then harden that plan with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Score authors the plan itself; it delegates only context-scouting and the adversarial review. The terminal artifact is an approved plan — never code, and never a spec. MANUAL-ONLY — invoke only when the user explicitly asks for Score by name or runs /score (e.g. "score this spec", "run Score on the spec", "turn this spec into a plan with Score", "resume the Score run"). Do NOT auto-trigger on generic "write an implementation plan / plan this out / break this into tasks" requests, and never on other senses of the word "score" (test/coverage/quality scores, "score this PR 1-10", ratings); if the user has not named Score as this skill, stay silent and leave the request to other workflows.
 ---
 
 # Score
@@ -34,7 +34,7 @@ now and expensive once three subagents have built on a broken decomposition.
 - **Decision-complete, not code-complete.** Every decision is made in the plan
   — exact file paths, interfaces, signatures, data shapes, named tests with
   their key assertions, exact verify commands. But the implementers are fresh
-  Fable 5 agents: they write the function bodies. A plan full of complete code has
+  Opus agents: they write the function bodies. A plan full of complete code has
   quietly become the implementation, done in the wrong phase with no review
   panel behind it.
 - **You plan; you delegate scrutiny.** You read the spec, decompose the work,
@@ -48,8 +48,8 @@ now and expensive once three subagents have built on a broken decomposition.
   not implement, and it does not redesign — open design questions go back to
   `/repertoire:libretto`, not into the plan as guesses. Point to
   `/repertoire:maestro` as the next step — but never invoke it.
-- **Fable 5 for skeptics, plus one cross-model voice.** Every review-lens subagent
-  runs on Fable 5 at high effort; one more reviewer is Codex, cross-model by design. Context
+- **Opus for skeptics, plus one cross-model voice.** Every review-lens subagent
+  runs on Opus at xhigh effort; one more reviewer is Codex, cross-model by design. Context
   scouting uses the read-only Explore agent.
 
 ## When to use
@@ -79,7 +79,7 @@ digraph score {
     "Propose file structure + movements" [shape=box];
     "User approves structure?" [shape=diamond];
     "Write plan (template) + self-check + commit" [shape=box];
-    "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)" [shape=box];
+    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" [shape=box];
     "Consolidate findings; revise plan; commit" [shape=box];
     "User approves plan?" [shape=diamond];
     "Done — point to /maestro (never invoke)" [shape=doublecircle];
@@ -95,8 +95,8 @@ digraph score {
     "Propose file structure + movements" -> "User approves structure?";
     "User approves structure?" -> "Propose file structure + movements" [label="rework"];
     "User approves structure?" -> "Write plan (template) + self-check + commit" [label="approved"];
-    "Write plan (template) + self-check + commit" -> "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)";
-    "Panel: 2-3 Fable 5 lenses + 1 Codex (parallel)" -> "Consolidate findings; revise plan; commit";
+    "Write plan (template) + self-check + commit" -> "Panel: 2-3 Opus lenses + 1 Codex (parallel)";
+    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" -> "Consolidate findings; revise plan; commit";
     "Consolidate findings; revise plan; commit" -> "User approves plan?";
     "User approves plan?" -> "Propose file structure + movements" [label="structure changed"];
     "User approves plan?" -> "Write plan (template) + self-check + commit" [label="small edits"];
@@ -194,11 +194,11 @@ no written spec (the clarify-pass branch), paste the clarified requirements
 into each reviewer's spec slot instead and say so — never send an
 unsubstituted placeholder:
 
-- **2-3 Fable 5 reviewers**, each with one lens from *Choosing review lenses*,
+- **2-3 Opus reviewers**, each with one lens from *Choosing review lenses*,
   using `plan-reviewer-prompt.md`. Use 3 by default; 2 is fine for a genuinely
   small plan.
 - **+1 Codex reviewer** for an independent cross-model pass
-  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Fable 5 lenses
+  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Opus lenses
   only and say so in your report — never silently drop a reviewer.
 
 When the verdicts return, **consolidate from the finding text** — match by
@@ -250,7 +250,7 @@ overlook. Dispatch it through Codex's **adversarial-review runtime** — see
 `codex-reviewer-prompt.md` for the invocation and the availability check. Do
 **not** use the `codex-rescue` subagent: it is a write-capable forwarder that
 refuses to run reviews. If neither the Codex plugin nor the `codex` CLI is
-available, treat the reviewer as absent, proceed with the Fable 5 lenses, and say
+available, treat the reviewer as absent, proceed with the Opus lenses, and say
 so.
 
 ## Handling subagent results

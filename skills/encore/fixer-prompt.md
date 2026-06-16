@@ -1,13 +1,13 @@
 # Fixer Prompt Template
 
-Dispatch a fresh **Fable 5** subagent per picked call — or one for a few
+Dispatch a fresh **Opus** subagent per picked call — or one for a few
 interrelated calls. Fixers write to the branch, so they run **sequentially**,
 never in parallel. The fixer implements the *verifier's directive*, which is
 authoritative even where it deliberately differs from the hunter's original
 sketch (ADJUSTED verdicts).
 
 ```
-Agent tool (model: fable, effort: high):
+Agent tool (model: opus, effort: xhigh):
   description: "Play [E-id]: [short gist]"
   prompt: |
     You are implementing an already-verified enhancement on an encore
