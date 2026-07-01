@@ -58,9 +58,13 @@ context survives a whole-codebase pass from first profile to final push.
 - **Everyone who changes code commits.** Each fixer commits its own work,
   referencing the call it plays; the commits and the dossier are the resume
   trail. You push exactly once, at the publish gate — and never merge.
-- **Opus everywhere.** Every Claude subagent runs on Opus at xhigh effort except the scout
-  (Explore). The only non-Claude agent is the Codex reviewer, cross-model by
-  design.
+- **Play it on your best.** The build seats — the fixers and the QC gate —
+  run unpinned and inherit your session model; the hunters, the read-only
+  verifier, and the panel skeptics stay pinned to Opus for a stable
+  adversarial baseline; the scout stays on Explore. Run these skills on the
+  most capable model you have — `/model best` resolves to Fable 5 where you
+  have access, otherwise Opus — never on Sonnet. The only non-Claude agent is
+  the Codex reviewer, cross-model by design.
 
 ## When to use
 
@@ -98,7 +102,7 @@ digraph encore {
     "Big or risky changes?" [shape=diamond];
     "Panel: 3 Opus lenses (parallel)" [shape=box];
     "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC (Opus): build + tests + full branch read" [shape=box];
+    "QC: build + tests + full branch read" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Route blockers -> fixer(s), sequential" [shape=box];
@@ -120,14 +124,14 @@ digraph encore {
     "Anything picked?" -> "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" [label="yes"];
     "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" -> "Big or risky changes?";
     "Big or risky changes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
-    "Big or risky changes?" -> "QC (Opus): build + tests + full branch read" [label="no"];
-    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC (Opus): build + tests + full branch read";
-    "QC (Opus): build + tests + full branch read" -> "Mergeable?";
+    "Big or risky changes?" -> "QC: build + tests + full branch read" [label="no"];
+    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC: build + tests + full branch read";
+    "QC: build + tests + full branch read" -> "Mergeable?";
     "Mergeable?" -> "Codex (cross-model, whole branch, runs once)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
     "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC (Opus): build + tests + full branch read";
+    "Route blockers -> fixer(s), sequential" -> "QC: build + tests + full branch read";
     "Codex (cross-model, whole branch, runs once)" -> "Codex findings?";
     "Codex findings?" -> "Finalize dossier; publish gate (push / PR / keep local)" [label="none / absent"];
     "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];

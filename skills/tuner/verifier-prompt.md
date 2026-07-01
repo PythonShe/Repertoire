@@ -1,6 +1,6 @@
 # Verifier Prompt Template (mechanical four-leg proof)
 
-The terminal gate. A fresh **Opus** subagent that runs, quotes, and judges
+The terminal gate. A fresh subagent that runs, quotes, and judges
 nothing the output does not show. The fixer's two-commit discipline (red test
 committed before the fix) is what makes the red leg possible: with the fix
 commits reverted in place, the repro test must fail again — and fail for the
@@ -12,7 +12,7 @@ reports — never placeholders, never a guessed test command. List **every** fix
 commit accrued across re-fix passes: the red leg reverts them all.
 
 ```
-Agent tool (model: opus, effort: xhigh):
+Agent tool (effort: xhigh):
   description: "Verify fix for [bug one-liner]"
   prompt: |
     You are the final verifier of a bug fix. Your verdict is mechanical:

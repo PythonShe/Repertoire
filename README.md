@@ -19,9 +19,10 @@ e.g. `/repertoire:maestro`.
 ## Recommended setup
 
 These skills are deliberately token-heavy: every run conducts an ensemble of
-fresh Opus subagents at xhigh effort (implementers, investigators, review
-panels, QC gates),
-and that is where their reliability comes from. Plan accounts accordingly:
+fresh subagents at xhigh effort — build seats (implementers, fixers, QC gates)
+on your session model, review seats (investigators, review panels, verifiers)
+pinned to Opus — and that is where their reliability comes from. Plan accounts
+accordingly:
 
 - **Claude Max (5x or 20x), or API billing** — expected. Lighter plans are
   likely to hit usage limits mid-run.
@@ -32,16 +33,21 @@ and that is where their reliability comes from. Plan accounts accordingly:
   the Opus-only panel and say so in their report — but the cross-model check
   is part of the design.
 
-> **Model note (temporary):** Subagents currently run on **Opus**. Anthropic
-> suspended Fable 5 access on 2026-06-12 under a US export-control order, so every
-> seat falls back to Opus — the highest tier still available — at xhigh effort.
-> We'll switch the subagents back to Fable 5 as soon as it's live again.
+> **Model note:** These skills run on two tiers. The **build seats** —
+> implementers, fixers, and the QC/final gates — are *unpinned*: they inherit
+> your session model, so start the session on the most capable model you have.
+> `/model best` resolves to **Fable 5** where you have access, otherwise the
+> latest **Opus** — Fable's speed on the build seats, an automatic Opus fallback,
+> and no hardcoded model name to break if Fable is ever suspended again. The
+> **review seats** — investigators, review panels, and verifiers — stay pinned
+> to **Opus** for a stable adversarial baseline. Run these skills on `best` or
+> `opus` — **never Sonnet**.
 
 ## Skills
 
 | Skill | Invoke | What it does |
 | :---- | :----- | :----------- |
-| **Eureka** | `/repertoire:eureka` | Hunts ideas before anything is built: establishes a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then finds candidates through a paced dialogue — seed sketches, a running idea board, and on-demand bursts of 3-4 diverse-lens Opus ideators — converges finalists, and drives them through a sequential vetting funnel (identity → compliance → demand → feasibility) where every kill verdict needs the user's confirmation before an idea dies. Ends at a ranked, vetted shortlist with an optional champion handed to Libretto — never a spec, never code. Manual-only; invoke it by name. |
+| **Eureka** | `/repertoire:eureka` | Hunts ideas before anything is built: establishes a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then finds candidates through a paced dialogue — seed sketches, a running idea board, and on-demand bursts of 3-4 diverse-lens ideators — converges finalists, and drives them through a sequential vetting funnel (identity → compliance → demand → feasibility) where every kill verdict needs the user's confirmation before an idea dies. Ends at a ranked, vetted shortlist with an optional champion handed to Libretto — never a spec, never code. Manual-only; invoke it by name. |
 | **Libretto** | `/repertoire:libretto` | Turns a rough idea into a build-ready spec through a guided design dialogue, then hardens it with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Delegates only context-gathering and review; ends at an approved spec and points to Maestro to build it — never auto-chains. Manual-only; invoke it by name. |
 | **Score** | `/repertoire:score` | Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens it with the same adversarial review panel before a final user-approval gate. One structural checkpoint with the user; ends at an approved plan and points to Maestro to conduct it — never auto-chains. Manual-only; invoke it by name. |
 | **Maestro** | `/repertoire:maestro` | Conducts subagent-driven execution of an implementation plan: groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate — while the conductor keeps its own context lean. Manual-only; invoke it by name. |

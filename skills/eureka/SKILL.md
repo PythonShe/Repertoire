@@ -1,6 +1,6 @@
 ---
 name: eureka
-description: Conversation-heavy idea and feature discovery — the spark before the production line. Establish a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then hunt ideas through a paced dialogue — seed sketches the user reacts to, a running idea board, and on-demand ensemble bursts of 3-4 diverse-lens Opus ideators — converge finalists through targeted refinement rounds, then drive them through a sequential vetting funnel (identity judge → compliance checker → demand analyst → feasibility estimator) where every kill verdict must be confirmed by the user via AskUserQuestion before an idea is truly dead. The terminal artifact is a ranked, vetted idea shortlist with an optional champion handed to /repertoire:libretto — never a spec, never a plan, never code. MANUAL-ONLY — invoke only when the user explicitly asks for Eureka by name or runs /eureka (e.g. "run Eureka on this repo", "Eureka, find feature ideas", "hunt ideas with Eureka", "resume the Eureka run"). Do NOT auto-trigger on generic "brainstorm ideas", "what features should I add", "what should I build next", or "help me come up with ideas" requests; do NOT fire on spec- or design-shaped requests for an idea the user already holds ("spec this out", "design this feature" — that is Libretto's territory); and never on other senses of the word (a "eureka moment", the exclamation "eureka, found it", Eureka the place, math curriculum, or TV series); if the user has not named Eureka as this skill, stay silent and leave ideation to other workflows.
+description: Conversation-heavy idea and feature discovery — the spark before the production line. Establish a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then hunt ideas through a paced dialogue — seed sketches the user reacts to, a running idea board, and on-demand ensemble bursts of 3-4 diverse-lens ideators — converge finalists through targeted refinement rounds, then drive them through a sequential vetting funnel (identity judge → compliance checker → demand analyst → feasibility estimator) where every kill verdict must be confirmed by the user via AskUserQuestion before an idea is truly dead. The terminal artifact is a ranked, vetted idea shortlist with an optional champion handed to /repertoire:libretto — never a spec, never a plan, never code. MANUAL-ONLY — invoke only when the user explicitly asks for Eureka by name or runs /eureka (e.g. "run Eureka on this repo", "Eureka, find feature ideas", "hunt ideas with Eureka", "resume the Eureka run"). Do NOT auto-trigger on generic "brainstorm ideas", "what features should I add", "what should I build next", or "help me come up with ideas" requests; do NOT fire on spec- or design-shaped requests for an idea the user already holds ("spec this out", "design this feature" — that is Libretto's territory); and never on other senses of the word (a "eureka moment", the exclamation "eureka, found it", Eureka the place, math curriculum, or TV series); if the user has not named Eureka as this skill, stay silent and leave ideation to other workflows.
 ---
 
 # Eureka
@@ -57,7 +57,11 @@ is dead.
 - **The idea is the terminal artifact.** Eureka ends at a committed shortlist
   and, optionally, a champion. Point to `/repertoire:libretto` as the next step —
   never invoke it, and never write the spec yourself.
-- **Opus at xhigh effort for ideators and vetting lenses; Explore for the scout.**
+- **Run on your most capable model.** The ideators (ensemble bursts) run
+  unpinned and inherit your session model; the vetting-funnel lenses stay pinned
+  to Opus for a stable adversarial baseline; the scout stays on Explore. Run this
+  skill on the most capable model you have — `/model best` resolves to Fable 5
+  where you have access, otherwise Opus — never on Sonnet.
 
 ## When to use
 
@@ -80,7 +84,7 @@ digraph eureka {
     "Pick dimension(s) (AskUserQuestion)" [shape=box];
     "Diverge: seeds ⇄ reactions; keep the board" [shape=box];
     "Novelty stalled, or user asks?" [shape=diamond];
-    "Ensemble burst: 3-4 blind Opus ideators (parallel)" [shape=box];
+    "Ensemble burst: 3-4 blind ideators (parallel)" [shape=box];
     "Board rich? (user's call, after ≥1 burst offer)" [shape=diamond];
     "Converge: cluster, rank, agree finalists" [shape=box];
     "Vet (sequential): identity → compliance → demand → feasibility" [shape=box];
@@ -97,9 +101,9 @@ digraph eureka {
     "Terrain scout (Explore) → brief" -> "Pick dimension(s) (AskUserQuestion)";
     "Pick dimension(s) (AskUserQuestion)" -> "Diverge: seeds ⇄ reactions; keep the board";
     "Diverge: seeds ⇄ reactions; keep the board" -> "Novelty stalled, or user asks?";
-    "Novelty stalled, or user asks?" -> "Ensemble burst: 3-4 blind Opus ideators (parallel)" [label="yes"];
+    "Novelty stalled, or user asks?" -> "Ensemble burst: 3-4 blind ideators (parallel)" [label="yes"];
     "Novelty stalled, or user asks?" -> "Board rich? (user's call, after ≥1 burst offer)" [label="no"];
-    "Ensemble burst: 3-4 blind Opus ideators (parallel)" -> "Diverge: seeds ⇄ reactions; keep the board";
+    "Ensemble burst: 3-4 blind ideators (parallel)" -> "Diverge: seeds ⇄ reactions; keep the board";
     "Board rich? (user's call, after ≥1 burst offer)" -> "Diverge: seeds ⇄ reactions; keep the board" [label="not yet"];
     "Board rich? (user's call, after ≥1 burst offer)" -> "Converge: cluster, rank, agree finalists" [label="yes"];
     "Converge: cluster, rank, agree finalists" -> "Vet (sequential): identity → compliance → demand → feasibility";
@@ -159,7 +163,7 @@ keeps the hunt aimed; "everything" is not a dimension.
    single idea belongs to Converge, and mixing the modes suppresses both.
 3. **Burst when the well stalls.** Two consecutive exchanges that add no new
    *category* of idea = novelty stall. On stall — or whenever the user asks —
-   offer an **ensemble burst**: 3-4 parallel Opus ideators
+   offer an **ensemble burst**: 3-4 parallel ideators
    (`ideator-prompt.md`), one lens each, blind to each other, each fed the
    range, dimension, identity brief, terrain digest, and the full board. Cut the
    terrain digest once for the first burst and reuse it verbatim for later ones

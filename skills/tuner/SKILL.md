@@ -47,6 +47,13 @@ your context, so it survives a long hunt intact.
 - **Strike budgets, then the user.** One rebuttal round for a cross-exam deadlock;
   three strikes for the repair loop. After that, AskUserQuestion — never loop
   silently past a budget.
+- **Play the best instrument you have.** The build seats — the triage scout, the
+  test-first fixer, and the terminal red→green verifier — run unpinned and inherit
+  your session model; the systematic investigator and the fix reviewer stay pinned
+  to Opus for a stable adversarial baseline, and the Codex investigator is
+  cross-model by design. Run this skill on the most capable model you have —
+  `/model best` resolves to Fable 5 where you have access, otherwise Opus — never
+  on Sonnet.
 
 ## When to use
 
@@ -147,7 +154,7 @@ cross-examination, and re-dispatch edges are described in the text below.*
    the rival is **absent** — proceed with the Opus side alone, note it in the
    final report, and let the reviewer + verifier gates carry the confidence
    burden alone. Never treat an empty reply as agreement.
-2. **Scout** (Opus, `scout-prompt.md`) — a fast triage pass, not a deep trace: it
+2. **Scout** (`scout-prompt.md`) — a fast triage pass, not a deep trace: it
    maps the failure's blast radius and returns ranked candidate fault surfaces,
    most→least likely, each with a one-line reason.
 3. **Opus investigator** (Opus at xhigh effort, `investigator-prompt.md`) — dispatched as soon as
@@ -200,7 +207,7 @@ cross-examine a single report.
 
 ### Phase 3 — Repair loop (fixer → reviewer)
 
-1. **Fixer** (Opus, `fixer-prompt.md`) — receives the agreed root cause,
+1. **Fixer** (`fixer-prompt.md`) — receives the agreed root cause,
    evidence, fix proposal, and repro. Its discipline, in order: write the minimal
    repro test and **prove it red** (quoting the failure), commit the test; apply
    the **minimal root-cause fix**, prove the repro green and the full suite
@@ -231,7 +238,7 @@ cross-examine a single report.
 
 ### Phase 4 — Verification
 
-1. **Verifier** (Opus, `verifier-prompt.md`) — fresh eyes, mechanical evidence,
+1. **Verifier** (`verifier-prompt.md`) — fresh eyes, mechanical evidence,
    four legs: **red** (with every fix commit reverted in the working tree via
    `git revert --no-commit`, the repro test must fail — and fail for the
    *diagnosed* reason, matched against the fixer's recorded red proof),

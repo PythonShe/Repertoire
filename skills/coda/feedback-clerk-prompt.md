@@ -1,13 +1,13 @@
 # Feedback Clerk Prompt (read-only harvest)
 
-Dispatch one fresh **Opus** subagent at Phase 0 to fetch and normalize every
+Dispatch one fresh subagent at Phase 0 to fetch and normalize every
 piece of PR feedback. The clerk exists to absorb the bulk — raw API JSON, diff
 hunks, CI logs — and return only the compact ledger, so none of that ever
 enters your context. Always fill in the real owner/repo/PR values; if you do
 not know owner/repo, the clerk can resolve them with `gh repo view`.
 
 ```
-Agent tool (model: opus, effort: xhigh):
+Agent tool (effort: xhigh):
   description: "Harvest feedback ledger for PR #[N]"
   prompt: |
     You are harvesting review feedback from a GitHub pull request into a

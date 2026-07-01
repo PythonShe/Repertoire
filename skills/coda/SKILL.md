@@ -61,8 +61,13 @@ survives a feedback-heavy PR from harvest to publish.
   final verdict. You never merge, never resolve threads, never approve or
   dismiss reviews, and never force-push (rewriting a shared PR branch breaks
   the line anchors that review comments hang on).
-- **Opus everywhere.** Every Claude subagent runs on Opus at xhigh effort. The only non-Opus
-  agent is the Codex reviewer, which is cross-model by design.
+- **The right model on every seat.** The build seats — the feedback-clerk, the
+  fixers, and the QC gate — run unpinned and inherit your session model; the
+  read-only verifier and the panel skeptics stay pinned to Opus for a stable
+  adversarial baseline. Run these skills on the most capable model you have —
+  `/model best` resolves to Fable 5 where you have access, otherwise Opus —
+  never on Sonnet. The Codex reviewer is the only non-Claude, cross-model seat,
+  by design.
 
 ## When to use
 
@@ -92,7 +97,7 @@ digraph coda {
     "Big or risky fixes?" [shape=diamond];
     "Panel: 3 Opus lenses (parallel)" [shape=box];
     "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC agent (Opus): build + tests + full fix read" [shape=box];
+    "QC agent: build + tests + full fix read" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Route blockers -> fixer(s), sequential" [shape=box];
@@ -111,14 +116,14 @@ digraph coda {
     "Any VALID or PARTIAL?" -> "Fixer(s), sequential: blocking -> simple -> complex" [label="yes"];
     "Fixer(s), sequential: blocking -> simple -> complex" -> "Big or risky fixes?";
     "Big or risky fixes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
-    "Big or risky fixes?" -> "QC agent (Opus): build + tests + full fix read" [label="no"];
-    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
-    "QC agent (Opus): build + tests + full fix read" -> "Mergeable?";
+    "Big or risky fixes?" -> "QC agent: build + tests + full fix read" [label="no"];
+    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent: build + tests + full fix read";
+    "QC agent: build + tests + full fix read" -> "Mergeable?";
     "Mergeable?" -> "Codex (cross-model, whole PR, runs once)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
     "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC agent (Opus): build + tests + full fix read";
+    "Route blockers -> fixer(s), sequential" -> "QC agent: build + tests + full fix read";
     "Codex (cross-model, whole PR, runs once)" -> "Codex findings?";
     "Codex findings?" -> "Draft replies -> one AskUserQuestion gate" [label="none / absent"];
     "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];

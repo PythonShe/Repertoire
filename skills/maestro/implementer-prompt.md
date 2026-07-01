@@ -1,10 +1,10 @@
 # Implementer Prompt Template
 
-Dispatch a fresh **Opus** subagent per task group. Paste in the full task text and
+Dispatch a fresh subagent per task group. Paste in the full task text and
 context — the subagent must never read the plan file itself.
 
 ```
-Agent tool (model: opus, effort: xhigh):
+Agent tool (effort: xhigh):
   description: "Implement group: [group name]"
   prompt: |
     You are implementing one group of related tasks from a larger plan. You have

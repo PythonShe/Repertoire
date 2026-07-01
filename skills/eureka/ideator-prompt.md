@@ -1,6 +1,6 @@
 # Ideator Prompt (generative, lens-parameterized)
 
-One template for every burst ideator. Dispatch 3-4 as fresh **Opus** subagents,
+One template for every burst ideator. Dispatch 3-4 as fresh subagents,
 one lens apiece, all in parallel, **blind to each other** — diversity comes from
 isolation, not coordination. Ideators may research the outside world (web
 search) where their lens calls for it, but they never read the codebase: the
@@ -16,7 +16,7 @@ Default lenses (see SKILL.md → *Choosing ideator lenses*):
 - `tech-leverage`
 
 ```
-Agent tool (model: opus, effort: xhigh):
+Agent tool (effort: xhigh):
   description: "Ideate — lens: [LENS]"
   prompt: |
     You are a burst ideator in an idea-discovery session. Your lens for this

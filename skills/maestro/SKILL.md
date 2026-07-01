@@ -1,6 +1,6 @@
 ---
 name: maestro
-description: Conductor for subagent-driven execution of an implementation plan in the current session — groups related tasks, builds each group with a fresh Opus implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate, all while keeping the controller's own context lean (it conducts and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Maestro by name or runs /maestro (e.g. "run Maestro on this plan", "execute this with Maestro", "Maestro, build out the plan", "resume the Maestro run"). Do NOT auto-trigger on generic "execute this plan" requests; if the user has not named Maestro, leave plan execution to other workflows.
+description: Conductor for subagent-driven execution of an implementation plan in the current session — groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate, all while keeping the controller's own context lean (it conducts and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Maestro by name or runs /maestro (e.g. "run Maestro on this plan", "execute this with Maestro", "Maestro, build out the plan", "resume the Maestro run"). Do NOT auto-trigger on generic "execute this plan" requests; if the user has not named Maestro, leave plan execution to other workflows.
 ---
 
 # Maestro
@@ -35,8 +35,13 @@ you can keep coordinating clearly all the way to the end.
   when you finalize — commits its own work as it goes. Reviewers and the QC agent
   change nothing, so they commit nothing. Commits are the unit of progress and the
   same-session resume trail.
-- **Opus everywhere.** Every Claude subagent runs on Opus at xhigh effort. The only non-Opus
-  agent is the Codex reviewer, which is cross-model by design.
+- **Model policy.** The build seats — implementer, fixer, and the QC gate — run
+  unpinned and inherit your session model; the general reviewer, the panel
+  skeptics, and the QC-adjacent review lenses stay pinned to Opus for a stable
+  adversarial baseline. Run these skills on the most capable model you have —
+  `/model best` resolves to Fable 5 where you have access, otherwise Opus — never
+  on Sonnet. The Codex reviewer is the only non-Claude, cross-model seat, by
+  design.
 
 ## When to use
 
@@ -54,24 +59,24 @@ digraph maestro {
     rankdir=TB;
     "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" [shape=box];
     "Next group" [shape=box];
-    "Implementer (Opus)" [shape=box];
+    "Implementer" [shape=box];
     "General reviewer (Opus, broad)" [shape=box];
-    "Fixer (Opus)" [shape=box];
+    "Fixer" [shape=box];
     "More groups?" [shape=diamond];
     "Panel: 3 Opus lenses + 1 Codex (parallel)" [shape=box];
     "Consolidate issues (from finding text)" [shape=box];
     "Fixer(s), sequential" [shape=box];
-    "QC agent (Opus): build + tests" [shape=box];
+    "QC agent: build + tests" [shape=box];
     "Mergeable?" [shape=diamond];
     "QC failed 3x?" [shape=diamond];
     "Push + report (never merge)" [shape=doublecircle];
     "Stop + AskUserQuestion" [shape=box];
 
     "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" -> "Next group";
-    "Next group" -> "Implementer (Opus)" -> "General reviewer (Opus, broad)" -> "Fixer (Opus)" -> "More groups?";
+    "Next group" -> "Implementer" -> "General reviewer (Opus, broad)" -> "Fixer" -> "More groups?";
     "More groups?" -> "Next group" [label="yes"];
     "More groups?" -> "Panel: 3 Opus lenses + 1 Codex (parallel)" [label="no"];
-    "Panel: 3 Opus lenses + 1 Codex (parallel)" -> "Consolidate issues (from finding text)" -> "Fixer(s), sequential" -> "QC agent (Opus): build + tests" -> "Mergeable?";
+    "Panel: 3 Opus lenses + 1 Codex (parallel)" -> "Consolidate issues (from finding text)" -> "Fixer(s), sequential" -> "QC agent: build + tests" -> "Mergeable?";
     "Mergeable?" -> "Push + report (never merge)" [label="yes"];
     "Mergeable?" -> "QC failed 3x?" [label="no"];
     "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
@@ -108,7 +113,7 @@ critical+complex exception are described in the text below, not drawn.*
 
 For each group, in order:
 
-1. **Implementer** — dispatch a fresh Opus subagent with `implementer-prompt.md`.
+1. **Implementer** — dispatch a fresh subagent with `implementer-prompt.md`.
    Paste in the full task text, context, the branch name, and `TEST`. Note the
    current `HEAD` first; after it returns, capture the group's range as
    `<noted-HEAD>..HEAD` (read-only bookkeeping) for the reviewer.
@@ -116,7 +121,7 @@ For each group, in order:
    **broad mode** (lens `overall correctness and spec compliance`, which tells the
    reviewer to range across the whole group rather than drill one angle). Pass the
    resolved `Scope` range from step 1. It returns a compact verdict.
-3. **Fixer** — dispatch one Opus subagent with `fixer-prompt.md`, handing it the
+3. **Fixer** — dispatch one subagent with `fixer-prompt.md`, handing it the
    reviewer's findings, the branch, and `TEST`. It fixes everything in one pass and
    commits. Do not re-review at this stage — one pass is the per-group gate.
    - **The one sanctioned exception:** if a finding is both *critical* and
@@ -156,7 +161,7 @@ Run this only after every group has passed Phase 1.
 
 ### Phase 3 — Quality-control gate
 
-1. Dispatch a **QC agent** (Opus, `qc-prompt.md`) with `BASE..HEAD`, `BUILD`, and
+1. Dispatch a **QC agent** (`qc-prompt.md`) with `BASE..HEAD`, `BUILD`, and
    `TEST`. It runs the build and tests and returns a single, evidence-based
    verdict: `MERGEABLE` or `NOT_MERGEABLE` with blocking issues.
 2. Read the verdict and decide:

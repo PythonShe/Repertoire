@@ -1,7 +1,7 @@
 # Scout Prompt Template (triage, not trace)
 
 A fast first map of the failure: where could this plausibly come from. Dispatched
-as a fresh **Opus** subagent in the same batch as the Codex investigator. Its
+as a fresh subagent in the same batch as the Codex investigator. Its
 ranked list primes the Opus investigator's search order — it goes to that one
 rival only, never to Codex, so the two investigations stay independent.
 
@@ -9,7 +9,7 @@ The scout is cheap and quick by design. If it comes back thin, dispatch the
 investigator anyway with what it found — never let triage become a bottleneck.
 
 ```
-Agent tool (model: opus, effort: xhigh):
+Agent tool (effort: xhigh):
   description: "Triage [bug one-liner]"
   prompt: |
     You are a triage scout. A bug needs investigating; your job is NOT to find
