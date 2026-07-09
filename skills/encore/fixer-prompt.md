@@ -41,9 +41,11 @@ Agent tool (effort: xhigh):
        your report rather than improvising a different change.
     2. This is finished, working code: preserve observable behavior except
        where the directive explicitly changes it. Keep or add the test the
-       acceptance check names. Run [TEST] and confirm it passes — including
-       the surrounding tests, so you break nothing the audience already
-       relies on.
+       acceptance check names. Run the tests related to your change — scope
+       [TEST] to the touched files/modules when the runner takes a path or
+       pattern — including the surrounding tests in those areas, so you break
+       nothing the audience already relies on. The full suite is not your
+       job: the QC gate runs it once over the whole branch.
     3. **Commit your work**: one clear commit per call, in the repo's
        commit convention, referencing the call it plays (e.g. "refactor:
        dedupe export writers — encore E3"). Stage only the files your

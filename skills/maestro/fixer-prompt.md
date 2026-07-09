@@ -30,8 +30,11 @@ Agent tool (effort: xhigh):
     1. Fix exactly the findings listed — and only those. Do not refactor beyond them
        or add features (YAGNI). If a finding looks wrong or you disagree with it, say
        so in your report rather than fixing it incorrectly.
-    2. Keep or add tests that prove each fix works. Run `[TEST]` and confirm it
-       passes — including the surrounding tests, so you do not break anything else.
+    2. Keep or add tests that prove each fix works. Run the tests related to your
+       fixes — scope `[TEST]` to the touched files/modules when the runner takes a
+       path or pattern — including the surrounding tests in those areas, so you do
+       not break anything else. The full suite is not your job: the QC gate runs
+       it once over the whole branch.
     3. **Commit your work.** You have full authority to commit, and you should: one
        clear commit per fix (or per logical group of fixes), referencing the finding
        it resolves.

@@ -35,8 +35,11 @@ Agent tool (effort: xhigh):
        features (YAGNI). If the directive turns out to be wrong once you are
        in the code, say so in your report rather than improvising a different
        fix.
-    2. Keep or add the test the acceptance check names. Run [TEST] and confirm
-       it passes — including the surrounding tests, so you break nothing else.
+    2. Keep or add the test the acceptance check names. Run the tests related
+       to your change — scope [TEST] to the touched files/modules when the
+       runner takes a path or pattern — including the surrounding tests in
+       those areas, so you break nothing else. The full suite is not your job:
+       the QC gate runs it once over the whole PR.
     3. **Commit your work**: one clear commit per item, in the repo's commit
        convention, referencing what it addresses (e.g. "fix: guard empty
        session — PR #42 review, F3").

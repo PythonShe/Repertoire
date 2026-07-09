@@ -36,7 +36,10 @@ Agent tool (effort: xhigh):
 
     1. Implement exactly what these tasks specify — nothing more (YAGNI).
     2. Write tests that verify real behavior, not mocks. Prefer test-first.
-    3. Run the tests (`[TEST]`) and confirm they pass.
+    3. Run the tests related to your changes — scope `[TEST]` to the touched
+       files/modules when the runner takes a path or pattern — and confirm they
+       pass. The full suite is not your job: the Phase 3 QC gate runs it once
+       over the whole branch.
     4. **Commit your work.** You have full authority to commit, and you should —
        commit in logical units with clear messages as you go. Commits are how your
        progress is recorded and how the run resumes if interrupted.
