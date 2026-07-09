@@ -229,7 +229,10 @@ re-review or push — and go to Phase 4 for replies only.
    `NOT_MERGEABLE` with evidence.
    - **NOT_MERGEABLE** → route each blocker by type — `[defect]` → fixer,
      `[implementation]` → re-verify the item or escalate to the user — then
-     re-run QC. A **round** is one QC dispatch that does not clear; update
+     re-run QC, filling the prompt's retry-round section (the prior blockers
+     + the fix SHAs since — the retry re-runs build and tests in full but
+     close-reads only the new fix commits). A **round** is one QC dispatch
+     that does not clear; update
      `Final verdict (strikes N/3)` after each, and re-verify excursions live
      inside the same budget. On the **third** failed round, stop looping and
      hand the decision to the user via AskUserQuestion — never silently loop
@@ -242,7 +245,8 @@ re-review or push — and go to Phase 4 for replies only.
    drop it.
    - **No critical or important findings** → the PR clears → Phase 4.
    - **Findings** → route them to fixer(s), sequential, then **one confirming
-     QC re-run** (it counts toward the same strike budget). Do not re-dispatch
+     QC re-run** in retry mode, with Codex's findings as the prior blockers
+     (it counts toward the same strike budget). Do not re-dispatch
      Codex — it runs once — unless those fixes were themselves big or risky.
      Confirming QC `MERGEABLE` → clear → Phase 4.
 

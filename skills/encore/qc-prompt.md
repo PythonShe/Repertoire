@@ -66,6 +66,20 @@ Agent tool (effort: xhigh):
     branch diff in full against the set list — a panel may not have run,
     which makes you the only close reader of these changes.
 
+    ## Retry round (only on re-runs)
+
+    [First QC round: omit this section entirely. Retry rounds — including the
+    confirming re-run after Codex findings are fixed: paste the prior round's
+    blocking issues (or Codex's findings) and the fix commits made since —
+    SHA · one line each.]
+
+    If this section is present, a previous QC round already close-read the
+    branch. For step 3, read only the diff of the fix commits listed here in
+    full — the prior round covered the rest — and verify each prior blocker
+    is actually resolved; still run [BUILD] and [TEST] in full as above, and
+    apply the preservation bar (step 4) to those fix diffs. Anything new you
+    stumble on still blocks; the retry narrows the read, not the standard.
+
     ## Report format (compact — the controller stays lean)
 
     - **Verdict:** MERGEABLE | NOT_MERGEABLE

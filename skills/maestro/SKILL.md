@@ -173,6 +173,10 @@ Run this only after every group has passed Phase 1.
      - a *missing or incorrect implementation / design gap* a fixer cannot
        localize → re-dispatch the relevant group's implementer, or escalate to the
        user if the plan itself is at fault.
+     When you re-run QC, fill the prompt's retry-round section with the blockers
+     the last round returned and the fix SHAs made since — the retry re-runs the
+     build and tests in full but close-reads only those fixes instead of
+     re-deriving the whole branch.
 3. **The counter and safety valve.** A round = one QC dispatch that returns
    `NOT_MERGEABLE`. Update the `Phase 3: QC (strikes N/3)` todo after each. On the
    **third** `NOT_MERGEABLE`, stop looping and escalate: report the situation and

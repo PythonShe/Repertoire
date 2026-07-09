@@ -44,6 +44,18 @@ Agent tool (effort: xhigh):
     requirements; rely on build + tests for the rest, and do not exhaustively reread
     every file.
 
+    ## Retry round (only on re-runs)
+
+    [First QC round: omit this section entirely. Retry rounds: paste the prior
+    round's blocking issues and the fix commits made since — SHA · one line each.]
+
+    If this section is present, a previous QC round already examined this branch.
+    Do not re-derive everything: run `[BUILD]` and `[TEST]` in full as above, read
+    the diff of the fix commits listed here in full, and verify each prior blocker
+    is actually resolved — then check only where those fixes touch the rest of the
+    branch. Anything new you stumble on still blocks; the retry narrows the read,
+    not the standard.
+
     ## Report format (compact — the controller stays lean)
 
     - **Verdict:** MERGEABLE | NOT_MERGEABLE

@@ -285,8 +285,10 @@ QC re-run are described in the text below.*
    - **NOT_MERGEABLE** → route each blocker by type — `[defect]` → fixer;
      `[implementation]` → re-dispatch the verifier for that call alone (once)
      when the dispute is factual, or escalate to the user when it needs a
-     decision — then re-run QC. A **round** is one QC dispatch that does not
-     clear; update
+     decision — then re-run QC, filling the prompt's retry-round section (the
+     prior blockers + the fix SHAs since — the retry re-runs build and tests
+     in full but close-reads only the new fix commits). A **round** is one QC
+     dispatch that does not clear; update
      `Final verdict (strikes N/3)` after each. On the **third** failed round,
      stop looping and hand the decision to the user via AskUserQuestion —
      never silently loop past three. Codex has not run yet: the cross-model
@@ -297,8 +299,9 @@ QC re-run are described in the text below.*
    rests on QC alone — say so in your report, never silently drop it.
    - **No critical or important findings** → the branch clears → Phase 5.
    - **Findings** → route to fixer(s), sequential, then **one confirming QC
-     re-run** (it counts toward the same strike budget; if it fails, it
-     rejoins the normal blocker loop above). Do not re-dispatch Codex — it
+     re-run** in retry mode, with Codex's findings as the prior blockers (it
+     counts toward the same strike budget; if it fails, it rejoins the normal
+     blocker loop above). Do not re-dispatch Codex — it
      runs once — unless those fixes were themselves big or risky by the same
      bar as *When the panel runs*.
 
