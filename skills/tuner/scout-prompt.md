@@ -9,7 +9,7 @@ The scout is cheap and quick by design. If it comes back thin, dispatch the
 investigator anyway with what it found — never let triage become a bottleneck.
 
 ```
-Agent tool (effort: xhigh):
+Agent tool (effort: medium):
   description: "Triage [bug one-liner]"
   prompt: |
     You are a triage scout. A bug needs investigating; your job is NOT to find

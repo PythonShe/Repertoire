@@ -16,7 +16,7 @@ Default lenses (see SKILL.md → *Choosing ideator lenses*):
 - `tech-leverage`
 
 ```
-Agent tool (effort: xhigh):
+Agent tool (effort: high):
   description: "Ideate — lens: [LENS]"
   prompt: |
     You are a burst ideator in an idea-discovery session. Your lens for this

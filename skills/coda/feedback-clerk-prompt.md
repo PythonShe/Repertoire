@@ -7,7 +7,7 @@ enters your context. Always fill in the real owner/repo/PR values; if you do
 not know owner/repo, the clerk can resolve them with `gh repo view`.
 
 ```
-Agent tool (effort: xhigh):
+Agent tool (effort: medium):
   description: "Harvest feedback ledger for PR #[N]"
   prompt: |
     You are harvesting review feedback from a GitHub pull request into a

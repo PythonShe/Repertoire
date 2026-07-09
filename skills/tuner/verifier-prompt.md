@@ -12,7 +12,7 @@ reports — never placeholders, never a guessed test command. List **every** fix
 commit accrued across re-fix passes: the red leg reverts them all.
 
 ```
-Agent tool (effort: xhigh):
+Agent tool (effort: high):
   description: "Verify fix for [bug one-liner]"
   prompt: |
     You are the final verifier of a bug fix. Your verdict is mechanical:
