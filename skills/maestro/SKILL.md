@@ -121,9 +121,12 @@ For each group, in order:
    **broad mode** (lens `overall correctness and spec compliance`, which tells the
    reviewer to range across the whole group rather than drill one angle). Pass the
    resolved `Scope` range from step 1. It returns a compact verdict.
-3. **Fixer** — dispatch one subagent with `fixer-prompt.md`, handing it the
-   reviewer's findings, the branch, and `TEST`. It fixes everything in one pass and
-   commits. Do not re-review at this stage — one pass is the per-group gate.
+3. **Fixer** — only if the reviewer found something. On a clean `PASS` with no
+   findings, skip the fixer and go to step 4 — a fixer with an empty finding list
+   is a wasted seat. Otherwise dispatch one subagent with `fixer-prompt.md`,
+   handing it the reviewer's findings, the branch, and `TEST`. It fixes everything
+   in one pass and commits. Do not re-review at this stage — one pass is the
+   per-group gate.
    - **The one sanctioned exception:** if a finding is both *critical* and
      *complex*, dispatch a second reviewer + fixer for that single issue (the
      second reviewer inspects the fix, not the whole group). Cap it at one extra
