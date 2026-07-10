@@ -1,0 +1,20 @@
+[
+  {"query": "run Coda on PR 42", "should_trigger": true},
+  {"query": "Coda, work through the review feedback", "should_trigger": true},
+  {"query": "/coda address the reviews on this PR", "should_trigger": true},
+  {"query": "address the review comments on my open PR", "should_trigger": true},
+  {"query": "work through the PR feedback and fix what's valid", "should_trigger": true},
+  {"query": "respond to my reviewers on the pull request", "should_trigger": true},
+  {"query": "CI flagged failures on the PR — fix what it flagged", "should_trigger": true},
+  {"query": "fix this bug — the app crashes on startup", "should_trigger": false, "note": "tuner's"},
+  {"query": "why is this unit test failing locally?", "should_trigger": false, "note": "tuner's"},
+  {"query": "find the root cause of this regression", "should_trigger": false, "note": "tuner's"},
+  {"query": "harden the security of the auth module", "should_trigger": false, "note": "encore's"},
+  {"query": "clean up the tech debt in the parser", "should_trigger": false, "note": "encore's"},
+  {"query": "execute the implementation plan we approved", "should_trigger": false, "note": "maestro's"},
+  {"query": "spec out this feature idea for me", "should_trigger": false, "note": "libretto's"},
+  {"query": "how do I make a lookup table in Coda.io?", "should_trigger": false},
+  {"query": "export my coda.io doc to markdown", "should_trigger": false},
+  {"query": "what is a coda in a sonata?", "should_trigger": false},
+  {"query": "help me write a coda for my piano piece", "should_trigger": false}
+]

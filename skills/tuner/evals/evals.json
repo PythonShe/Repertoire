@@ -1,0 +1,20 @@
+[
+  {"query": "run Tuner on this failure", "should_trigger": true},
+  {"query": "debug this with Tuner", "should_trigger": true},
+  {"query": "/tuner the flaky login test", "should_trigger": true},
+  {"query": "fix this bug — clicking save throws a TypeError", "should_trigger": true},
+  {"query": "why is this test failing?", "should_trigger": true},
+  {"query": "find the root cause of this regression", "should_trigger": true},
+  {"query": "the app crashes on startup after the last commit — debug it", "should_trigger": true},
+  {"query": "clean up the tech debt in this module — nothing's broken", "should_trigger": false, "note": "encore's"},
+  {"query": "improve the robustness of this working module", "should_trigger": false, "note": "encore's"},
+  {"query": "address the reviewer comments on PR 17", "should_trigger": false, "note": "coda's"},
+  {"query": "fix what CI flagged on my open pull request", "should_trigger": false, "note": "coda's"},
+  {"query": "break this spec into implementation tasks", "should_trigger": false, "note": "score's"},
+  {"query": "execute the plan in docs/plan.md", "should_trigger": false, "note": "maestro's"},
+  {"query": "what feature should I build next?", "should_trigger": false, "note": "eureka's"},
+  {"query": "my guitar tuner says the E string is flat — how do I tune it?", "should_trigger": false},
+  {"query": "tune the hyperparameters of this XGBoost model", "should_trigger": false},
+  {"query": "help me tune the JVM garbage collector settings for our production service", "should_trigger": false},
+  {"query": "how do I tune a piano by ear?", "should_trigger": false}
+]

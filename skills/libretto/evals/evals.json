@@ -1,0 +1,20 @@
+[
+  {"query": "spec this out with Libretto", "should_trigger": true},
+  {"query": "/libretto design the offline sync feature", "should_trigger": true},
+  {"query": "spec this out — I want to add dark mode support", "should_trigger": true},
+  {"query": "design this feature: a rate limiter for the public API", "should_trigger": true},
+  {"query": "turn this idea into a spec I can build from", "should_trigger": true},
+  {"query": "I know exactly what I want to build — help me write the spec", "should_trigger": true},
+  {"query": "can you design this export feature into a proper spec?", "should_trigger": true},
+  {"query": "brainstorm what features to add next", "should_trigger": false, "note": "eureka's"},
+  {"query": "what should I build next for this app?", "should_trigger": false, "note": "eureka's"},
+  {"query": "hunt for new feature ideas for the plugin", "should_trigger": false, "note": "eureka's"},
+  {"query": "write the implementation plan from this approved spec", "should_trigger": false, "note": "score's"},
+  {"query": "break the spec into implementation tasks", "should_trigger": false, "note": "score's"},
+  {"query": "execute this implementation plan step by step", "should_trigger": false, "note": "maestro's"},
+  {"query": "address the review comments on my open PR", "should_trigger": false, "note": "coda's"},
+  {"query": "who wrote the libretto for The Magic Flute?", "should_trigger": false},
+  {"query": "translate this opera libretto from Italian to English", "should_trigger": false},
+  {"query": "what's the difference between a libretto and the score in an opera?", "should_trigger": false},
+  {"query": "recommend some famous opera libretti to read", "should_trigger": false}
+]

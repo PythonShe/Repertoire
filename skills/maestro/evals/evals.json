@@ -1,0 +1,20 @@
+[
+  {"query": "run Maestro on this plan", "should_trigger": true},
+  {"query": "execute this with Maestro", "should_trigger": true},
+  {"query": "/maestro plans/v2-migration.md", "should_trigger": true},
+  {"query": "execute this implementation plan", "should_trigger": true},
+  {"query": "build out the plan step by step", "should_trigger": true},
+  {"query": "implement the plan in docs/plan.md with subagents", "should_trigger": true},
+  {"query": "the plan is approved — go implement it task by task", "should_trigger": true},
+  {"query": "write an implementation plan for this spec", "should_trigger": false, "note": "score's"},
+  {"query": "break this spec into task groups", "should_trigger": false, "note": "score's"},
+  {"query": "plan out how we'd build this feature", "should_trigger": false, "note": "score's"},
+  {"query": "rename this config variable across the file", "should_trigger": false, "note": "no skill — single small task, no plan"},
+  {"query": "spec this feature idea out first", "should_trigger": false, "note": "libretto's"},
+  {"query": "address the reviewer feedback on PR 42", "should_trigger": false, "note": "coda's"},
+  {"query": "debug why the build is failing on main", "should_trigger": false, "note": "tuner's"},
+  {"query": "who was the maestro conducting the Berlin Philharmonic in 1990?", "should_trigger": false},
+  {"query": "what does a maestro actually do in an orchestra?", "should_trigger": false},
+  {"query": "recommend recordings conducted by maestro Abbado", "should_trigger": false},
+  {"query": "is the movie Maestro about Bernstein worth watching?", "should_trigger": false}
+]

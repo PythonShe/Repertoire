@@ -1,0 +1,20 @@
+[
+  {"query": "run Eureka on this repo", "should_trigger": true},
+  {"query": "/eureka find feature ideas for my CLI tool", "should_trigger": true},
+  {"query": "brainstorm feature ideas for this project", "should_trigger": true},
+  {"query": "what should I build next in this codebase?", "should_trigger": true},
+  {"query": "help me come up with ideas for what to add to the app", "should_trigger": true},
+  {"query": "I'm out of ideas — can we hunt for what feature to work on next?", "should_trigger": true},
+  {"query": "what should I add to make this plugin more useful?", "should_trigger": true},
+  {"query": "I have an idea for an export feature — spec it out", "should_trigger": false, "note": "libretto's"},
+  {"query": "design this notification feature into a proper spec", "should_trigger": false, "note": "libretto's"},
+  {"query": "turn this rough idea I've been sitting on into a build-ready spec", "should_trigger": false, "note": "libretto's"},
+  {"query": "write the implementation plan for this spec", "should_trigger": false, "note": "score's"},
+  {"query": "execute the plan in docs/plan.md", "should_trigger": false, "note": "maestro's"},
+  {"query": "audit the payments module and improve it", "should_trigger": false, "note": "encore's"},
+  {"query": "figure out why this test started failing and fix it", "should_trigger": false, "note": "tuner's"},
+  {"query": "I just had a eureka moment about the caching bug", "should_trigger": false},
+  {"query": "find me a cheap hotel in Eureka, California", "should_trigger": false},
+  {"query": "is the Eureka TV series worth watching?", "should_trigger": false},
+  {"query": "help my kid with Eureka Math module 3 homework", "should_trigger": false}
+]

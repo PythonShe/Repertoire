@@ -1,0 +1,20 @@
+[
+  {"query": "run Encore on the auth module", "should_trigger": true},
+  {"query": "do an Encore pass over this repo", "should_trigger": true},
+  {"query": "/encore src/parser", "should_trigger": true},
+  {"query": "optimize this module — it works but could be faster", "should_trigger": true},
+  {"query": "harden security here", "should_trigger": true},
+  {"query": "clean up the tech debt in the services layer", "should_trigger": true},
+  {"query": "audit the exporter and improve it", "should_trigger": true},
+  {"query": "fix this crash we're seeing in production", "should_trigger": false, "note": "tuner's"},
+  {"query": "this test started failing after the upgrade — debug it", "should_trigger": false, "note": "tuner's"},
+  {"query": "address the review comments on my open PR", "should_trigger": false, "note": "coda's"},
+  {"query": "work through what CI flagged on the pull request", "should_trigger": false, "note": "coda's"},
+  {"query": "brainstorm new features for the app", "should_trigger": false, "note": "eureka's"},
+  {"query": "write an implementation plan for the redesign spec", "should_trigger": false, "note": "score's"},
+  {"query": "execute the migration plan step by step", "should_trigger": false, "note": "maestro's"},
+  {"query": "what songs make a good concert encore?", "should_trigger": false},
+  {"query": "what did the band play for the encore last night?", "should_trigger": false},
+  {"query": "how do I define a service in Encore.dev?", "should_trigger": false},
+  {"query": "deploy my Encore.ts backend to production", "should_trigger": false}
+]

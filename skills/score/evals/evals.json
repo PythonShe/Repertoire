@@ -1,0 +1,20 @@
+[
+  {"query": "score this spec", "should_trigger": true},
+  {"query": "run Score on the approved spec", "should_trigger": true},
+  {"query": "/score specs/auth-redesign.md", "should_trigger": true},
+  {"query": "write the implementation plan for this spec", "should_trigger": true},
+  {"query": "the design is agreed — plan this out into concrete tasks", "should_trigger": true},
+  {"query": "break the spec into implementation tasks", "should_trigger": true},
+  {"query": "turn this approved design into an implementation plan", "should_trigger": true},
+  {"query": "execute this implementation plan", "should_trigger": false, "note": "maestro's"},
+  {"query": "build out the plan in tasks.md step by step", "should_trigger": false, "note": "maestro's"},
+  {"query": "the plan is ready — implement it with subagents", "should_trigger": false, "note": "maestro's"},
+  {"query": "spec out this feature idea I have", "should_trigger": false, "note": "libretto's"},
+  {"query": "design this feature into a spec before we plan anything", "should_trigger": false, "note": "libretto's"},
+  {"query": "brainstorm what to build next in this repo", "should_trigger": false, "note": "eureka's"},
+  {"query": "figure out why the integration test is failing and fix it", "should_trigger": false, "note": "tuner's"},
+  {"query": "score this PR from 1 to 10", "should_trigger": false},
+  {"query": "what's our test coverage score after this change?", "should_trigger": false},
+  {"query": "typeset this music score in LilyPond", "should_trigger": false},
+  {"query": "rate the code quality and give it a score out of ten", "should_trigger": false}
+]
