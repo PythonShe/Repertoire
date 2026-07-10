@@ -15,7 +15,7 @@
 
 ## 推荐配置
 
-这些 skill 在设计上就是高 token 消耗的：每次运行都会调度一组全新的、以 high 至 xhigh 推理强度运行的 subagent 协同工作——构建席位（实现者、修复者、QC 闸门）跑在你的会话模型上，评审席位（调查者、评审小组、校验者）固定用 Opus——而它们的可靠性正源于此。请相应地规划你的账户：
+这些 skill 在设计上就是高 token 消耗的：每次运行都会调度一组全新的、以 medium 至 xhigh 推理强度运行的 subagent 协同工作——构建席位（实现者、修复者、QC 闸门）跑在你的会话模型上，评审席位（调查者、评审小组、校验者）固定用 Opus——而它们的可靠性正源于此。请相应地规划你的账户：
 
 - **Claude Max（5x 或 20x），或 API 计费**——这是预期配置。更轻量的套餐很可能在运行途中就触及用量上限。
 - **安装了 OpenAI [`codex-cc` 插件](https://github.com/openai/codex-plugin-cc)的 Codex 账户**——强烈建议。每个 skill 都会通过它调度一个跨模型的 Codex agent（评审者或调查者）。没有 Codex 时 skill 也能优雅降级——它们会改跑纯 Opus 的小组，并在报告中说明这一点——但跨模型校验本身就是设计的一部分。
@@ -47,34 +47,23 @@ claude plugin validate .
 ## 仓库结构
 
 ```text
-Repertoire/                       repo root = plugin root = marketplace root
+Repertoire/                       仓库根目录 = 插件根目录 = marketplace 根目录
 ├── .claude-plugin/
-│   ├── plugin.json               plugin manifest (name: repertoire)
-│   └── marketplace.json          catalog listing this plugin (source "./")
-├── skills/
-│   ├── eureka/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── libretto/
-│   │   ├── SKILL.md
-│   │   ├── spec-template.md      bundled spec structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── score/
-│   │   ├── SKILL.md
-│   │   ├── plan-template.md      bundled plan structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── maestro/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── coda/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── encore/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   └── tuner/
+│   ├── plugin.json               插件清单（name: repertoire）
+│   └── marketplace.json          列出本插件的 catalog（source "./"）
+├── skills/                       每个 skill 一个目录
+│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner
 │       ├── SKILL.md
-│       └── *-prompt.md           bundled subagent prompt templates
+│       ├── evals/evals.json      已提交的 trigger evals
+│       ├── *-template.md         内置的文档结构（libretto、score）
+│       └── *-prompt.md           内置的 subagent prompt 模板
+├── shared/
+│   ├── codex-reviewer-core.md    共享的 Codex 调用契约
+│   └── invariants.md             两档模型策略的权威定义
+├── docs/
+│   ├── adr/                      架构决策记录（ADR）
+│   └── authoring/                skill 撰写准则
+├── CHANGELOG.md
 └── README.md
 ```
 

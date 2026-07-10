@@ -18,7 +18,7 @@
 
 ## 建議的環境設定
 
-這些 skill 刻意設計成相當耗用 token：每次執行都會調度一組全新的、以 high 至 xhigh 推理強度
+這些 skill 刻意設計成相當耗用 token：每次執行都會調度一組全新的、以 medium 至 xhigh 推理強度
 運作的 subagent 陣容——建置席位（實作者、修復者、QC 把關）跑在你的會話模型上，審查席位（調查員、審查小組、驗證者）固定用 Opus——它們的可靠度正是來自於此。
 請依此選擇方案：
 
@@ -56,34 +56,23 @@ claude plugin validate .
 ## 儲存庫結構
 
 ```text
-Repertoire/                       repo root = plugin root = marketplace root
+Repertoire/                       儲存庫根目錄 = 外掛根目錄 = marketplace 根目錄
 ├── .claude-plugin/
-│   ├── plugin.json               plugin manifest (name: repertoire)
-│   └── marketplace.json          catalog listing this plugin (source "./")
-├── skills/
-│   ├── eureka/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── libretto/
-│   │   ├── SKILL.md
-│   │   ├── spec-template.md      bundled spec structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── score/
-│   │   ├── SKILL.md
-│   │   ├── plan-template.md      bundled plan structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── maestro/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── coda/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── encore/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   └── tuner/
+│   ├── plugin.json               外掛清單（name: repertoire）
+│   └── marketplace.json          列出本外掛的 catalog（source "./"）
+├── skills/                       每個 skill 一個目錄
+│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner
 │       ├── SKILL.md
-│       └── *-prompt.md           bundled subagent prompt templates
+│       ├── evals/evals.json      已提交的 trigger evals
+│       ├── *-template.md         內建的文件結構（libretto、score）
+│       └── *-prompt.md           內建的 subagent prompt 範本
+├── shared/
+│   ├── codex-reviewer-core.md    共用的 Codex 呼叫契約
+│   └── invariants.md             兩檔模型策略的權威定義
+├── docs/
+│   ├── adr/                      架構決策紀錄（ADR）
+│   └── authoring/                skill 撰寫準則
+├── CHANGELOG.md
 └── README.md
 ```
 

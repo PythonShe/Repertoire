@@ -15,7 +15,7 @@
 
 ## 推奨セットアップ
 
-これらの Skill は意図的にトークンを多く消費します。実行のたびに新規の subagent 群を high〜xhigh の推論労力で編成して動かします——ビルドシート（実装者、フィクサー、QC ゲート）はあなたのセッションモデルで、レビューシート（調査者、レビューパネル、検証者）は Opus に固定——その点こそが信頼性の源泉となっています。プランはそれに見合ったものを用意してください。
+これらの Skill は意図的にトークンを多く消費します。実行のたびに新規の subagent 群を medium〜xhigh の推論労力で編成して動かします——ビルドシート（実装者、フィクサー、QC ゲート）はあなたのセッションモデルで、レビューシート（調査者、レビューパネル、検証者）は Opus に固定——その点こそが信頼性の源泉となっています。プランはそれに見合ったものを用意してください。
 
 - **Claude Max（5x または 20x）、もしくは API 課金** — 想定されている構成です。これより軽量なプランでは、実行の途中で利用上限に達する可能性が高くなります。
 - **OpenAI の [`codex-cc` プラグイン](https://github.com/openai/codex-plugin-cc) をインストールした Codex アカウント** — 強く推奨します。各 Skill は、これを通じてクロスモデルの Codex エージェント（レビュアーまたは調査者）をディスパッチします。Codex がなくても Skill は適切にデグレードして動作し、Opus のみのパネルで実行したうえでその旨をレポートに記載しますが、クロスモデルでのチェックは設計の一部です。
@@ -47,34 +47,23 @@ claude plugin validate .
 ## リポジトリ構成
 
 ```text
-Repertoire/                       repo root = plugin root = marketplace root
+Repertoire/                       リポジトリルート = プラグインルート = marketplace ルート
 ├── .claude-plugin/
-│   ├── plugin.json               plugin manifest (name: repertoire)
-│   └── marketplace.json          catalog listing this plugin (source "./")
-├── skills/
-│   ├── eureka/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── libretto/
-│   │   ├── SKILL.md
-│   │   ├── spec-template.md      bundled spec structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── score/
-│   │   ├── SKILL.md
-│   │   ├── plan-template.md      bundled plan structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── maestro/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── coda/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── encore/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   └── tuner/
+│   ├── plugin.json               プラグインマニフェスト（name: repertoire）
+│   └── marketplace.json          このプラグインを掲載するカタログ（source "./"）
+├── skills/                       Skill ごとに 1 ディレクトリ
+│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner
 │       ├── SKILL.md
-│       └── *-prompt.md           bundled subagent prompt templates
+│       ├── evals/evals.json      コミット済みの trigger evals
+│       ├── *-template.md         同梱のドキュメント構造（libretto、score）
+│       └── *-prompt.md           同梱の subagent プロンプトテンプレート
+├── shared/
+│   ├── codex-reviewer-core.md    共有の Codex 呼び出し契約
+│   └── invariants.md             規範となる 2 階層モデルポリシー
+├── docs/
+│   ├── adr/                      アーキテクチャ決定記録（ADR）
+│   └── authoring/                Skill 作成の指針
+├── CHANGELOG.md
 └── README.md
 ```
 
