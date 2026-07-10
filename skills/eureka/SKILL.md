@@ -58,6 +58,7 @@ is dead.
 - **The idea is the terminal artifact.** Eureka ends at a committed shortlist
   and, optionally, a champion. Point to `/repertoire:libretto` as the next step —
   never invoke it, and never write the spec yourself.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Run on your most capable model.** The ideators (ensemble bursts) run
   unpinned and inherit your session model; the vetting-funnel lenses stay pinned
   to Opus for a stable adversarial baseline; the scout stays on Explore. Run this

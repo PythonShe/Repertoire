@@ -46,6 +46,7 @@ ruinously expensive once it is baked into code.
   does not write an implementation plan and it does not build. Point to
   `/repertoire:score` (spec → plan) and then `/repertoire:maestro` as the next
   steps — but never invoke them, and never write the plan yourself.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Opus for skeptics, plus one cross-model voice.** Every review-lens subagent
   runs on Opus at xhigh effort; one more reviewer is Codex, cross-model by design. Context
   scouting uses the read-only Explore agent.
@@ -133,8 +134,10 @@ The headline gate. Dispatch the panel **in parallel** against the committed spec
   `spec-reviewer-prompt.md`. Use 3 by default; 2 is fine for a genuinely small
   spec.
 - **+1 Codex reviewer** for an independent cross-model pass
-  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Opus lenses only
-  and say so in your report — never silently drop a reviewer.
+  (`codex-reviewer-prompt.md` — read
+  `${CLAUDE_PLUGIN_ROOT}/shared/codex-reviewer-core.md` first; the stub
+  composes with that shared contract). If Codex is unavailable, run the Opus
+  lenses only and say so in your report — never silently drop a reviewer.
 
 When the verdicts return, **consolidate from the finding text** — match by section
 + description, drop duplicates, discard anything that isn't a real gap. Then
@@ -233,4 +236,5 @@ available, treat the reviewer as absent, proceed with the Opus lenses, and say s
   docs, and conventions into a compact brief.
 - `spec-reviewer-prompt.md` — skeptical spec reviewer, parameterized by lens (one
   lens each for the panel).
-- `codex-reviewer-prompt.md` — cross-model general spec review via Codex.
+- `codex-reviewer-prompt.md` — what the Codex reviewer reviews; a thin stub
+  composing with `shared/codex-reviewer-core.md` (the invocation mechanics).

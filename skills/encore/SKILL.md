@@ -59,6 +59,7 @@ context survives a whole-codebase pass from first profile to final push.
 - **Everyone who changes code commits.** Each fixer commits its own work,
   referencing the call it plays; the commits and the dossier are the resume
   trail. You push exactly once, at the publish gate — and never merge.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Play it on your best.** The build seats — the fixers and the QC gate —
   run unpinned and inherit your session model; the hunters, the read-only
   verifier, and the panel skeptics stay pinned to Opus for a stable
@@ -257,7 +258,9 @@ strike budget live there, not here.
      stop looping and hand the decision to the user via AskUserQuestion —
      never silently loop past three. Codex has not run yet: the cross-model
      pass is never spent on a branch same-model QC would bounce.
-3. **Codex — once, after QC passes** (`codex-reviewer-prompt.md`): a
+3. **Codex — once, after QC passes** (`codex-reviewer-prompt.md` — read
+   `${CLAUDE_PLUGIN_ROOT}/shared/codex-reviewer-core.md` first; the stub
+   composes with that shared contract): a
    cross-model adversarial pass over the **whole branch** (`BASE..HEAD`), the
    last reviewer in the pipeline. Unavailable or empty result → the verdict
    rests on QC alone — say so in your report, never silently drop it.
@@ -443,4 +446,6 @@ describe.
   or risky set lists only.
 - `qc-prompt.md` — evidence-based mergeability verdict (build, tests, full
   branch read against the set list).
-- `codex-reviewer-prompt.md` — cross-model, whole-branch pass once QC clears.
+- `codex-reviewer-prompt.md` — cross-model, whole-branch pass once QC clears;
+  a thin stub composing with `shared/codex-reviewer-core.md` (the invocation
+  mechanics).

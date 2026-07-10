@@ -62,6 +62,7 @@ survives a feedback-heavy PR from harvest to publish.
   final verdict. You never merge, never resolve threads, never approve or
   dismiss reviews, and never force-push (rewriting a shared PR branch breaks
   the line anchors that review comments hang on).
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **The right model on every seat.** The build seats — the feedback-clerk, the
   fixers, and the QC gate — run unpinned and inherit your session model; the
   read-only verifier and the panel skeptics stay pinned to Opus for a stable
@@ -207,7 +208,9 @@ re-review or push — and go to Phase 4 for replies only.
      hand the decision to the user via AskUserQuestion — never silently loop
      past three. Codex has not run yet: the cross-model pass is never spent
      on a branch that same-model QC would bounce.
-3. **Codex — once, after QC passes** (`codex-reviewer-prompt.md`): a
+3. **Codex — once, after QC passes** (`codex-reviewer-prompt.md` — read
+   `${CLAUDE_PLUGIN_ROOT}/shared/codex-reviewer-core.md` first; the stub
+   composes with that shared contract): a
    cross-model adversarial pass over the **whole PR** (`BASE..HEAD`) — the
    last reviewer in the pipeline. If Codex is unavailable or returns nothing,
    the verdict rests on QC alone — say so in your report, never silently
@@ -366,6 +369,8 @@ Replies are part of the work product and carry the same rigor as the code:
   (read-only, one agent).
 - `fixer-prompt.md` — implement a verified directive and commit.
 - `reviewer-prompt.md` — adversarial panel review, one lens per reviewer.
-- `codex-reviewer-prompt.md` — cross-model, whole-PR pass once QC clears.
+- `codex-reviewer-prompt.md` — cross-model, whole-PR pass once QC clears; a
+  thin stub composing with `shared/codex-reviewer-core.md` (the invocation
+  mechanics).
 - `qc-prompt.md` — evidence-based mergeability verdict (reads every fix in
   full).

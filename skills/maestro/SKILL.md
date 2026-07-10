@@ -36,6 +36,7 @@ you can keep coordinating clearly all the way to the end.
   when you finalize — commits its own work as it goes. Reviewers and the QC agent
   change nothing, so they commit nothing. Commits are the unit of progress and the
   same-session resume trail.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Model policy.** The build seats — implementer, fixer, and the QC gate — run
   unpinned and inherit your session model; the general reviewer, the panel
   skeptics, and the QC-adjacent review lenses stay pinned to Opus for a stable
@@ -132,8 +133,10 @@ Run this only after every group has passed Phase 1.
    - **3 Opus reviewers**, each with a different lens you choose for this work
      (see *Choosing lenses*). Use `reviewer-prompt.md` for each.
    - **+1 Codex reviewer** for an independent cross-model pass
-     (`codex-reviewer-prompt.md`). If Codex is unavailable, run 3 Opus reviewers
-     only and say so in your report — never silently drop a reviewer.
+     (`codex-reviewer-prompt.md` — read
+     `${CLAUDE_PLUGIN_ROOT}/shared/codex-reviewer-core.md` first; the stub
+     composes with that shared contract). If Codex is unavailable, run 3 Opus
+     reviewers only and say so in your report — never silently drop a reviewer.
    - Include any findings carried forward from Phase 1 in each reviewer's brief.
 2. When all verdicts return, **consolidate from the finding text only** — match by
    `file:line` + description, drop duplicates, discard anything that is not a real
@@ -255,6 +258,7 @@ as the phase steps describe.
 - `implementer-prompt.md` — build one group.
 - `reviewer-prompt.md` — skeptical reviewer, parameterized by lens (broad mode for
   Phase 1, one lens each for the Phase 2 panel).
-- `codex-reviewer-prompt.md` — cross-model general review via Codex.
+- `codex-reviewer-prompt.md` — what the Codex reviewer reviews; a thin stub
+  composing with `shared/codex-reviewer-core.md` (the invocation mechanics).
 - `fixer-prompt.md` — fix a consolidated set of findings and commit.
 - `qc-prompt.md` — final whole-branch mergeability verdict.

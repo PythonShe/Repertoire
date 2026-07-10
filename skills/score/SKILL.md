@@ -49,6 +49,7 @@ now and expensive once three subagents have built on a broken decomposition.
   not implement, and it does not redesign — open design questions go back to
   `/repertoire:libretto`, not into the plan as guesses. Point to
   `/repertoire:maestro` as the next step — but never invoke it.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Opus for skeptics, plus one cross-model voice.** Every review-lens subagent
   runs on Opus at xhigh effort; one more reviewer is Codex, cross-model by design. Context
   scouting uses the read-only Explore agent.
@@ -176,8 +177,10 @@ unsubstituted placeholder:
   using `plan-reviewer-prompt.md`. Use 3 by default; 2 is fine for a genuinely
   small plan.
 - **+1 Codex reviewer** for an independent cross-model pass
-  (`codex-reviewer-prompt.md`). If Codex is unavailable, run the Opus lenses
-  only and say so in your report — never silently drop a reviewer.
+  (`codex-reviewer-prompt.md` — read
+  `${CLAUDE_PLUGIN_ROOT}/shared/codex-reviewer-core.md` first; the stub
+  composes with that shared contract). If Codex is unavailable, run the Opus
+  lenses only and say so in your report — never silently drop a reviewer.
 
 When the verdicts return, **consolidate from the finding text** — match by
 movement/task + description, drop duplicates, discard anything that isn't a
@@ -280,4 +283,5 @@ so.
   points, conventions, build/test commands, and spec drift into a compact brief.
 - `plan-reviewer-prompt.md` — skeptical plan reviewer, parameterized by lens
   (one lens each for the panel).
-- `codex-reviewer-prompt.md` — cross-model general plan review via Codex.
+- `codex-reviewer-prompt.md` — what the Codex reviewer reviews; a thin stub
+  composing with `shared/codex-reviewer-core.md` (the invocation mechanics).

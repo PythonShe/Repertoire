@@ -48,6 +48,7 @@ your context, so it survives a long hunt intact.
 - **Strike budgets, then the user.** One rebuttal round for a cross-exam deadlock;
   three strikes for the repair loop. After that, AskUserQuestion — never loop
   silently past a budget.
+<!-- canonical: shared/invariants.md — keep this bullet in sync -->
 - **Play the best instrument you have.** The build seats — the triage scout, the
   test-first fixer, and the terminal red→green verifier — run unpinned and inherit
   your session model; the systematic investigator and the fix reviewer stay pinned
