@@ -2,7 +2,8 @@
 
 This file is the canonical statement of the two-tier model policy; each
 SKILL.md carries a marked copy (seat names vary by skill) that must not drift
-from it.
+from it. Sanctioned variance: libretto and score, whose only build seat is the
+conductor itself, state the policy without the session-model guidance.
 
 - **Play it on your best.** The build seats — the fixers and the QC gate —
   run unpinned and inherit your session model; the hunters, the read-only

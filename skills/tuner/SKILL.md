@@ -1,6 +1,6 @@
 ---
 name: tuner
-description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — rival investigations by a Codex agent (xhigh effort) and a scout-primed Opus investigator, cross-examined as the confidence gate; then a failing-test-first repair on a feature branch: a deliberately-red repro test committed before the fix, a skeptical fix reviewer, and a mechanical red→green verifier. Commits as it goes, never merges, pushes only on request.
+description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — rival investigations by a Codex agent (xhigh effort) and a scout-primed Opus investigator, cross-examined as the confidence gate; then a failing-test-first repair on a feature branch — a deliberately-red repro test committed before the fix, a skeptical fix reviewer, and a mechanical red→green verifier. Commits as it goes, never merges, pushes only on request.
 when_to_use: Use when the user reports a reproducible bug, regression, crash, or failing test in the codebase and wants it diagnosed to root cause and fixed — "fix this bug", "debug this failure", "why is this test failing", "find the root cause", "run Tuner on this". Code that works but should be better goes to encore.
 ---
 

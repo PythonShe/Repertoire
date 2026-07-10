@@ -10,7 +10,7 @@ Repertoire is quality-first: subagent seats run the strongest models available, 
 
 ## Decision
 
-Seats split into two tiers by role, not by skill. Build seats — implementers, fixers, QC and final gates, scouts, clerks — dispatch unpinned and inherit the session model, so `/model best` routes Fable 5 where available, else Opus, with no model name baked into any prompt. Review seats — investigators, review panels, verifiers — stay pinned to Opus for a stable adversarial baseline. Sonnet and Haiku are never used on any seat.
+Seats split into two tiers by role, not by skill. Build seats — implementers, fixers, QC and final gates, scouts, clerks, and Tuner's mechanical red→green verifier — dispatch unpinned and inherit the session model, so `/model best` routes Fable 5 where available, else Opus, with no model name baked into any prompt. Review seats — investigators, review panels, and the evidence verifiers (Coda's and Encore's) — stay pinned to Opus for a stable adversarial baseline. Sonnet and Haiku are never used on any seat.
 
 ## Consequences
 

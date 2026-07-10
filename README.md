@@ -19,7 +19,7 @@ e.g. `/repertoire:maestro`.
 ## Recommended setup
 
 These skills are deliberately token-heavy: every run conducts an ensemble of
-fresh subagents at high-to-xhigh effort — build seats (implementers, fixers, QC gates)
+fresh subagents at medium-to-xhigh effort — build seats (implementers, fixers, QC gates)
 on your session model, review seats (investigators, review panels, verifiers)
 pinned to Opus — and that is where their reliability comes from. Plan accounts
 accordingly:
@@ -72,30 +72,19 @@ Repertoire/                       repo root = plugin root = marketplace root
 ├── .claude-plugin/
 │   ├── plugin.json               plugin manifest (name: repertoire)
 │   └── marketplace.json          catalog listing this plugin (source "./")
-├── skills/
-│   ├── eureka/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── libretto/
-│   │   ├── SKILL.md
-│   │   ├── spec-template.md      bundled spec structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── score/
-│   │   ├── SKILL.md
-│   │   ├── plan-template.md      bundled plan structure
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── maestro/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── coda/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   ├── encore/
-│   │   ├── SKILL.md
-│   │   └── *-prompt.md           bundled subagent prompt templates
-│   └── tuner/
+├── skills/                       one directory per skill
+│   └── <name>/                   eureka, libretto, score, maestro, coda, encore, tuner
 │       ├── SKILL.md
+│       ├── evals/evals.json      committed trigger evals
+│       ├── *-template.md         bundled document structure (libretto, score)
 │       └── *-prompt.md           bundled subagent prompt templates
+├── shared/
+│   ├── codex-reviewer-core.md    shared Codex invocation contract
+│   └── invariants.md             canonical two-tier model policy
+├── docs/
+│   ├── adr/                      architecture decision records
+│   └── authoring/                skill-authoring doctrine
+├── CHANGELOG.md
 └── README.md
 ```
 

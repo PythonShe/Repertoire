@@ -15,7 +15,8 @@ The lever that makes existing installs update is the plugin `version`, and it li
 No test/lint/build toolchain exists. Validation and iteration happen through the Claude CLI:
 
 ```bash
-claude plugin validate .     # validate plugin + marketplace manifests and skill frontmatter
+claude plugin validate .     # validate the marketplace manifest ONLY — it does not parse skill frontmatter
+ruby -ryaml -e 'Dir.glob("skills/*/SKILL.md").each { |f| YAML.safe_load(File.read(f).split("---")[1]) }' && echo OK   # frontmatter YAML check (strict parsers reject bare ': ' in scalars)
 claude --plugin-dir .        # run Claude with this repo loaded as a local plugin (no install)
 /reload-plugins              # in-session, after editing a skill — picks up changes without a restart
 ```
