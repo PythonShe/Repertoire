@@ -1,6 +1,7 @@
 ---
 name: eureka
-description: Conversation-heavy idea and feature discovery — the spark before the production line. Establish a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then hunt ideas through a paced dialogue — seed sketches the user reacts to, a running idea board, and on-demand ensemble bursts of 3-4 diverse-lens ideators — converge finalists through targeted refinement rounds, then drive them through a sequential vetting funnel (identity judge → compliance checker → demand analyst → feasibility estimator) where every kill verdict must be confirmed by the user via AskUserQuestion before an idea is truly dead. The terminal artifact is a ranked, vetted idea shortlist with an optional champion handed to /repertoire:libretto — never a spec, never a plan, never code. MANUAL-ONLY — invoke only when the user explicitly asks for Eureka by name or runs /eureka (e.g. "run Eureka on this repo", "Eureka, find feature ideas", "hunt ideas with Eureka", "resume the Eureka run"). Do NOT auto-trigger on generic "brainstorm ideas", "what features should I add", "what should I build next", or "help me come up with ideas" requests; do NOT fire on spec- or design-shaped requests for an idea the user already holds ("spec this out", "design this feature" — that is Libretto's territory); and never on other senses of the word (a "eureka moment", the exclamation "eureka, found it", Eureka the place, math curriculum, or TV series); if the user has not named Eureka as this skill, stay silent and leave ideation to other workflows.
+description: Conversation-led idea and feature discovery — establishes a talking range (an existing codebase, an open domain, or a half-formed spark) and a focus dimension, hunts ideas through a paced dialogue with a running idea board and on-demand ensemble bursts of 3-4 diverse-lens ideators, then drives finalists through a sequential vetting funnel where every kill verdict needs user confirmation. Ends at a ranked, vetted shortlist with an optional champion — never a spec, never a plan, never code.
+when_to_use: Use when the user wants to discover what to build — "brainstorm feature ideas", "what should I add to this project", "what should I build next", "hunt ideas for this repo", "run Eureka". An idea the user already holds and wants designed ("spec this out", "design this feature") goes to libretto.
 ---
 
 # Eureka
@@ -70,8 +71,8 @@ existing project, an open-domain idea search, or exploration around a half-forme
 spark. If the user already knows what they want built, that's Libretto's door,
 not this one.
 
-Eureka is **manual-only**: run it when the user invokes it explicitly (by name or
-`/eureka`), not as an automatic response to any brainstorm-shaped request.
+Eureka auto-invokes on matching requests; its paced dialogue means nothing
+expensive dispatches before the user has shaped the hunt.
 
 ## The pipeline
 

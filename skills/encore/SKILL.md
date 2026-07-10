@@ -1,6 +1,7 @@
 ---
 name: encore
-description: Post-performance enhancement pass over a finished codebase, feature, or module — the audience demands more. A conductor that profiles the user-named target with a read-only scout, agrees an adaptive lens roster with the user (performance, security, robustness, DX, observability, …), hunts enhancement opportunities with parallel diverse-lens Opus hunters, and verifies every call against codebase reality with one read-only Opus verifier (evidence decides — refuted calls die, feature-sized ones route to /repertoire:libretto or /repertoire:score and never get built here). Only what the user picks at the set-list gate gets implemented — on a fresh encore/ branch by sequential fixers, panel-reviewed by 3 diverse-lens Opus skeptics when big or risky, and sealed with a staged final verdict — an evidence-based QC gate, then one cross-model Codex review once QC passes. Lands a committed enhancement dossier; pushes the branch and offers a PR behind one user approval, never merges. MANUAL-ONLY — invoke only when the user explicitly asks for Encore by name or runs /encore (e.g. "run Encore on the auth module", "Encore, revisit the exporter", "do an Encore pass over this repo", "resume the Encore run"). Do NOT auto-trigger on generic "optimize this code", "improve performance", "harden security", "clean up tech debt", or "audit the codebase" requests; do NOT fire on bug reports (Tuner's territory), open-PR review feedback (Coda's), or new-feature ideation (Eureka's); and never on other senses of the word "encore" (a concert encore, the exclamation, the Encore.dev backend framework, the Encore music-notation app, the film or album); if the user has not named Encore as this skill, stay silent and leave code improvement to other workflows.
+description: Post-ship enhancement pass over finished, working code — a read-only scout profiles the user-named target, the user picks a lens roster (performance, security, robustness, DX, observability, …), parallel diverse-lens Opus hunters surface enhancement calls, a read-only verifier confirms each against the code, and only user-picked calls are implemented on a fresh encore/ branch — sealed by an evidence-based QC gate plus one cross-model Codex review, landing a committed dossier. Pushes and offers a PR behind one approval; never merges.
+when_to_use: Use when the user wants working code made better — "optimize this module", "harden security here", "clean up tech debt", "audit and improve the exporter", "run Encore on the auth module". The code must already work; a bug goes to tuner, open-PR review feedback to coda, new-feature ideation to eureka.
 ---
 
 # Encore
@@ -74,9 +75,9 @@ hunted, verified, user-curated, implemented, and re-reviewed in one session.
 It is the natural step after Coda closes a PR, but it works on any code that
 is *done*; "finished" means no half-built work in flight on the target.
 
-Encore is **manual-only**: run it when the user invokes it explicitly (by name
-or `/encore`), not as an automatic response to "optimize this" or "clean up
-the code". Adjacent doors: a *bug* (something is broken) is Tuner's; review
+Encore auto-invokes on matching requests; the roster gate precedes the hunter
+fleet, so nothing expensive runs unconfirmed.
+Adjacent doors: a *bug* (something is broken) is Tuner's; review
 feedback on an *open PR* is Coda's; hunting *new features* is Eureka's. Encore
 needs a git repository to perform (branch, commits, push) — without one it can
 still hunt and verify, but the run must end at the dossier, and you say so up

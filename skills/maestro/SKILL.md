@@ -1,6 +1,7 @@
 ---
 name: maestro
-description: Conductor for subagent-driven execution of an implementation plan in the current session — groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate, all while keeping the controller's own context lean (it conducts and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Maestro by name or runs /maestro (e.g. "run Maestro on this plan", "execute this with Maestro", "Maestro, build out the plan", "resume the Maestro run"). Do NOT auto-trigger on generic "execute this plan" requests; if the user has not named Maestro, leave plan execution to other workflows.
+description: Conductor that executes a written implementation plan through a pipeline of subagents — groups related tasks, builds each group with a fresh implementer plus one review-and-fix pass, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based QC merge gate. Pushes but never merges, and keeps the conductor's own context lean.
+when_to_use: Use when an implementation plan or task list exists and the user wants it built — "execute this plan", "build out the plan with subagents", "run Maestro on this plan", or resuming an interrupted Maestro run. Needs a written plan; producing one from a spec goes to score, and a small one-off task needs no pipeline at all.
 ---
 
 # Maestro
@@ -49,8 +50,10 @@ Use Maestro when you have a written plan with multiple tasks and you want it
 implemented in this session with subagents. If the work is a single small change,
 just do it directly. If there is no plan yet, brainstorm or write one first.
 
-Maestro is **manual-only**: run it when the user invokes it explicitly (by name or
-`/maestro`), not as an automatic response to any plan-shaped request.
+Maestro auto-invokes on matching requests. **Cost gate:** if the user did not
+name Maestro or run `/maestro`, confirm scope and cost first — one
+AskUserQuestion stating the group count and rough subagent count — before the
+first implementer dispatches. A user who named Maestro has already consented.
 
 ## The pipeline
 
@@ -58,7 +61,8 @@ At a glance — the phase prose below is authoritative; re-dispatch edges
 (NEEDS_CONTEXT/BLOCKED) and the Phase-1 critical+complex exception live there,
 not here.
 
-0. Setup — read the plan, group tasks, capture BASE + BUILD/TEST, TodoWrite.
+0. Setup — cost gate if Maestro wasn't named; read the plan, group tasks,
+   capture BASE + BUILD/TEST, TodoWrite.
 1. Per group — implementer → broad Opus reviewer → fixer (skipped on a clean
    PASS) — until no groups remain.
 2. Panel over the whole branch, parallel — 3 Opus lenses + 1 Codex →

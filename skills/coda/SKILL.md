@@ -1,6 +1,7 @@
 ---
 name: coda
-description: Closing-passage pipeline for an open GitHub pull request's review feedback (via the gh CLI) — a conductor that fetches every formal review, inline comment thread, conversation comment, and failing CI check; verifies all of it against codebase reality with one read-only Opus verifier (evidence decides — no blind implementation, no performative agreement); fixes only what verification confirms with sequential fixers; panel-reviews big or risky fixes with 3 diverse-lens Opus skeptics; seals every run with a staged final verdict — an evidence-based QC gate that reads each fix in full, then one cross-model Codex review over the whole PR once QC passes; then drafts thread replies (fix confirmations, technical pushback, clarifying questions) and gates pushing and posting behind one user approval. Pushes to the PR branch but never merges, never resolves threads, never force-pushes. MANUAL-ONLY — invoke only when the user explicitly asks for Coda by name or runs /coda (e.g. "run Coda on PR 42", "Coda, work through the review feedback", "address these reviews with Coda", "resume the Coda run"). Do NOT auto-trigger on generic "address the review comments", "fix the PR feedback", "respond to my PR reviews", or "go through the review comments and fix them" requests, and never on other senses of the word "coda" (a musical or document coda, the Coda/coda.io app, the film); if the user has not named Coda as this skill, stay silent and leave review handling to other workflows.
+description: Works an open GitHub pull request's review feedback to closure via the gh CLI — harvests every formal review, inline thread, conversation comment, and failing CI check; verifies each item against codebase reality with a read-only Opus verifier; fixes only what verification confirms; seals the run with an evidence-based QC gate plus one cross-model Codex review; then drafts thread replies and gates pushing and posting behind one user approval. Never merges, never resolves threads, never force-pushes.
+when_to_use: Use when the user wants review feedback on an open PR addressed — "address the review comments", "work through the PR feedback", "respond to my reviewers", "fix what CI flagged on the PR", "run Coda on PR 42". Needs an open pull request; a bug with no PR attached goes to tuner.
 ---
 
 # Coda
@@ -79,8 +80,10 @@ but it works on any PR. It needs the `gh` CLI, authenticated. If there is no
 open PR for the branch, stop and say so. If the harvest finds nothing
 actionable, report that and stop.
 
-Coda is **manual-only**: run it when the user invokes it explicitly (by name or
-`/coda`), not as an automatic response to "address the review comments".
+Coda auto-invokes on matching requests. **Cost gate:** if the user did not
+name Coda or run `/coda`, confirm scope and cost first — one AskUserQuestion
+naming the PR and the verify→fix→verdict pipeline it triggers — before the
+clerk dispatches. A user who named Coda has already consented.
 
 ## The pipeline
 
@@ -88,9 +91,9 @@ At a glance — the phase prose below is authoritative; resume,
 NEEDS_CONTEXT/BLOCKED re-dispatch, and the confirming re-run's strike budget
 live there, not here. A clean panel (no findings) passes straight to QC.
 
-0. Setup — resolve the PR, checkout the branch, capture BASE + BUILD/TEST,
-   TodoWrite; the feedback clerk harvests the ledger. Empty ledger → report,
-   done.
+0. Setup — cost gate if Coda wasn't named; resolve the PR, checkout the
+   branch, capture BASE + BUILD/TEST, TodoWrite; the feedback clerk harvests
+   the ledger. Empty ledger → report, done.
 1. Verify — a read-only Opus verifier judges the whole ledger; no
    VALID/PARTIAL items → straight to the publish gate, replies only.
 2. Fix — sequential fixer(s): blocking → simple → complex.

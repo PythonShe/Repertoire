@@ -24,9 +24,9 @@ Once installed, skills are namespaced by plugin name: invoke Maestro as `/repert
 
 ## Anatomy of a skill
 
-A skill is a directory `skills/<name>/` containing `SKILL.md` (YAML frontmatter: `name`, `description`) plus any bundled prompt or reference files beside it.
+A skill is a directory `skills/<name>/` containing `SKILL.md` (YAML frontmatter: `name`, `description`, `when_to_use`) plus any bundled prompt or reference files beside it, and committed trigger evals at `skills/<name>/evals/evals.json`.
 
-The `description` is the **routing surface** — Claude reads it to decide whether to auto-invoke the skill, so it must be concrete, triggerable, and explicit about its trigger policy. Maestro's description is marked `MANUAL-ONLY` and tells Claude *not* to fire on generic "execute this plan" requests; that negative guidance is what keeps a powerful, expensive skill from auto-triggering. When you change what a skill does, update its `description` in the same edit — the description and the behavior are one contract.
+The `description` + `when_to_use` pair is the **routing surface** — since v2.0.0 every skill auto-invokes, and Claude reads this pair to route requests. `description` states what the skill does and to what object; `when_to_use` carries positive triggers plus one adjacency clause per confusable neighbor — never negative trigger lists, which embed the very phrases they guard against. Keep the combined pair under ~1,200 characters: the skill listing truncates at 1,536, silently. Skills whose pipelines dispatch subagents before any user gate (Maestro, Coda, Tuner) carry an in-skill **cost gate** — confirm scope via AskUserQuestion when the skill wasn't invoked by name. The full doctrine and the eval loop live in `docs/authoring/skill-descriptions.md`. When you change what a skill does, update its routing surface in the same edit and re-run the trigger evals — the routing surface and the behavior are one contract.
 
 Bundled `*-prompt.md` files are not loaded into the active context wholesale. The skill body names them, and they are pasted into freshly dispatched subagents at runtime — keeping the controlling context lean while each subagent gets a complete, purpose-built brief.
 
@@ -35,17 +35,17 @@ Bundled `*-prompt.md` files are not loaded into the active context wholesale. Th
 Maestro (`skills/maestro/`) is the one substantive skill and the template for future ones. Understanding it requires reading `SKILL.md` together with its five role prompts — they form one system:
 
 - **The conductor never plays.** The skill controller dispatches subagents and never reads source files or diffs itself; only compact reports and verdicts return to it, so its context survives a long plan. Reading the *plan* and running read-only git metadata (`merge-base`, `rev-parse`, `log`, `status`) is "bookkeeping" and allowed; reading *code* is "playing" and is delegated.
-- **Three-phase pipeline.** Phase 1 builds each task group with a fresh implementer, one broad review, and one fix. Phase 2 runs a whole-branch adversarial panel — 3 diverse-lens Opus skeptics plus 1 cross-model Codex reviewer. Phase 3 is an evidence-based QC merge gate that **pushes but never merges**, escalating via `AskUserQuestion` after 3 `NOT_MERGEABLE` rounds.
+- **Three-phase pipeline.** Phase 1 builds each task group with a fresh implementer, one broad review, and a fix when the review found something. Phase 2 runs a whole-branch adversarial panel — 3 diverse-lens Opus skeptics plus 1 cross-model Codex reviewer. Phase 3 is an evidence-based QC merge gate that **pushes but never merges**, escalating via `AskUserQuestion` after 3 `NOT_MERGEABLE` rounds.
 - **One prompt per role.** `implementer-prompt.md`, `reviewer-prompt.md` (parameterized by lens — broad for Phase 1, one lens each for the panel), `codex-reviewer-prompt.md`, `fixer-prompt.md`, and `qc-prompt.md` are the subagent contexts. A phase described in `SKILL.md` is realized by its prompt file, so the two must stay consistent when you change behavior.
 
 ## Authoring conventions
 
 To add a skill (keep this in sync with the README's process section):
 
-1. Create `skills/<name>/SKILL.md` with `name` + `description` frontmatter; bundle any prompt/reference files alongside it.
+1. Create `skills/<name>/SKILL.md` with `name` + `description` + `when_to_use` frontmatter (doctrine: `docs/authoring/skill-descriptions.md`); bundle any prompt/reference files alongside it, plus trigger evals at `skills/<name>/evals/evals.json`. A skill that dispatches subagents before any user gate needs a cost gate.
 2. Add a row to the **Skills** table in `README.md`.
-3. `claude plugin validate .`, then commit.
-4. Bump `version` in **both** `.claude-plugin/plugin.json` and the `marketplace.json` plugin entry — same value — when you want existing installs to pick it up. If you changed the plugin's user-facing `description`, edit it in both places too: the `marketplace.json` entry is what the `/plugin` UI displays.
+3. `claude plugin validate .`, re-run the trigger evals if the routing surface changed, then commit.
+4. Bump `version` in **both** `.claude-plugin/plugin.json` and the `marketplace.json` plugin entry — same value — when you want existing installs to pick it up. If you changed the plugin's user-facing `description`, edit it in both places too: the `marketplace.json` entry is what the `/plugin` UI displays. Record the release in `CHANGELOG.md` — a short paragraph on *why*, not just what.
 
 Keep the skill name consistent across `plugin.json` keywords, `SKILL.md` frontmatter, the README table, and the invocation path.
 
@@ -55,4 +55,4 @@ When deciding where new behavior belongs, choose the layer deliberately: work th
 
 ## Local-only workspaces
 
-`*-workspace/` directories sit beside a skill and are gitignored — never commit them. They hold skill-creator eval/optimizer scratch: for example `maestro-workspace/trigger-eval.json` is a set of `should_trigger` cases used to verify that Maestro's `description` routes correctly (fires when Maestro is named, stays silent on generic plan-execution requests). Treat these as disposable validation output.
+`*-workspace/` directories sit beside a skill and are gitignored — never commit them. They hold skill-creator eval/optimizer *scratch*: run logs and optimizer output. The trigger-eval *cases* themselves are not scratch — since v2.0.0 they are committed at `skills/<name>/evals/evals.json` and encode each skill's auto-invoke routing contract (in-territory requests fire, even generic ones; neighbors' requests and homonyms stay silent). Treat workspaces as disposable, evals as source.

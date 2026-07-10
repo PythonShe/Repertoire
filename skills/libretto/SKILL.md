@@ -1,6 +1,7 @@
 ---
 name: libretto
-description: Turn a rough idea into a build-ready spec through a guided design dialogue, then harden that spec with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Libretto runs the conversation and writes the spec itself; it delegates only context-gathering and the adversarial review. The terminal artifact is an approved spec — never code or an implementation plan. MANUAL-ONLY — invoke only when the user explicitly asks for Libretto by name or runs /libretto (e.g. "spec this out with Libretto", "run Libretto on this idea", "Libretto, design X", "draft a spec with Libretto"). Do NOT auto-trigger on generic "build/brainstorm/design/spec this out" requests; if the user has not named Libretto, stay silent and leave the request to other workflows.
+description: Turns a rough idea into a build-ready spec through a guided design dialogue — clarifies intent, proposes 2-3 approaches with a recommendation, presents the design section by section, and writes the spec itself — then hardens it with an adversarial review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. The terminal artifact is an approved spec — never code, never an implementation plan.
+when_to_use: Use when the user holds an idea or feature and wants it designed into a spec — "spec this out", "design this feature", "turn this idea into a spec", "draft a spec with Libretto". Discovering ideas from scratch goes to eureka; turning an approved spec into an implementation plan goes to score.
 ---
 
 # Libretto
@@ -56,10 +57,8 @@ builds it — a feature, a component, a behavior change, a refactor with choices
 make. If the change is so small there is genuinely nothing to decide, just make
 it. If there is already an approved spec, this skill is done before it started.
 
-Libretto is **manual-only**: run it when the user invokes it explicitly (by name
-or `/libretto`), not as an automatic response to any idea-shaped request. The
-auto-triggering brainstorming workflow stays out of your way only because you stay
-silent unless named.
+Libretto auto-invokes on matching requests; the design dialogue precedes every
+heavy dispatch, so the user steers before anything is spent.
 
 ## The pipeline
 

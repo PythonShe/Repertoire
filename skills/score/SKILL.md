@@ -1,6 +1,7 @@
 ---
 name: score
-description: Turn an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then harden that plan with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Score authors the plan itself; it delegates only context-scouting and the adversarial review. The terminal artifact is an approved plan — never code, and never a spec. MANUAL-ONLY — invoke only when the user explicitly asks for Score by name or runs /score (e.g. "score this spec", "run Score on the spec", "turn this spec into a plan with Score", "resume the Score run"). Do NOT auto-trigger on generic "write an implementation plan / plan this out / break this into tasks" requests, and never on other senses of the word "score" (test/coverage/quality scores, "score this PR 1-10", ratings); if the user has not named Score as this skill, stay silent and leave the request to other workflows.
+description: Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens the plan with an adversarial review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. The terminal artifact is an approved plan — never code, and never a spec.
+when_to_use: Use when a spec or agreed design exists and the user wants the implementation plan — "write the implementation plan", "plan this out", "break the spec into tasks", "score this spec". Executing a finished plan goes to maestro; writing the spec itself goes to libretto.
 ---
 
 # Score
@@ -62,8 +63,8 @@ open (approach unchosen, interfaces unsettled), the work belongs in
 `/repertoire:libretto` first; planning an undesigned thing just launders
 guesses into tasks.
 
-Score is **manual-only**: run it when the user invokes it explicitly (by name
-or `/score`), not as an automatic response to any plan-shaped request.
+Score auto-invokes on matching requests; the structure checkpoint gates all
+heavy work behind user approval.
 
 ## The pipeline
 

@@ -1,6 +1,7 @@
 ---
 name: tuner
-description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — dispatches a Codex investigator at xhigh reasoning effort the moment the bug brief is assembled, runs a fast triage scout whose ranked fault surfaces prime a systematic Opus investigator (also xhigh effort) beside it, cross-examines the two rival root-cause hypotheses as the confidence gate, then repairs on a feature branch (created with consent if needed) through a failing-test-first fixer that commits a deliberately-red repro test before the fix, a skeptical fix reviewer, and a mechanical red→green verifier — committing as it goes, never merging, pushing only on request, and keeping the conductor's own context lean (it judges and never reads code itself). MANUAL-ONLY — invoke this skill only when the user explicitly asks for Tuner by name or runs /tuner (e.g. "debug this with Tuner", "run Tuner on this failure", "Tuner, find the root cause", "resume the Tuner run"). Do NOT auto-trigger on generic "fix this bug", "debug this", or "why is this test failing" requests, nor on audio/instrument tuning, performance tuning, or ML hyperparameter-tuning requests (tuner homonyms); if the user has not named Tuner, leave debugging to other workflows.
+description: Cross-model debugging conductor that hunts a bug to its root cause and lands a verified fix — rival investigations by a Codex agent (xhigh effort) and a scout-primed Opus investigator, cross-examined as the confidence gate; then a failing-test-first repair on a feature branch: a deliberately-red repro test committed before the fix, a skeptical fix reviewer, and a mechanical red→green verifier. Commits as it goes, never merges, pushes only on request.
+when_to_use: Use when the user reports a reproducible bug, regression, crash, or failing test in the codebase and wants it diagnosed to root cause and fixed — "fix this bug", "debug this failure", "why is this test failing", "find the root cause", "run Tuner on this". Code that works but should be better goes to encore.
 ---
 
 # Tuner
@@ -63,8 +64,10 @@ speed. If intake reveals something genuinely trivial — an obvious one-line typ
 with an obvious fix — say so and confirm with the user before running the full
 pipeline on it.
 
-Tuner is **manual-only**: run it when the user invokes it explicitly (by name or
-`/tuner`), not as an automatic response to any bug-shaped request.
+Tuner auto-invokes on matching requests. **Cost gate:** if the user did not
+name Tuner or run `/tuner`, confirm scope and cost first — one AskUserQuestion
+stating the bug brief and the dual-investigator pipeline it launches — before
+Codex and the scout dispatch. A user who named Tuner has already consented.
 
 ## The pipeline
 
@@ -72,7 +75,8 @@ At a glance — the phase prose below is authoritative; Codex-absent
 degradation, CAUSE_DISPUTED routing back to cross-examination, and re-dispatch
 edges live there, not here.
 
-0. Intake — bug brief, branch, BUILD/TEST, TodoWrite.
+0. Intake — cost gate if Tuner wasn't named; bug brief, branch, BUILD/TEST,
+   TodoWrite.
 1. Rival investigation, parallel — the Codex investigator (xhigh, read-only,
    background) launches first, same batch as the scout; the scout's ranked
    surfaces prime the Opus investigator, which runs while Codex works.
