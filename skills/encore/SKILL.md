@@ -84,65 +84,28 @@ front.
 
 ## The pipeline
 
-```dot
-digraph encore {
-    rankdir=TB;
-    "Establish target + ambition; capture SCOPE; TodoWrite" [shape=box];
-    "Scout (Explore): profile, BUILD/TEST, prior dossiers, lens proposal" [shape=box];
-    "Roster gate (AskUserQuestion, multi-select)" [shape=box];
-    "Hunt: one Opus hunter per lens (parallel, read-only)" [shape=box];
-    "Any calls?" [shape=diamond];
-    "Report: no encore needed; bank clean bill" [shape=doublecircle];
-    "Verifier (Opus, read-only, whole board)" [shape=box];
-    "Any CONFIRMED or ADJUSTED?" [shape=diamond];
-    "Finalize dossier (audit record); stop" [shape=doublecircle];
-    "Program -> dossier draft -> set-list gate (batched multi-select)" [shape=box];
-    "Anything picked?" [shape=diamond];
-    "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" [shape=box];
-    "Big or risky changes?" [shape=diamond];
-    "Panel: 3 Opus lenses (parallel)" [shape=box];
-    "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC: build + tests + full branch read" [shape=box];
-    "Mergeable?" [shape=diamond];
-    "QC failed 3x?" [shape=diamond];
-    "Route blockers -> fixer(s), sequential" [shape=box];
-    "Stop + AskUserQuestion" [shape=box];
-    "Codex (cross-model, whole branch, runs once)" [shape=box];
-    "Codex findings?" [shape=diamond];
-    "Fix findings -> one confirming QC re-run" [shape=box];
-    "Finalize dossier; publish gate (push / PR / keep local)" [shape=box];
-    "Take a bow: report" [shape=doublecircle];
+At a glance — the phase prose below is authoritative; resume, NEEDS_CONTEXT
+re-dispatch, a clean panel passing straight to QC, and the confirming re-run's
+strike budget live there, not here.
 
-    "Establish target + ambition; capture SCOPE; TodoWrite" -> "Scout (Explore): profile, BUILD/TEST, prior dossiers, lens proposal" -> "Roster gate (AskUserQuestion, multi-select)" -> "Hunt: one Opus hunter per lens (parallel, read-only)" -> "Any calls?";
-    "Any calls?" -> "Report: no encore needed; bank clean bill" [label="no"];
-    "Any calls?" -> "Verifier (Opus, read-only, whole board)" [label="yes"];
-    "Verifier (Opus, read-only, whole board)" -> "Any CONFIRMED or ADJUSTED?";
-    "Any CONFIRMED or ADJUSTED?" -> "Finalize dossier (audit record); stop" [label="no"];
-    "Any CONFIRMED or ADJUSTED?" -> "Program -> dossier draft -> set-list gate (batched multi-select)" [label="yes"];
-    "Program -> dossier draft -> set-list gate (batched multi-select)" -> "Anything picked?";
-    "Anything picked?" -> "Finalize dossier (audit record); stop" [label="no"];
-    "Anything picked?" -> "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" [label="yes"];
-    "Cut encore/ branch, commit dossier; fixers sequential (cheap+safe first)" -> "Big or risky changes?";
-    "Big or risky changes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
-    "Big or risky changes?" -> "QC: build + tests + full branch read" [label="no"];
-    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC: build + tests + full branch read";
-    "QC: build + tests + full branch read" -> "Mergeable?";
-    "Mergeable?" -> "Codex (cross-model, whole branch, runs once)" [label="yes"];
-    "Mergeable?" -> "QC failed 3x?" [label="no"];
-    "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
-    "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC: build + tests + full branch read";
-    "Codex (cross-model, whole branch, runs once)" -> "Codex findings?";
-    "Codex findings?" -> "Finalize dossier; publish gate (push / PR / keep local)" [label="none / absent"];
-    "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];
-    "Fix findings -> one confirming QC re-run" -> "Finalize dossier; publish gate (push / PR / keep local)";
-    "Finalize dossier; publish gate (push / PR / keep local)" -> "Take a bow: report";
-}
-```
-
-*Happy path only — re-dispatch edges (NEEDS_CONTEXT), resume, a clean panel
-(no findings) passing straight to QC, and the strike budget on the confirming
-QC re-run are described in the text below.*
+0. Setup & roster — establish target + ambition, capture SCOPE, TodoWrite;
+   the scout (Explore) profiles the target, finds BUILD/TEST and prior
+   dossiers, proposes lenses; roster gate (AskUserQuestion, multi-select).
+1. Hunt — one Opus hunter per lens, parallel, read-only. No calls → report
+   "no encore needed", bank the clean bill.
+2. Verify & set list — a read-only Opus verifier judges the whole board;
+   nothing CONFIRMED/ADJUSTED → finalize the dossier, stop. Program → dossier
+   draft → set-list gate (batched multi-select); nothing picked → finalize
+   the dossier, stop.
+3. Perform — cut the encore/ branch, commit the dossier; sequential fixers,
+   cheap+safe first.
+4. Final verdict — panel (3 Opus lenses, parallel) only when the changes are
+   big or risky, findings → sequential fixers; then QC (build + tests + full
+   branch read): NOT_MERGEABLE → route blockers → retry-mode re-run, third
+   strike → AskUserQuestion; MERGEABLE → Codex once, whole branch; findings →
+   fix → one confirming QC re-run.
+5. Take a bow — finalize the dossier; publish gate (push / PR / keep local);
+   report.
 
 ### Phase 0 — Setup & the roster
 

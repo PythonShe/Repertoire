@@ -67,42 +67,19 @@ or `/score`), not as an automatic response to any plan-shaped request.
 
 ## The pipeline
 
-```dot
-digraph score {
-    rankdir=TB;
-    "Locate & read spec; scope check" [shape=box];
-    "Written spec exists?" [shape=diamond];
-    "Short clarify pass (not a design dialogue)" [shape=box];
-    "Multi-subsystem spec?" [shape=diamond];
-    "Split: one plan per subsystem; pick first" [shape=box];
-    "Context scout (Explore) → brief" [shape=box];
-    "Propose file structure + movements" [shape=box];
-    "User approves structure?" [shape=diamond];
-    "Write plan (template) + self-check + commit" [shape=box];
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" [shape=box];
-    "Consolidate findings; revise plan; commit" [shape=box];
-    "User approves plan?" [shape=diamond];
-    "Done — point to /maestro (never invoke)" [shape=doublecircle];
+At a glance — the phase prose below is authoritative.
 
-    "Locate & read spec; scope check" -> "Written spec exists?";
-    "Written spec exists?" -> "Short clarify pass (not a design dialogue)" [label="no"];
-    "Written spec exists?" -> "Multi-subsystem spec?" [label="yes"];
-    "Short clarify pass (not a design dialogue)" -> "Multi-subsystem spec?";
-    "Multi-subsystem spec?" -> "Split: one plan per subsystem; pick first" [label="yes"];
-    "Multi-subsystem spec?" -> "Context scout (Explore) → brief" [label="no"];
-    "Split: one plan per subsystem; pick first" -> "Context scout (Explore) → brief";
-    "Context scout (Explore) → brief" -> "Propose file structure + movements";
-    "Propose file structure + movements" -> "User approves structure?";
-    "User approves structure?" -> "Propose file structure + movements" [label="rework"];
-    "User approves structure?" -> "Write plan (template) + self-check + commit" [label="approved"];
-    "Write plan (template) + self-check + commit" -> "Panel: 2-3 Opus lenses + 1 Codex (parallel)";
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" -> "Consolidate findings; revise plan; commit";
-    "Consolidate findings; revise plan; commit" -> "User approves plan?";
-    "User approves plan?" -> "Propose file structure + movements" [label="structure changed"];
-    "User approves plan?" -> "Write plan (template) + self-check + commit" [label="small edits"];
-    "User approves plan?" -> "Done — point to /maestro (never invoke)" [label="approved"];
-}
-```
+0. Locate the spec & scope check — no written spec → a short clarify pass
+   (not a design dialogue); a multi-subsystem spec → split, one plan per
+   subsystem, pick the first.
+1. Context scout (Explore) → brief.
+2. Structure checkpoint — propose file structure + movements; rework until
+   the user approves.
+3. Write the plan — from the template, self-check, commit.
+4. Adversarial review panel, parallel — 2-3 Opus lenses + 1 Codex →
+   consolidate findings, revise the plan, commit.
+5. User approval (terminal) — structure changed → back to Phase 2; small
+   edits → back to Phase 3; approved → point to /maestro (never invoke).
 
 Create a TodoWrite list with one item per phase so a resumed session knows where
 it left off; the committed plan is the durable trail. Whether a revision re-runs

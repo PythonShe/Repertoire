@@ -84,57 +84,23 @@ Coda is **manual-only**: run it when the user invokes it explicitly (by name or
 
 ## The pipeline
 
-```dot
-digraph coda {
-    rankdir=TB;
-    "Resolve PR, checkout branch, capture BASE + BUILD/TEST, TodoWrite" [shape=box];
-    "Feedback clerk: harvest reviews/threads/comments/CI" [shape=box];
-    "Ledger empty?" [shape=diamond];
-    "Report: nothing to address" [shape=doublecircle];
-    "Verifier (Opus, read-only, whole ledger)" [shape=box];
-    "Any VALID or PARTIAL?" [shape=diamond];
-    "Fixer(s), sequential: blocking -> simple -> complex" [shape=box];
-    "Big or risky fixes?" [shape=diamond];
-    "Panel: 3 Opus lenses (parallel)" [shape=box];
-    "Panel findings -> fixer(s), sequential" [shape=box];
-    "QC agent: build + tests + full fix read" [shape=box];
-    "Mergeable?" [shape=diamond];
-    "QC failed 3x?" [shape=diamond];
-    "Route blockers -> fixer(s), sequential" [shape=box];
-    "Codex (cross-model, whole PR, runs once)" [shape=box];
-    "Codex findings?" [shape=diamond];
-    "Fix findings -> one confirming QC re-run" [shape=box];
-    "Draft replies -> one AskUserQuestion gate" [shape=box];
-    "Push, confirm, then post approved replies + report" [shape=doublecircle];
-    "Stop + AskUserQuestion" [shape=box];
+At a glance — the phase prose below is authoritative; resume,
+NEEDS_CONTEXT/BLOCKED re-dispatch, and the confirming re-run's strike budget
+live there, not here. A clean panel (no findings) passes straight to QC.
 
-    "Resolve PR, checkout branch, capture BASE + BUILD/TEST, TodoWrite" -> "Feedback clerk: harvest reviews/threads/comments/CI" -> "Ledger empty?";
-    "Ledger empty?" -> "Report: nothing to address" [label="yes"];
-    "Ledger empty?" -> "Verifier (Opus, read-only, whole ledger)" [label="no"];
-    "Verifier (Opus, read-only, whole ledger)" -> "Any VALID or PARTIAL?";
-    "Any VALID or PARTIAL?" -> "Draft replies -> one AskUserQuestion gate" [label="no - nothing to fix"];
-    "Any VALID or PARTIAL?" -> "Fixer(s), sequential: blocking -> simple -> complex" [label="yes"];
-    "Fixer(s), sequential: blocking -> simple -> complex" -> "Big or risky fixes?";
-    "Big or risky fixes?" -> "Panel: 3 Opus lenses (parallel)" [label="yes"];
-    "Big or risky fixes?" -> "QC agent: build + tests + full fix read" [label="no"];
-    "Panel: 3 Opus lenses (parallel)" -> "Panel findings -> fixer(s), sequential" -> "QC agent: build + tests + full fix read";
-    "QC agent: build + tests + full fix read" -> "Mergeable?";
-    "Mergeable?" -> "Codex (cross-model, whole PR, runs once)" [label="yes"];
-    "Mergeable?" -> "QC failed 3x?" [label="no"];
-    "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
-    "QC failed 3x?" -> "Route blockers -> fixer(s), sequential" [label="no"];
-    "Route blockers -> fixer(s), sequential" -> "QC agent: build + tests + full fix read";
-    "Codex (cross-model, whole PR, runs once)" -> "Codex findings?";
-    "Codex findings?" -> "Draft replies -> one AskUserQuestion gate" [label="none / absent"];
-    "Codex findings?" -> "Fix findings -> one confirming QC re-run" [label="critical / important"];
-    "Fix findings -> one confirming QC re-run" -> "Draft replies -> one AskUserQuestion gate";
-    "Draft replies -> one AskUserQuestion gate" -> "Push, confirm, then post approved replies + report";
-}
-```
-
-*Happy path only — re-dispatch edges (NEEDS_CONTEXT/BLOCKED), resume, and the
-strike budget on the confirming QC re-run are described in the text below. A
-clean panel (no findings) passes straight through to QC.*
+0. Setup — resolve the PR, checkout the branch, capture BASE + BUILD/TEST,
+   TodoWrite; the feedback clerk harvests the ledger. Empty ledger → report,
+   done.
+1. Verify — a read-only Opus verifier judges the whole ledger; no
+   VALID/PARTIAL items → straight to the publish gate, replies only.
+2. Fix — sequential fixer(s): blocking → simple → complex.
+3. Final verdict — panel (3 Opus lenses, parallel) only when the fixes are
+   big or risky, findings → sequential fixers; then QC (build + tests + full
+   fix read): NOT_MERGEABLE → route blockers → retry-mode re-run, third
+   strike → AskUserQuestion; MERGEABLE → Codex once, whole PR; Codex findings
+   → fix → one confirming QC re-run.
+4. Publish gate — draft replies → one AskUserQuestion → push, confirm, post
+   approved replies + report.
 
 ### Phase 0 — Setup
 

@@ -54,38 +54,18 @@ Maestro is **manual-only**: run it when the user invokes it explicitly (by name 
 
 ## The pipeline
 
-```dot
-digraph maestro {
-    rankdir=TB;
-    "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" [shape=box];
-    "Next group" [shape=box];
-    "Implementer" [shape=box];
-    "General reviewer (Opus, broad)" [shape=box];
-    "Fixer" [shape=box];
-    "More groups?" [shape=diamond];
-    "Panel: 3 Opus lenses + 1 Codex (parallel)" [shape=box];
-    "Consolidate issues (from finding text)" [shape=box];
-    "Fixer(s), sequential" [shape=box];
-    "QC agent: build + tests" [shape=box];
-    "Mergeable?" [shape=diamond];
-    "QC failed 3x?" [shape=diamond];
-    "Push + report (never merge)" [shape=doublecircle];
-    "Stop + AskUserQuestion" [shape=box];
+At a glance — the phase prose below is authoritative; re-dispatch edges
+(NEEDS_CONTEXT/BLOCKED) and the Phase-1 critical+complex exception live there,
+not here.
 
-    "Read plan, group tasks, capture base ref + build/test cmds, TodoWrite" -> "Next group";
-    "Next group" -> "Implementer" -> "General reviewer (Opus, broad)" -> "Fixer" -> "More groups?";
-    "More groups?" -> "Next group" [label="yes"];
-    "More groups?" -> "Panel: 3 Opus lenses + 1 Codex (parallel)" [label="no"];
-    "Panel: 3 Opus lenses + 1 Codex (parallel)" -> "Consolidate issues (from finding text)" -> "Fixer(s), sequential" -> "QC agent: build + tests" -> "Mergeable?";
-    "Mergeable?" -> "Push + report (never merge)" [label="yes"];
-    "Mergeable?" -> "QC failed 3x?" [label="no"];
-    "QC failed 3x?" -> "Stop + AskUserQuestion" [label="yes"];
-    "QC failed 3x?" -> "Fixer(s), sequential" [label="no, fix & re-QC"];
-}
-```
-
-*Happy path only — re-dispatch edges (NEEDS_CONTEXT/BLOCKED) and the Phase-1
-critical+complex exception are described in the text below, not drawn.*
+0. Setup — read the plan, group tasks, capture BASE + BUILD/TEST, TodoWrite.
+1. Per group — implementer → broad Opus reviewer → fixer (skipped on a clean
+   PASS) — until no groups remain.
+2. Panel over the whole branch, parallel — 3 Opus lenses + 1 Codex →
+   consolidate from finding text → sequential fixer(s).
+3. QC gate — build + tests: MERGEABLE → push + report (never merge);
+   NOT_MERGEABLE → route blockers to fixers → retry-mode QC re-run; third
+   strike → stop + AskUserQuestion.
 
 ### Phase 0 — Setup
 

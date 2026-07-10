@@ -63,38 +63,18 @@ silent unless named.
 
 ## The pipeline
 
-```dot
-digraph libretto {
-    rankdir=TB;
-    "Understand idea; scope check" [shape=box];
-    "Multi-subsystem?" [shape=diamond];
-    "Help decompose; pick first sub-project" [shape=box];
-    "Context scout (Explore) → brief" [shape=box];
-    "Clarify intent (hybrid Q&A)" [shape=box];
-    "Propose 2-3 approaches + recommend" [shape=box];
-    "Present design in sections; approve each" [shape=box];
-    "Write spec (template) + commit" [shape=box];
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" [shape=box];
-    "Consolidate findings; revise spec; commit" [shape=box];
-    "User approves spec?" [shape=diamond];
-    "Done — point to plan + /maestro (never invoke)" [shape=doublecircle];
+At a glance — the phase prose below is authoritative.
 
-    "Understand idea; scope check" -> "Multi-subsystem?";
-    "Multi-subsystem?" -> "Help decompose; pick first sub-project" [label="yes"];
-    "Multi-subsystem?" -> "Context scout (Explore) → brief" [label="no"];
-    "Help decompose; pick first sub-project" -> "Context scout (Explore) → brief";
-    "Context scout (Explore) → brief" -> "Clarify intent (hybrid Q&A)";
-    "Clarify intent (hybrid Q&A)" -> "Propose 2-3 approaches + recommend";
-    "Propose 2-3 approaches + recommend" -> "Present design in sections; approve each";
-    "Present design in sections; approve each" -> "Write spec (template) + commit";
-    "Write spec (template) + commit" -> "Panel: 2-3 Opus lenses + 1 Codex (parallel)";
-    "Panel: 2-3 Opus lenses + 1 Codex (parallel)" -> "Consolidate findings; revise spec; commit";
-    "Consolidate findings; revise spec; commit" -> "User approves spec?";
-    "User approves spec?" -> "Present design in sections; approve each" [label="design changed"];
-    "User approves spec?" -> "Write spec (template) + commit" [label="small edits"];
-    "User approves spec?" -> "Done — point to plan + /maestro (never invoke)" [label="approved"];
-}
-```
+0. Understand & scope — a multi-subsystem idea gets decomposed first, one
+   sub-project picked; then a context scout (Explore) → brief.
+1. Clarify intent — hybrid Q&A.
+2. Approaches & design — propose 2-3 approaches + a recommendation; present
+   the design in sections, each approved.
+3. Write the spec — from the template, commit.
+4. Adversarial review panel, parallel — 2-3 Opus lenses + 1 Codex →
+   consolidate findings, revise the spec, commit.
+5. User approval (terminal) — design changed → back to Phase 2; small edits →
+   back to Phase 3; approved → point to a plan + /maestro (never invoke).
 
 Create a TodoWrite list with one item per phase so a resumed session knows where
 it left off; the committed spec is the durable trail. The approval-gate loop-backs

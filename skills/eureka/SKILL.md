@@ -75,49 +75,22 @@ Eureka is **manual-only**: run it when the user invokes it explicitly (by name o
 
 ## The pipeline
 
-```dot
-digraph eureka {
-    rankdir=TB;
-    "Range & identity brief (anchored / open-field / orbit)" [shape=box];
-    "Anchored range?" [shape=diamond];
-    "Terrain scout (Explore) → brief" [shape=box];
-    "Pick dimension(s) (AskUserQuestion)" [shape=box];
-    "Diverge: seeds ⇄ reactions; keep the board" [shape=box];
-    "Novelty stalled, or user asks?" [shape=diamond];
-    "Ensemble burst: 3-4 blind ideators (parallel)" [shape=box];
-    "Board rich? (user's call, after ≥1 burst offer)" [shape=diamond];
-    "Converge: cluster, rank, agree finalists" [shape=box];
-    "Vet (sequential): identity → compliance → demand → feasibility" [shape=box];
-    "Kill proposed?" [shape=diamond];
-    "AskUserQuestion: rescue or confirm drop" [shape=box];
-    "Same-lens re-judgment (once per idea)" [shape=box];
-    "Survivors remain?" [shape=diamond];
-    "Land: write + commit shortlist; champion gate" [shape=box];
-    "Done — point champion to /repertoire:libretto (never invoke)" [shape=doublecircle];
+At a glance — the phase prose below is authoritative; the zero-finalists
+off-ramp and the funnel's amendment flow live there, not here.
 
-    "Range & identity brief (anchored / open-field / orbit)" -> "Anchored range?";
-    "Anchored range?" -> "Terrain scout (Explore) → brief" [label="yes"];
-    "Anchored range?" -> "Pick dimension(s) (AskUserQuestion)" [label="no — elicit identity from user"];
-    "Terrain scout (Explore) → brief" -> "Pick dimension(s) (AskUserQuestion)";
-    "Pick dimension(s) (AskUserQuestion)" -> "Diverge: seeds ⇄ reactions; keep the board";
-    "Diverge: seeds ⇄ reactions; keep the board" -> "Novelty stalled, or user asks?";
-    "Novelty stalled, or user asks?" -> "Ensemble burst: 3-4 blind ideators (parallel)" [label="yes"];
-    "Novelty stalled, or user asks?" -> "Board rich? (user's call, after ≥1 burst offer)" [label="no"];
-    "Ensemble burst: 3-4 blind ideators (parallel)" -> "Diverge: seeds ⇄ reactions; keep the board";
-    "Board rich? (user's call, after ≥1 burst offer)" -> "Diverge: seeds ⇄ reactions; keep the board" [label="not yet"];
-    "Board rich? (user's call, after ≥1 burst offer)" -> "Converge: cluster, rank, agree finalists" [label="yes"];
-    "Converge: cluster, rank, agree finalists" -> "Vet (sequential): identity → compliance → demand → feasibility";
-    "Vet (sequential): identity → compliance → demand → feasibility" -> "Kill proposed?";
-    "Kill proposed?" -> "AskUserQuestion: rescue or confirm drop" [label="yes"];
-    "Kill proposed?" -> "Land: write + commit shortlist; champion gate" [label="no — funnel done"];
-    "AskUserQuestion: rescue or confirm drop" -> "Survivors remain?" [label="rescue picked or drop confirmed"];
-    "AskUserQuestion: rescue or confirm drop" -> "Same-lens re-judgment (once per idea)" [label="user proposes new rescue"];
-    "Same-lens re-judgment (once per idea)" -> "Survivors remain?" [label="dissolved → continues · re-kill → drop or overrule"];
-    "Survivors remain?" -> "Vet (sequential): identity → compliance → demand → feasibility" [label="yes — resume funnel"];
-    "Survivors remain?" -> "Diverge: seeds ⇄ reactions; keep the board" [label="none — promote parked or burst"];
-    "Land: write + commit shortlist; champion gate" -> "Done — point champion to /repertoire:libretto (never invoke)";
-}
-```
+0. Range & identity brief — anchored / open-field / orbit; anchored → terrain
+   scout (Explore) → brief.
+1. Dimension — pick the focus dimension(s) via AskUserQuestion.
+2. Diverge — seeds ⇄ reactions, the board kept throughout; on stalled novelty
+   or on request, an ensemble burst: 3-4 blind ideators in parallel (offer at
+   least one before converging); loop until the user calls the board rich.
+3. Converge — cluster, rank, agree finalists.
+4. Vetting funnel, sequential — identity → compliance → demand → feasibility;
+   every proposed kill → AskUserQuestion (a new rescue → same-lens
+   re-judgment, once per idea); no survivors → back to Diverge, promote
+   parked ideas or burst.
+5. Land — write + commit the shortlist; champion gate → point the champion to
+   /repertoire:libretto (never invoke).
 
 Create a TodoWrite list with one item per phase so a resumed session knows where
 it left off; the board (restated at each phase transition) and the shortlist

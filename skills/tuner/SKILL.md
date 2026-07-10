@@ -68,51 +68,21 @@ Tuner is **manual-only**: run it when the user invokes it explicitly (by name or
 
 ## The pipeline
 
-```dot
-digraph tuner {
-    rankdir=TB;
-    "Intake: bug brief, branch, BUILD/TEST, TodoWrite" [shape=box];
-    "Codex investigator (xhigh, read-only)" [shape=box];
-    "Scout: ranked fault surfaces" [shape=box];
-    "Opus investigator (scout list in hand)" [shape=box];
-    "Cross-examine the two reports" [shape=box];
-    "Mechanisms agree?" [shape=diamond];
-    "One rebuttal round" [shape=box];
-    "Agree now?" [shape=diamond];
-    "Fixer: repro RED, commit; fix GREEN, commit" [shape=box];
-    "Reviewer: cause, only cause, test pins bug" [shape=box];
-    "Reviewer PASS?" [shape=diamond];
-    "Verifier: red leg, green leg, suite, build" [shape=box];
-    "VERIFIED?" [shape=diamond];
-    "3 strikes?" [shape=diamond];
-    "Stop + AskUserQuestion" [shape=box];
-    "Report (never merge)" [shape=doublecircle];
+At a glance — the phase prose below is authoritative; Codex-absent
+degradation, CAUSE_DISPUTED routing back to cross-examination, and re-dispatch
+edges live there, not here.
 
-    "Intake: bug brief, branch, BUILD/TEST, TodoWrite" -> "Codex investigator (xhigh, read-only)";
-    "Intake: bug brief, branch, BUILD/TEST, TodoWrite" -> "Scout: ranked fault surfaces";
-    "Scout: ranked fault surfaces" -> "Opus investigator (scout list in hand)";
-    "Codex investigator (xhigh, read-only)" -> "Cross-examine the two reports";
-    "Opus investigator (scout list in hand)" -> "Cross-examine the two reports";
-    "Cross-examine the two reports" -> "Mechanisms agree?";
-    "Mechanisms agree?" -> "Fixer: repro RED, commit; fix GREEN, commit" [label="yes"];
-    "Mechanisms agree?" -> "One rebuttal round" [label="no"];
-    "One rebuttal round" -> "Agree now?";
-    "Agree now?" -> "Fixer: repro RED, commit; fix GREEN, commit" [label="yes"];
-    "Agree now?" -> "Stop + AskUserQuestion" [label="no"];
-    "Fixer: repro RED, commit; fix GREEN, commit" -> "Reviewer: cause, only cause, test pins bug";
-    "Reviewer: cause, only cause, test pins bug" -> "Reviewer PASS?";
-    "Reviewer PASS?" -> "Verifier: red leg, green leg, suite, build" [label="yes"];
-    "Reviewer PASS?" -> "3 strikes?" [label="no"];
-    "Verifier: red leg, green leg, suite, build" -> "VERIFIED?";
-    "VERIFIED?" -> "Report (never merge)" [label="yes"];
-    "VERIFIED?" -> "3 strikes?" [label="no"];
-    "3 strikes?" -> "Fixer: repro RED, commit; fix GREEN, commit" [label="no — route findings"];
-    "3 strikes?" -> "Stop + AskUserQuestion" [label="yes"];
-}
-```
-
-*Happy path only — Codex-absent degradation, CAUSE_DISPUTED routing back to
-cross-examination, and re-dispatch edges are described in the text below.*
+0. Intake — bug brief, branch, BUILD/TEST, TodoWrite.
+1. Rival investigation, parallel — the Codex investigator (xhigh, read-only,
+   background) launches first, same batch as the scout; the scout's ranked
+   surfaces prime the Opus investigator, which runs while Codex works.
+2. Cross-examination — mechanisms agree → repair; disagree → one rebuttal
+   round; still split → stop + AskUserQuestion.
+3. Repair loop — the fixer commits the repro test RED, then the fix GREEN →
+   skeptical reviewer (cause, only cause, test pins the bug).
+4. Verification — mechanical verifier: red leg, green leg, suite, build. A
+   reviewer FAIL or NOT_VERIFIED costs a strike; three strikes → stop +
+   AskUserQuestion; VERIFIED → report (never merge).
 
 ### Phase 0 — Intake
 
