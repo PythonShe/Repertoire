@@ -12,7 +12,9 @@ same batch** as the Opus reviewer dispatches so they all run together. This
 is a document review: no `--base` flag; keep both full paths in the prompt so
 the runtime knows which files to read. If no written spec exists (the
 clarify-pass branch), drop the "against the spec at …" clause and fold the
-clarified requirements into the `[one line]` summary instead. If Codex is
+clarified requirements into the `[one line]` summary instead. For a **plan
+set**, set `[PLAN_FILE_PATH]` to the set directory and say so — the reviewer
+reads `00-overview.md` first, then every `plan-NN-*.md`. If Codex is
 unavailable, run the Opus lenses only and say so in your report.
 
 **Runtime review prompt** (substitute `[PLAN_FILE_PATH]`, `[SPEC_FILE_PATH]`,
@@ -24,7 +26,8 @@ and the `[one line]` summary before sending):
     tasks out of dependency order, and scope the spec never asked for:
     [one line on what the plan should deliver]
 
-**Issues location format:** `[Movement N, Task N.M] · severity · one-line gap`.
+**Issues location format:** `[Movement N, Task N.M] · severity · one-line gap`
+(in a plan set, prefix the plan file: `[plan-02, Movement N, Task N.M]`).
 
 **Fallback `codex exec` prompt** (replace `[PLAN_FILE_PATH]`,
 `[SPEC_FILE_PATH]`, and the paste block before sending; with no written spec,

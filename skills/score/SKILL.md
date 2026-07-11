@@ -1,7 +1,7 @@
 ---
 name: score
-description: Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens the plan with an adversarial review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. The terminal artifact is an approved plan — never code, and never a spec.
-when_to_use: Use when a spec or agreed design exists and the user wants the implementation plan — "write the implementation plan", "plan this out", "break the spec into tasks", "score this spec". Executing a finished plan goes to maestro; writing the spec itself goes to libretto.
+description: Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens the plan with an adversarial review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. When one goal is too big for a single plan it scales to a plan set — a dated directory where a 00-overview authored by the controller carries the cross-plan contracts and parallel plan-writer subagents author one plan file each. The terminal artifact is an approved plan or plan set — never code, and never a spec.
+when_to_use: Use when a spec or agreed design exists and the user wants the implementation plan — "write the implementation plan", "plan this out", "break the spec into tasks", "score this spec" — including goals that need several coordinated plan files. Executing a finished plan goes to maestro; writing the spec itself goes to libretto.
 ---
 
 # Score
@@ -10,8 +10,9 @@ In music, the score is what the conductor conducts from — every part written
 out, every entrance marked, nothing left to guesswork on stage. Here it's the
 same: your job is to turn an approved spec into an implementation plan complete
 enough that a fresh implementer with zero conversation context can build each
-part without asking what you meant. The plan is the finish line. You do not
-write the code; you hand off a clear, approved document and stop.
+part without asking what you meant. A large work ships as a suite — several
+plans under one overview — but the finish line is the same: the plan. You do
+not write the code; you hand off a clear, approved document and stop.
 
 Like Libretto's author and unlike Maestro's conductor, **you are hands-on with
 the plan**: you decompose the work, lock in the file structure, and write every
@@ -39,9 +40,17 @@ now and expensive once three subagents have built on a broken decomposition.
   quietly become the implementation, done in the wrong phase with no review
   panel behind it.
 - **You plan; you delegate scrutiny.** You read the spec, decompose the work,
-  and author the plan. You dispatch subagents only to (1) scout context and
-  (2) review the written plan. Editing prose you wrote, in response to review,
-  is your job — not delegated.
+  and author the plan. You dispatch subagents only to (1) scout context,
+  (2) write the individual plan files of a plan set — the partition and the
+  overview stay yours — and (3) review the written plan. Editing prose you
+  wrote, in response to review, is your job — not delegated.
+- **One plan by default; a set when the goal demands it.** When one goal
+  genuinely exceeds what a single plan — and the single Maestro run that
+  conducts it — can carry, split it into a **plan set**: `00-overview.md` plus
+  one plan file per part, numbered in execution order. You judge the count
+  from the seams in the work, not from a page target, and the user confirms
+  the partition at the structure checkpoint like every other decomposition
+  decision.
 - **Movements are the unit.** Group tasks the way Maestro will conduct them:
   tightly coupled work travels together, one implementer-sized unit per group,
   clean seams between groups. The plan's structure *is* the execution structure.
@@ -58,7 +67,8 @@ now and expensive once three subagents have built on a broken decomposition.
 
 Use Score when a design is settled — ideally an approved spec from Libretto,
 but any written spec or solid requirements will do — and the work is big enough
-to need more than one sitting. If the change is small enough that a single
+to need more than one sitting, up to goals big enough to need several
+coordinated plans. If the change is small enough that a single
 implementer could just do it, skip the plan. If the design itself is still
 open (approach unchosen, interfaces unsettled), the work belongs in
 `/repertoire:libretto` first; planning an undesigned thing just launders
@@ -72,14 +82,18 @@ heavy work behind user approval.
 At a glance — the phase prose below is authoritative.
 
 0. Locate the spec & scope check — no written spec → a short clarify pass
-   (not a design dialogue); a multi-subsystem spec → split, one plan per
-   subsystem, pick the first.
+   (not a design dialogue); decide the artifact's shape: one plan, or a
+   plan set (you pick the count; the user confirms in Phase 2).
 1. Context scout (Explore) → brief.
-2. Structure checkpoint — propose file structure + movements; rework until
-   the user approves.
-3. Write the plan — from the template, self-check, commit.
-4. Adversarial review panel, parallel — 2-3 Opus lenses + 1 Codex →
-   consolidate findings, revise the plan, commit.
+2. Structure checkpoint — propose file structure + movements (for a set:
+   the partition first, then per-plan structure); rework until the user
+   approves.
+3. Write the plan — single: author it yourself from the template. Set:
+   author 00-overview.md, dispatch parallel plan writers (one per plan),
+   reconcile their manifests. Self-check, commit.
+4. Adversarial review panel, parallel — 2-3 Opus lenses + 1 Codex over the
+   whole artifact (for a set: overview + every plan) → consolidate
+   findings, revise, commit.
 5. User approval (terminal) — structure changed → back to Phase 2; small
    edits → back to Phase 3; approved → point to /maestro (never invoke).
 
@@ -98,10 +112,15 @@ the panel is the judgment call described in Phase 4 — it is not automatic.
    This is not a design dialogue. If real design decisions are still open — the
    approach isn't chosen, interfaces aren't settled — stop and point the user to
    `/repertoire:libretto` rather than designing inside a planning skill.
-3. **Scope check (decomposition gate).** If the spec covers multiple independent
-   subsystems, plan one at a time — each plan must produce working, testable
-   software on its own. Help the user pick the first; the rest get their own
-   plans later.
+3. **Scope check (plan-count decision).** Decide the artifact's shape: one
+   plan, or a **plan set**. A single plan is the default. Reach for a set when
+   one goal spans parts too big or too separable for a single plan — several
+   subsystems, parallel feature tracks, work that will take multiple Maestro
+   runs. The count is your judgment call, made from the seams in the work:
+   each plan must still produce working, testable software on its own. The
+   user confirms the partition at the structure checkpoint. Fully unrelated
+   goals are not a set — they are separate Score runs; help the user pick the
+   first.
 
 ### Phase 1 — Context scout
 
@@ -129,8 +148,17 @@ between spec and finished plan.
    each other where you can — a clean seam is a clean handoff and a clean
    commit boundary. A movement must be small enough for one agent to hold in
    context, large enough to stand on its own.
+   **For a plan set, partition first, then structure each plan.** The same
+   grouping criteria apply one level up: work travels into the same plan when
+   it shares files, interfaces, or context; seams between plans must be at
+   least as clean as seams between movements, because each plan is conducted
+   by a separate Maestro run that never reads its siblings. Name each plan's
+   deliverable, its dependencies on other plans, and the cross-plan interfaces
+   that will live in the overview.
 3. **Present the structure compactly** — the file map, the movements, and the
-   one-line intent of each — and get the user's approval before writing the full
+   one-line intent of each; for a set, lead with the partition (each plan, its
+   one-line deliverable, the dependency order) and keep the per-plan detail to
+   a movement sketch — and get the user's approval before writing the full
    plan. Use AskUserQuestion for discrete choices, prose for open ones. A wrong
    decomposition caught here costs a paragraph; caught after the panel, it costs
    the whole plan.
@@ -143,6 +171,31 @@ root (create the directory if it doesn't exist), following `plan-template.md`.
 Decision-complete throughout: exact paths, spelled-out interfaces and data
 shapes, named tests with key assertions, exact verify commands, and the
 build/test commands in the header where Maestro's Phase 0 looks for them.
+
+**For a plan set**, the artifact is a directory —
+`docs/repertoire/plans/YYYY-MM-DD-<topic>/` holding `00-overview.md` plus
+`plan-NN-<slug>.md` files numbered in execution order — and the writing is
+shared:
+
+1. **Author `00-overview.md` yourself**, following `overview-template.md`. It
+   carries what no single plan can: the goal, the plan inventory with its
+   dependency order, the shared interfaces and data shapes that cross plan
+   boundaries, project-wide conventions, and the build/test commands. You hold
+   the spec and the approved structure, so the global document is yours —
+   and writing it *first* pins the contracts the writers build against.
+2. **Dispatch one plan writer per plan file, in parallel**, using
+   `plan-writer-prompt.md`. Each gets its plan's approved structure slice, the
+   spec (or the clarified requirements), the overview path, and the scout
+   findings that touch its scope. Writers are build seats — dispatch them
+   unpinned so they inherit the session model. Each writes exactly one file
+   and returns a compact manifest: interfaces defined, interfaces consumed
+   with the shape it relied on, and open assumptions.
+3. **Reconcile the manifests.** Every consumed interface must match its
+   definition — in the overview or the defining plan — exactly; every spec
+   requirement must land in exactly one plan. Spot-read plan files only where
+   manifests disagree. Fix small drift yourself; a "missing contract" in a
+   manifest means the *overview* needs the edit. Re-dispatch a writer only
+   when its plan needs structural rework.
 
 **Plan failures — never write them:**
 
@@ -159,16 +212,20 @@ build/test commands in the header where Maestro's Phase 0 looks for them.
   the plan; function bodies are the implementer's job.
 
 **Self-check, then commit.** Re-read the spec (or, with no written spec, the
-clarified requirements) with fresh eyes and walk it section by section — can you point at the task that implements each
+clarified requirements) with fresh eyes and walk it section by section — can
+you point at the task (and, in a set, the plan) that implements each
 requirement? Scan the plan for the failure patterns above. Check that
 signatures and names used in later movements match where they were defined.
-Fix inline, then commit. This self-check catches the cheap mistakes so the
-panel can spend its attention on the expensive ones.
+Fix inline, then commit — a set commits as one directory, overview and all.
+This self-check catches the cheap mistakes so the panel can spend its
+attention on the expensive ones.
 
 ### Phase 4 — Adversarial review panel
 
 The headline gate. Dispatch the panel **in parallel** against the committed
-plan, giving every reviewer both the plan path and the spec path. If there is
+plan, giving every reviewer both the plan path and the spec path — for a plan
+set, the plan path is the set directory, and reviewers read the overview plus
+every plan file. If there is
 no written spec (the clarify-pass branch), paste the clarified requirements
 into each reviewer's spec slot instead and say so — never send an
 unsubstituted placeholder:
@@ -220,6 +277,13 @@ instead of repeating each other. Good defaults for an implementation plan:
   movement seams that split coupled work or weld independent work, a movement
   too big for one implementer to hold in context.
 
+For a **plan set**, one lens of the panel must be:
+
+- **Cross-plan coherence** — shared contracts in the overview that no plan
+  implements, interfaces that drift between the defining and consuming plans,
+  spec requirements that fall between plans or land in two, and dependency
+  order between plans that contradicts the overview.
+
 Adjust to the work (a migration-heavy plan might swap in a *rollback &
 ordering* lens). Hand each reviewer exactly one lens. The Codex reviewer does a
 general pass, so it complements the lens reviewers rather than duplicating them.
@@ -242,6 +306,12 @@ so.
   spec names files or interfaces that don't exist as described), surface that to
   the user at the structure checkpoint — it may need a spec fix, not a plan
   workaround.
+- **Plan writers** return the path they wrote plus a manifest — interfaces
+  defined, interfaces consumed with the shapes they relied on, open
+  assumptions. You reconcile manifests against the overview; open a plan file
+  only where manifests conflict. A writer that returns questions instead of a
+  finished plan got an underspecified brief — fix the brief (or the overview)
+  and re-dispatch; don't answer piecemeal.
 - **Reviewers** return `PASS`/`FAIL` with findings. Consolidate from the text
   only; you don't open code files to dedupe. A finding you can't tie to a
   specific movement or task isn't actionable — drop it.
@@ -253,6 +323,10 @@ so.
   `docs/repertoire/specs/`. The path is relative to the project root; create
   the directory if it's missing. (User preference for plan location overrides
   this.)
+- A **plan set** gets a dated directory instead:
+  `docs/repertoire/plans/YYYY-MM-DD-<topic>/` holding `00-overview.md` plus
+  `plan-NN-<slug>.md` files numbered in execution order — the overview is
+  `00` so it sorts first. (Same user-preference override.)
 - Commit the plan when you first write it and again after each revision — the
   commits are the resume trail.
 - Work on a branch if the repo convention calls for it; Score writes only the
@@ -270,6 +344,14 @@ so.
   it's the cheapest moment to be wrong in the whole pipeline.
 - Reading the whole codebase yourself instead of dispatching the context scout
   → you'll burn the context you need for writing.
+- Splitting into a plan set when one plan would do → every extra plan buys
+  coordination cost; split at real seams, not for symmetry.
+- Writing an approved set's plan files yourself, serially → that burns the
+  author context the overview and reconciliation need; the parallel writers
+  exist for exactly this. (Conversely, delegating `00-overview.md` → the
+  global contracts are the author's job, never a writer's.)
+- An overview that summarizes the plans instead of carrying contracts → if a
+  line wouldn't change how someone writes or executes a plan, cut it.
 - Folding a blank/missing Codex result into the panel as a pass → that's a
   dropped reviewer, not an approval.
 - Writing code, scaffolding, or invoking Maestro after approval → the plan is
@@ -279,8 +361,13 @@ so.
 
 - `plan-template.md` — the document structure for the plan (header, file
   structure, movements, tasks).
+- `overview-template.md` — the document structure for a plan set's
+  `00-overview.md` (plan inventory, execution order, shared contracts).
 - `context-scout-prompt.md` — read-only Explore subagent that maps touch
   points, conventions, build/test commands, and spec drift into a compact brief.
+- `plan-writer-prompt.md` — plan-set writer subagent (one per plan file,
+  dispatched in parallel, unpinned); writes one plan, returns an interface
+  manifest.
 - `plan-reviewer-prompt.md` — skeptical plan reviewer, parameterized by lens
   (one lens each for the panel).
 - `codex-reviewer-prompt.md` — what the Codex reviewer reviews; a thin stub

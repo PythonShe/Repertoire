@@ -4,7 +4,10 @@ One template for every panel reviewer. Dispatch each as a fresh **Opus**
 subagent, one lens apiece, all in parallel. Reviewers never edit the plan —
 they only find. Always fill `[PLAN_FILE_PATH]` and `[SPEC_FILE_PATH]` with
 resolved file paths, never placeholders; if no written spec exists, paste the
-clarified requirements into that section instead and say so.
+clarified requirements into that section instead and say so. For a **plan
+set**, `[PLAN_FILE_PATH]` is the set directory — tell the reviewer to read
+`00-overview.md` first, then every `plan-NN-*.md` — and findings name the
+plan file too: `[plan-02, Movement 1, Task 1.3] · …`.
 
 Default lenses for an implementation plan (see SKILL.md → *Choosing review
 lenses*):
@@ -12,6 +15,7 @@ lenses*):
 - `spec coverage & traceability`
 - `buildability & self-containment`
 - `sequencing & decomposition`
+- `cross-plan coherence` — plan sets only, where it must be one of the lenses
 
 ```
 Agent tool (model: opus, effort: xhigh):
@@ -29,7 +33,8 @@ Agent tool (model: opus, effort: xhigh):
     ## What to review
 
     Read both in full:
-    - Plan: [PLAN_FILE_PATH]
+    - Plan: [PLAN_FILE_PATH] (if this is a plan-set directory, read
+      00-overview.md first, then every plan-NN-*.md)
     - Spec it implements: [SPEC_FILE_PATH]
 
     The spec is the ground truth; the plan is on trial.
@@ -44,7 +49,7 @@ Agent tool (model: opus, effort: xhigh):
     This plan was written by its own author, who cannot see their own blind
     spots, and it will be executed by fresh implementers who get one task
     group each and zero conversation context. Your job is to find the gap that
-    will derail one of them — but **only through your lens**. The three
+    will derail one of them — but **only through your lens**. The
     default lenses are defined below; hunt for the one that matches yours and
     leave the others to your fellow reviewers (they're listed only so you know
     what you can safely ignore). If your lens isn't one of these (a custom
@@ -63,6 +68,12 @@ Agent tool (model: opus, effort: xhigh):
       task that references work built later, movement seams that split
       tightly-coupled work or weld independent work together, a movement too
       big for one implementer to hold in context.
+    - **cross-plan coherence** (plan sets only) — walk each shared contract
+      in the overview: which plan implements it, and do the consuming plans
+      restate it identically? Flag interfaces that drift between plans,
+      overview contracts no plan implements, spec requirements that fall
+      between plans or land in two, and dependency claims inside plans that
+      contradict the overview's execution order.
 
     Judge only what the plan *says*, not how it's worded. A real gap is one
     that would lead an implementer to build the wrong thing or get stuck.

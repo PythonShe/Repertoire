@@ -17,6 +17,7 @@ you meant.
 > for tracking.
 
 **Spec:** `docs/repertoire/specs/<file>.md` (or: derived from conversation — see Goal)
+**Overview:** `00-overview.md` — plan sets only; a standalone plan omits this line.
 **Goal:** one sentence — what this builds.
 **Architecture:** 2-3 sentences on the approach, lifted from the spec's decision.
 **Build:** `<exact command>` · **Test:** `<exact command>`
@@ -71,3 +72,7 @@ Conventions worth keeping to:
   reads them from the plan before falling back to the README or manifest; an
   exact command here saves every downstream agent from guessing.
 - **An empty "Notes for the conductor" is deleted,** not left as a heading.
+- **In a plan set,** the header links the overview, every cross-plan
+  interface is restated at the point of use exactly as the overview defines
+  it, and the plan stays executable by a Maestro run that never reads its
+  siblings. A standalone plan has no overview file at all.

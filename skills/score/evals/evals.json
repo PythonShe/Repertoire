@@ -6,6 +6,8 @@
   {"query": "the design is agreed — plan this out into concrete tasks", "should_trigger": true},
   {"query": "break the spec into implementation tasks", "should_trigger": true},
   {"query": "turn this approved design into an implementation plan", "should_trigger": true},
+  {"query": "this feature set is too big for one plan — write multiple plans with an overview", "should_trigger": true},
+  {"query": "break this goal into several plan files we can execute one at a time", "should_trigger": true},
   {"query": "execute this implementation plan", "should_trigger": false, "note": "maestro's"},
   {"query": "build out the plan in tasks.md step by step", "should_trigger": false, "note": "maestro's"},
   {"query": "the plan is ready — implement it with subagents", "should_trigger": false, "note": "maestro's"},
