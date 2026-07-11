@@ -20,7 +20,9 @@ unavailable, run the Opus lenses only and say so in your report.
 **Runtime review prompt** (substitute `[PLAN_FILE_PATH]`, `[SPEC_FILE_PATH]`,
 and the `[one line]` summary before sending):
 
-    review the implementation plan at [PLAN_FILE_PATH] against the spec at
+    review the implementation plan at [PLAN_FILE_PATH] (if that is a plan-set
+    directory, read 00-overview.md first, then every plan-NN-*.md) against
+    the spec at
     [SPEC_FILE_PATH] for gaps that would derail a fresh implementer: spec
     requirements with no task, undefined interfaces or placeholder steps,
     tasks out of dependency order, and scope the spec never asked for:
@@ -45,7 +47,8 @@ handling", "similar to task N"), tests too vague to write, tasks out of
 dependency order, and scope the spec never asked for. Report only material
 gaps; one strong finding beats five weak ones.
 
-Plan file: [PLAN_FILE_PATH]
+Plan file: [PLAN_FILE_PATH] (a plan-set directory? read 00-overview.md first,
+then every plan-NN-*.md)
 Spec file: [SPEC_FILE_PATH]
 This plan is meant to deliver:
 [PASTE one paragraph: the goal and the chosen approach]

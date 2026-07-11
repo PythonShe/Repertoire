@@ -25,8 +25,8 @@ Agent tool:
     - File to write: [PLAN_FILE_PATH, e.g. docs/repertoire/plans/2026-07-11-<topic>/plan-02-<slug>.md]
     - Delivers: [one paragraph: what this plan builds and why it stands alone]
     - Approved structure — follow it, do not restructure:
-    [PASTE this plan's checkpoint-approved slice: movements, task outline,
-    file map]
+    [PASTE this plan's checkpoint-approved slice: movements and file map;
+    naming the tasks inside each movement is the writer's job]
 
     ## Read before writing
 
@@ -36,8 +36,8 @@ Agent tool:
       and shapes it defines are law: consume them exactly as written, and
       restate any you consume inside the task that uses them.
     - The plan template: [PLAN_TEMPLATE_PATH] — follow its structure exactly,
-      and add an `**Overview:** `00-overview.md`` line to the header so a
-      conductor finds the contracts.
+      and keep its "Overview: 00-overview.md" header line so a conductor
+      finds the contracts.
 
     ## Codebase context (from the scout)
 
@@ -75,7 +75,7 @@ Agent tool:
     - **Defines:** each public interface this plan introduces — exact
       signature or shape
     - **Consumes:** each cross-plan interface used, and the exact shape you
-      relied on (from the overview or a named sibling plan)
+      relied on, as the overview defines it
     - **Assumptions / missing contracts:** anything you had to assume, or a
       gap in the overview — one line each, or "none"
 ```
