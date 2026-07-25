@@ -62,10 +62,12 @@ unreviewed routing change. Scratch output stays in the gitignored
 A skill whose pipeline dispatches subagents before any user gate must carry a
 cost gate: if the user did not name the skill or run its slash command,
 confirm scope and cost with one AskUserQuestion before the first dispatch.
-Maestro, coda, and tuner carry this gate; eureka, libretto, score, and encore
-do not need one because a dialogue or AskUserQuestion gate already precedes
-their first expensive dispatch. A new skill that launches a fleet from Phase 0
-needs the gate from day one.
+Maestro, coda, tuner, and presto carry this gate; eureka, libretto, score, and
+encore do not need one because a dialogue or AskUserQuestion gate already
+precedes their first expensive dispatch. A new skill that launches a fleet from
+Phase 0 needs the gate from day one. Presto shows the cheap form: its gate is
+folded into the branch question it had to ask anyway, so an unnamed run still
+costs exactly one interaction.
 
 ## Writing prompt files (the leading-words rule)
 
