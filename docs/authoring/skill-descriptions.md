@@ -65,9 +65,13 @@ confirm scope and cost with one AskUserQuestion before the first dispatch.
 Maestro, coda, tuner, and presto carry this gate; eureka, libretto, score, and
 encore do not need one because a dialogue or AskUserQuestion gate already
 precedes their first expensive dispatch. A new skill that launches a fleet from
-Phase 0 needs the gate from day one. Presto shows the cheap form: its gate is
-folded into the branch question it had to ask anyway, so an unnamed run still
-costs exactly one interaction.
+Phase 0 needs the gate from day one. Presto shows the cheap form: the branch
+decision rides along in the same question, and it is placed before the branch
+is cut, so a misfire costs one question and leaves the repository untouched.
+Note what the gate is *not* — Presto's Phase 2 approval gate still follows it
+on every run. A cost gate asks whether to spend; an approval gate asks what to
+build. A skill that already has the second still needs the first if it
+dispatches before reaching it.
 
 ## Writing prompt files (the leading-words rule)
 

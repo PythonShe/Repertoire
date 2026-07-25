@@ -1,9 +1,12 @@
 # Implementer Prompt Template
 
-Used only when the size gate sends the work to a subagent — when the change is
-past ~3 files / ~150 lines, spans more than one module, or introduces a new
-subsystem, dependency, schema, or public interface. Inside the gate, the
-controller builds it directly and this file is not used.
+Used when the size gate sends the work to a subagent — when the change is past
+~3 files / ~150 lines, spans more than one module, or introduces a new
+subsystem, dependency, schema, or public interface. Also used for the two
+mid-run routes into this seat: a **stop-and-hand-off** (the controller began
+playing and the work outgrew the gate) and a QC `[implementation]` blocker.
+Both fill the *Work already on the branch* section; a first-dispatch build
+omits it entirely.
 
 Dispatch **one** implementer, alone. Paste in everything it needs — it never
 reads the scout's raw report and never goes hunting for the request.
@@ -32,6 +35,19 @@ Agent tool (effort: xhigh):
     [The scout's landing zone: the files and functions with their `file:line`
     anchors, the local patterns to follow, and the constraints that forbid the
     alternatives. Paste it — don't reference it.]
+
+    ## Work already on the branch (omit this section on a first dispatch)
+
+    [Only when someone built part of this before you — a controller that
+    handed off mid-build, or a prior implementer whose gap QC flagged. Give:
+    the commit SHAs and what each covers · what is therefore already DONE and
+    must not be rebuilt · what changed in the picture (the schema, the
+    interface, the fourth file that triggered the hand-off) · what remains.]
+
+    If this section is present, start by reading those commits — the work in
+    them is finished unless it is listed as remaining. Build the remainder on
+    top of it. Do not restart from scratch, and do not redo what is committed
+    just because you would have done it differently.
 
     Work from: [directory]   Branch: [BRANCH]
     Test command: [TEST — how to run the tests]

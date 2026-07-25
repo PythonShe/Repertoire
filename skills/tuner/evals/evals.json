@@ -16,5 +16,7 @@
   {"query": "my guitar tuner says the E string is flat — how do I tune it?", "should_trigger": false},
   {"query": "tune the hyperparameters of this XGBoost model", "should_trigger": false},
   {"query": "help me tune the JVM garbage collector settings for our production service", "should_trigger": false},
-  {"query": "how do I tune a piano by ear?", "should_trigger": false}
+  {"query": "how do I tune a piano by ear?", "should_trigger": false},
+  {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — a change to build, not a bug to diagnose"},
+  {"query": "wire this endpoint to the new notification service", "should_trigger": false, "note": "presto's"}
 ]

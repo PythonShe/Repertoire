@@ -1,9 +1,11 @@
 # Fixer Prompt Template
 
-Dispatch a fixer when an **implementer** built the change and the review or QC
-findings need real work. When the controller built the change — or when the
-findings are trivial regardless of who built it (localized, mechanical, no
-design judgment) — the controller fixes them in place and this file is not used.
+Dispatch a fixer for any `critical` or `important` finding against code an
+**implementer** wrote. The controller fixes in place — and this file is not
+used — when it built the change itself, or when every finding is `minor`
+(localized, mechanical, needing no grasp of the surrounding design). The
+routing is the reviewer's severity, not a judgment the controller makes about
+its own convenience.
 
 One fixer at a time, never alongside another writer. It fixes everything in one
 pass; Presto does not re-review a fix.

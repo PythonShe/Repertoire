@@ -1,7 +1,7 @@
 ---
 name: presto
 description: Fast-lane implementation session for one scoped change — 1-2 read-only scouts investigate the codebase and weigh approaches, the user picks at a single AskUserQuestion gate, then the work is built (by the controller itself when it is small, by one implementer subagent when it is not), reviewed by one Opus subagent that is never skipped, fixed in a single pass, and sealed by a short build-and-test QC gate. Runs on a named or fresh branch, commits as it goes, pushes only on request, never merges.
-when_to_use: Use when the user wants one concrete change built right now, with no spec or plan written first — "add a --json flag to the export command", "wire this endpoint to the new service", "make the sidebar collapsible", "just build it", "run Presto on this". A written plan already exists → maestro; a bug to diagnose → tuner; improving working code nobody asked to change → encore.
+when_to_use: Use when the user wants one concrete change built right now, with no spec or plan written first — "add a --json flag to the export command", "wire this endpoint to the new service", "make the sidebar collapsible", "just build it", "run Presto on this". A written plan already exists → maestro; a bug to diagnose → tuner; improving working code nobody asked to change → encore; a change that needs designing or planning before anyone builds it → libretto, then score.
 ---
 
 # Presto
@@ -25,8 +25,10 @@ gate that actually runs the tests.
   deliberate break with the rest of the line. When the change is small and the
   approach is settled, you implement it yourself: a handoff to a subagent that
   must first reconstruct context you already hold is pure latency. Outside the
-  size gate (below), you dispatch. Discovering mid-build that the work outgrew
-  the gate is a **stop-and-hand-off**, not a reason to keep playing.
+  size gate (below), you dispatch — with one narrow extension at the repair
+  step, where you may fix `minor` findings in place whoever wrote the code.
+  Discovering mid-build that the work outgrew the gate is a
+  **stop-and-hand-off**, not a reason to keep playing.
 - **You never review your own code.** The reviewer is always a fresh subagent —
   most of all when you were the one who built it. An author reviewing their own
   work is precisely the failure this seat exists to catch, and it is the one
@@ -63,9 +65,9 @@ gate that actually runs the tests.
 
 Use Presto when the user names a change they want built now and the path to it
 is short enough that writing a plan would cost more than the work. It is the
-door Maestro's own guidance points at when it says a small one-off task needs
-no pipeline — except that "no pipeline" still deserves recon, a decision, a
-reviewer, and a gate.
+door Maestro's own guidance points at for a single scoped change with no plan
+behind it — except that "no plan" still deserves recon, a decision, a reviewer,
+and a gate.
 
 The floor and the ceiling both matter. Below the floor — a rename, a typo, a
 one-line config edit with an obvious answer — just make the change and say so;
@@ -75,10 +77,13 @@ the gate.
 
 Presto auto-invokes on matching requests. **Cost gate:** if the user did not
 name Presto or run `/presto`, confirm before the scouts dispatch — one
-AskUserQuestion carrying the restated brief, the branch, and the fact that
-recon is about to run. Fold the branch decision into that same question so an
-unnamed run still costs exactly one interaction. A user who named Presto has
-already consented to recon; ask only if the branch is ambiguous.
+AskUserQuestion carrying the restated brief, the branch you intend to use, and
+the fact that recon is about to run. Fold the branch decision into that same
+question rather than asking twice; a misfire then costs one question, and the
+repository has not been touched yet. A user who named Presto has already
+consented to recon — ask only if the branch is ambiguous. Either way the
+Phase 2 approval gate still follows: the cost gate is about spending, the
+Phase 2 gate is about what gets built, and no run skips the second one.
 
 ## The pipeline
 
@@ -86,8 +91,9 @@ At a glance — the phase prose below is authoritative; the size gate's terms,
 the stop-and-hand-off rule, who-fixes routing, and the strike budget live
 there, not here.
 
-0. Downbeat — restate the brief, scope check, resolve BRANCH and BASE, find
-   BUILD/TEST, cost gate if Presto wasn't named, TodoWrite.
+0. Downbeat — restate the brief, scope check, decide BRANCH, find BUILD/TEST,
+   cost gate if Presto wasn't named, *then* cut the branch and capture BASE,
+   TodoWrite.
 1. Recon — 1 read-only Opus scout, a 2nd only for a genuinely separate
    surface. Landing zone, approaches, size call.
 2. The gate — report and one AskUserQuestion. Nothing is written before it
@@ -104,9 +110,11 @@ there, not here.
 ### Phase 0 — Downbeat
 
 1. **If resuming:** read TodoWrite and `git log --oneline` first. There is no
-   state file — re-derive the run from the todos and commits and resume at the
-   first phase not marked done. Read the strike count from its todo if you are
-   mid-QC.
+   state file — the todos carry what the commits cannot: `BASE` in the
+   `Review` todo, the build seat in the `Build` todo, and the strike count in
+   the `QC` todo. Re-derive the rest from the commits and resume at the first
+   phase not marked done. If `BASE` is genuinely lost, do not guess a range —
+   ask the user which commit the branch started from.
 2. **Restate the request as the brief** — one or two lines of what the user
    wants, plus **acceptance**: how anyone would know it works. Every agent in
    the run receives this verbatim, so it is worth getting exact. If the request
@@ -121,25 +129,30 @@ there, not here.
      plan). Do not run Presto on it.
    - *In the room* — proceed. If you are unsure, proceed to recon: the scout's
      size call settles it at the gate, which is a cheaper place to be wrong.
-4. **Resolve `BRANCH`.** The user may name an existing branch (check it out) or
-   ask for a new one; absent an instruction, use the current branch when it is
-   already a feature branch, otherwise create `presto/<slug>` from a short
-   kebab-case handle for the request. **Never build on main or master** without
-   the user's explicit consent. Check `git status` first — uncommitted changes
-   are the user's work; surface them and resolve before Phase 3, never touch
-   them.
-5. **Capture `BASE`** = `git rev-parse HEAD` once the branch is settled.
-   Every review in this run is `BASE..HEAD`. (Read-only bookkeeping, allowed.)
-6. **Determine `BUILD` and `TEST`** from the README or package manifest. If you
+4. **Decide `BRANCH` — but do not cut it yet.** The user may name an existing
+   branch or ask for a new one; absent an instruction, use the current branch
+   when it is already a feature branch, otherwise plan to create
+   `presto/<slug>` from a short kebab-case handle for the request. **Never
+   build on main or master** without the user's explicit consent. Check
+   `git status` now — uncommitted changes are the user's work; surface them and
+   resolve before Phase 3, never touch them.
+5. **Determine `BUILD` and `TEST`** from the README or package manifest. If you
    cannot find them, ask the user — never let an agent guess, and never let QC
    run on an invented command. If the project genuinely has none, record
    `none (user-confirmed)` and pass that token to QC, which then judges by its
    read and says so in its evidence.
-7. **Cost gate** — if the user did not name Presto, one AskUserQuestion now
-   (brief + branch + recon about to run). If they did name it, ask only when
-   the branch is ambiguous.
+6. **Cost gate** — if the user did not name Presto, one AskUserQuestion now:
+   the brief, the branch you intend to use, and the fact that recon is about to
+   run. Nothing in the repository has changed yet, and that is the point of
+   asking here rather than after the checkout.
+7. **Now cut the branch** — check out or create what step 4 settled and the
+   gate confirmed — and **capture `BASE`** = `git rev-parse HEAD`. Every review
+   in this run is `BASE..HEAD`.
 8. Create a TodoWrite list: `Recon`, `Gate`, `Build`, `Review`, `Fix`,
-   `QC (strikes 0/2)`.
+   `QC (strikes 0/2)` — and **write `BASE` into the `Review` todo's text**.
+   `BASE` is a plain `HEAD` snapshot, not a merge-base: on a branch that
+   already carried commits nothing can recompute it later, so that todo is the
+   only place it survives a resume.
 
 ### Phase 1 — Recon
 
@@ -186,8 +199,9 @@ there, not here.
 - it lives in **one module**, and
 - it introduces no new subsystem, dependency, schema, or public interface.
 
-Fail any one of them and you dispatch. Record the seat as `SEAT = controller |
-implementer` — Phase 5's routing reads it.
+Fail any one of them and you dispatch. Record the seat in the `Build` todo's
+text as `seat: controller` or `seat: implementer` — Phase 5's routing reads it,
+and a resumed run has no other way to recover it.
 
 1. **You play** — implement the approved approach yourself, follow the patterns
    recon named, write tests that verify real behavior, run `TEST` scoped to
@@ -202,9 +216,14 @@ implementer` — Phase 5's routing reads it.
 4. **Stop-and-hand-off.** If you are playing and the work reveals itself to be
    past the size gate — a fourth file, a schema change, an interface you did
    not expect — stop, commit what is coherent, and hand the remainder to an
-   implementer with what you learned. Sunk effort is not a reason to keep
-   playing, and the size gate is a promise about *this* change, not about how
-   far you have already gotten.
+   implementer, filling that prompt's **Work already on the branch** section
+   with your commit SHAs, what they cover, and what you learned that changed
+   the picture. Without that section the implementer would rebuild what you
+   already committed. Flip the `Build` todo to `seat: implementer` (Phase 5
+   then routes the review findings to a fixer, not to you — the branch is no
+   longer only your code). Sunk effort is not a reason to keep playing: the
+   size gate is a promise about *this* change, not about how far you have
+   already gotten.
 
 ### Phase 4 — Review
 
@@ -222,16 +241,18 @@ implementer` — Phase 5's routing reads it.
 
 1. **Clean `PASS` with no findings → skip this phase.** A fixer with an empty
    finding list is a wasted seat and a wasted minute.
-2. **Who fixes:**
-   - **You**, when `SEAT = controller` — you already hold the context of code
-     you wrote, so briefing a subagent on it costs more than the repair — or
-     when the findings are **trivial regardless of who built it**: localized
-     and mechanical, needing no design judgment (a missing null check, a
-     rename, an unhandled case).
-   - **A fixer subagent** (`fixer-prompt.md`) otherwise — an implementer built
-     it and the findings need real work. A subagent's code is context you do
-     not have, and reconstructing it in your own window is how a fast lane
-     turns slow *and* wrong.
+2. **Who fixes** — the size gate governs who *builds*; repair has its own,
+   narrower rule, and it routes on the severities the reviewer already
+   assigned rather than on your own sense of convenience:
+   - **You**, when the `Build` todo says `seat: controller` — you already hold
+     the context of code you wrote, so briefing a subagent on it costs more
+     than the repair — or, whoever built it, when **every finding is `minor`**:
+     localized and mechanical, needing no grasp of the surrounding design (a
+     missing null check, a rename, an unhandled case).
+   - **A fixer subagent** (`fixer-prompt.md`) otherwise — that is, any
+     `critical` or `important` finding against code an implementer wrote. A
+     subagent's code is context you do not have, and reconstructing it in your
+     own window is how a fast lane turns slow *and* wrong.
 3. **One pass.** Do not review the fix, and do not loop. Anything the fixer
    disputes or could not fix goes into the QC brief verbatim — QC is the round
    that catches it, and it is one dispatch away.
@@ -275,11 +296,18 @@ implementer` — Phase 5's routing reads it.
 
 ## The ensemble budget
 
-Three agents at the floor — one scout, one reviewer, one QC. Six at the
-ceiling — two scouts, an implementer, a reviewer, a fixer, and QC. That range
-*is* the skill: a run that wants a seventh seat, a second review round, or a
-third scout has outgrown the fast lane, and the honest move is to say so and
-name the door rather than to quietly grow an orchestra.
+Three agents on the floor — one scout, one reviewer, one QC. **Six on the
+nominal path** — two scouts, an implementer, a reviewer, a fixer, and QC.
+
+A QC retry round spends past six (a fixer, then another QC), and that is not a
+budget violation: it is what the two-strike budget exists to bound. The six
+counts the run as designed, not the run as rescued.
+
+What the budget forbids is growing the ensemble **by design** — a third scout,
+a second review round, a panel of lenses, a cross-model seat. Those are
+Maestro's ensemble, and a run that wants one has outgrown the fast lane. The
+honest move is to say so and name the door, not to quietly assemble an
+orchestra.
 
 ## Handling subagent status
 
@@ -307,13 +335,16 @@ remainder into the QC brief; do not re-loop Phase 5.
 
 - Editing a file before the Phase 2 gate cleared — the gate is the only
   approval in this pipeline.
-- Playing outside the size gate, or playing on past it once the work grew —
-  the honest move is the hand-off.
+- Building outside the size gate, or playing on past it once the work grew —
+  the honest move is the hand-off. (Repairing a `minor` finding in place is
+  the one sanctioned extension, and it is the *only* one.)
 - Reviewing your own work, or skipping the reviewer because the change "is
   obviously right". There is one review here; skipping it leaves zero.
 - Two writers on the branch at once, in any combination.
-- Dispatching a fixer with an empty finding list, or dispatching one to fix
-  three characters you could fix in place.
+- Dispatching a fixer with an empty finding list, or dispatching one for a
+  `minor` finding you could fix in place.
+- Fixing a `critical` or `important` finding yourself on code an implementer
+  wrote — that is the fixer's seat, and the severity is not yours to relabel.
 - A third scout, a second review round, or a panel — that ensemble is
   Maestro's. Escalate instead of growing.
 - Running Presto on work that needs a spec or a plan, instead of naming the
@@ -328,7 +359,8 @@ remainder into the QC brief; do not re-loop Phase 5.
 - `scout-prompt.md` — read-only Opus recon: landing zone, constraints,
   approaches with a recommendation, size call.
 - `implementer-prompt.md` — build the approved approach in one pass and commit;
-  used only when the size gate sends the work to a subagent.
+  used when the size gate sends the work to a subagent, and for the two mid-run
+  routes into that seat (a stop-and-hand-off, a QC `[implementation]` blocker).
 - `reviewer-prompt.md` — the single broad adversarial review over `BASE..HEAD`,
   briefed with the request and the approved approach.
 - `fixer-prompt.md` — repair review or QC findings and commit.

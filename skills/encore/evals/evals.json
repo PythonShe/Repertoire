@@ -16,5 +16,7 @@
   {"query": "what songs make a good concert encore?", "should_trigger": false},
   {"query": "what did the band play for the encore last night?", "should_trigger": false},
   {"query": "how do I define a service in Encore.dev?", "should_trigger": false},
-  {"query": "deploy my Encore.ts backend to production", "should_trigger": false}
+  {"query": "deploy my Encore.ts backend to production", "should_trigger": false},
+  {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — a requested new change, not an un-asked-for improvement"},
+  {"query": "make the sidebar collapsible", "should_trigger": false, "note": "presto's"}
 ]

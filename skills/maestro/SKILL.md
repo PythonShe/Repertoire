@@ -1,7 +1,7 @@
 ---
 name: maestro
 description: Conductor that executes a written implementation plan through a pipeline of subagents — groups related tasks, builds each group with a fresh implementer plus one review-and-fix pass, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based QC merge gate. Pushes but never merges, and keeps the conductor's own context lean.
-when_to_use: Use when an implementation plan or task list exists and the user wants it built — "execute this plan", "build out the plan with subagents", "run Maestro on this plan", or resuming an interrupted Maestro run. Needs a written plan; producing one from a spec goes to score, and a small one-off task needs no pipeline at all.
+when_to_use: Use when an implementation plan or task list exists and the user wants it built — "execute this plan", "build out the plan with subagents", "run Maestro on this plan", or resuming an interrupted Maestro run. Needs a written plan; producing one from a spec goes to score, and a single scoped change with no plan behind it goes to presto.
 ---
 
 # Maestro
@@ -48,8 +48,10 @@ you can keep coordinating clearly all the way to the end.
 ## When to use
 
 Use Maestro when you have a written plan with multiple tasks and you want it
-implemented in this session with subagents. If the work is a single small change,
-just do it directly. If there is no plan yet, brainstorm or write one first.
+implemented in this session with subagents. If the work is a single scoped
+change with no plan behind it, that is `/repertoire:presto`'s room — recon, one
+approval gate, one reviewer, one QC. If there is no plan yet, brainstorm or
+write one first.
 
 Maestro auto-invokes on matching requests. **Cost gate:** if the user did not
 name Maestro or run `/maestro`, confirm scope and cost first — one

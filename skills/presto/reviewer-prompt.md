@@ -72,8 +72,11 @@ Agent tool (model: opus, effort: xhigh):
       `path/to/file.ext:42 · important · off-by-one drops the last record`
 
     Severity is `critical` (must not ship), `important` (should be fixed now),
-    or `minor` (worth a line, not worth a round). Be accurate about it: the
-    controller routes trivial findings to itself and substantial ones to a
-    fixer, so an inflated severity buys a wasted seat and a deflated one lets
-    a real defect through.
+    or `minor` (worth a line, not worth a round). **Be accurate about it — it
+    is routing, not commentary.** A run where every finding is `minor` is
+    repaired by the controller in place; a single `critical` or `important`
+    one against subagent-written code dispatches a fixer. An inflated severity
+    buys a wasted seat; a deflated one sends a substantial defect to a seat
+    picked for mechanical repairs — and there is no later round to catch that,
+    because you are the only review.
 ```
