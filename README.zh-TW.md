@@ -25,10 +25,10 @@
 - **Claude Max（5x 或 20x），或採用 API 計費** —— 這是預期的配置。較輕量的方案
   很可能在執行到一半時就撞上用量上限。
 - **安裝了 OpenAI [`codex-cc` 外掛](https://github.com/openai/codex-plugin-cc)
-  的 Codex 帳號** —— 強烈建議。除 Presto 和 Jam 之外，每個 skill 都會透過它調度一個跨模型的 Codex agent
+  的 Codex 帳號** —— 強烈建議。除 Presto、Jam 和 Legato 之外，每個 skill 都會透過它調度一個跨模型的 Codex agent
   （審查員或調查員）。沒有 Codex 時 skill 仍能優雅降級——它們會改跑純 Opus 的小組，
   並在報告中說明——但跨模型檢查本來就是設計的一部分。（Presto 刻意不設這個席位：
-  跨模型這一輪的時間成本值得花在整條分支上，而不是一處範圍明確的變更上。Jam 不設
+  跨模型這一輪的時間成本值得花在整條分支上，而不是一處範圍明確的變更上。Legato 與 Presto 同理——一處範圍明確的動效打磨。Jam 不設
   則是因為它全程無人值守——一次掛起的跨模型呼叫會讓一場沒人盯著的會話就此卡住；
   它的終章改為讓一位固定用 Opus 的審查員與一位跑在會話模型上的審查員搭檔。）
 
@@ -67,11 +67,12 @@ Repertoire/                       儲存庫根目錄 = 外掛根目錄 = marketp
 │   ├── plugin.json               外掛清單（name: repertoire）
 │   └── marketplace.json          列出本外掛的 catalog（source "./"）
 ├── skills/                       每個 skill 一個目錄
-│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner、presto、jam
+│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner、presto、jam、legato
 │       ├── SKILL.md
 │       ├── evals/evals.json      已提交的 trigger evals
-│       ├── *-template.md         內建的文件結構（libretto、score）
-│       └── *-prompt.md           內建的 subagent prompt 範本
+│       ├── *-template.md         內建的文件結構（libretto、score、legato）
+│       ├── *-prompt.md           內建的 subagent prompt 範本
+│       └── references/           內建的第三方參考資料（legato；MIT 授權，見該目錄的 LICENSE）
 ├── shared/
 │   ├── codex-reviewer-core.md    共用的 Codex 呼叫契約
 │   └── invariants.md             兩檔模型策略的權威定義

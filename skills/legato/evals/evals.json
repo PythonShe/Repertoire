@@ -17,5 +17,11 @@
   {"query": "execute the animation plan in docs/plans with subagents", "should_trigger": false, "note": "maestro's — a written plan exists"},
   {"query": "brainstorm animation ideas we could add to this product", "should_trigger": false, "note": "eureka's — discovery, not a named surface to polish"},
   {"query": "make the strings sound legato in this MIDI generator", "should_trigger": false, "note": "homonym — musical articulation in domain code"},
-  {"query": "what's the term for the bouncy effect when a popover opens", "should_trigger": false, "note": "vocabulary lookup — naming a motion, not building one"}
+  {"query": "what's the term for the bouncy effect when a popover opens", "should_trigger": false, "note": "vocabulary lookup — naming a motion, not building one"},
+  {"query": "what does legato mean in sheet music?", "should_trigger": false},
+  {"query": "how do I play legato on the violin?", "should_trigger": false},
+  {"query": "we're migrating off Legato NetWorker backups", "should_trigger": false},
+  {"query": "the modal enter transition uses ease-in — switch it to ease-out", "should_trigger": true, "note": "in territory — below the floor: fires, makes the one-line change, cites the standard, says it skipped the pipeline"},
+  {"query": "do an app-wide motion overhaul of this app", "should_trigger": false, "note": "above the ceiling — the spec-to-maestro line's; Phase 0's scope check is the backstop if it fires anyway"},
+  {"query": "just improve things, you pick", "should_trigger": false, "note": "jam's — no surface named"}
 ]

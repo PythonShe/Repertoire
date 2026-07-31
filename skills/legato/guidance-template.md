@@ -19,7 +19,7 @@ Standing motion guidance for this project, maintained by Repertoire/Legato
 runs. Decisions here are settled: agents extend them, they do not re-argue
 them. A human editing this file wins over any run.
 
-Last updated: <YYYY-MM-DD> · <short commit SHA>
+Last updated: <YYYY-MM-DD> · <`git rev-parse --short HEAD` when this doc was written>
 
 ## Motion language
 

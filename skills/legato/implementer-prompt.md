@@ -61,9 +61,11 @@ Agent tool (effort: xhigh):
 
     ## Craft rules that are not optional
 
-    - **Animate `transform` and `opacity` only**; no `transition: all`, no
-      layout properties, no Framer Motion `x`/`y`/`scale` shorthands where
-      the motion runs under load — use the full transform string.
+    - **Animate compositor-friendly properties** — `transform` and
+      `opacity`, plus `clip-path` and short `filter` blurs where STANDARDS.md
+      sanctions them; never layout properties, never `transition: all`, and
+      no Framer Motion `x`/`y`/`scale` shorthands where the motion runs
+      under load — use the full transform string.
     - **Extend the project's motion tokens**; if a needed curve has no
       token, add one where the conventions say tokens live — never a fifth
       hand-typed cubic-bezier.

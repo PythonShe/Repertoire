@@ -17,5 +17,6 @@
   {"query": "I just had a eureka moment about the caching bug", "should_trigger": false},
   {"query": "find me a cheap hotel in Eureka, California", "should_trigger": false},
   {"query": "is the Eureka TV series worth watching?", "should_trigger": false},
-  {"query": "help my kid with Eureka Math module 3 homework", "should_trigger": false}
+  {"query": "help my kid with Eureka Math module 3 homework", "should_trigger": false},
+  {"query": "polish the animations on the checkout flow", "should_trigger": false, "note": "legato's — a named surface to build on, not ideation"}
 ]

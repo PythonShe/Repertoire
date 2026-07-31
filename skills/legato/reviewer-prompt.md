@@ -32,6 +32,12 @@ Agent tool (model: opus, effort: xhigh):
     [Concerns or open feel questions the implementer raised, verbatim, or
     `none`. These do not evaporate because they were mentioned first.]
 
+    ## Decisions already on the record (omit when none)
+
+    [Rows from the project's docs/repertoire/animation.md that touch this
+    surface, verbatim. These are settled: code that follows them is not a
+    finding, and a direction the record rejects is not a fix to propose.]
+
     ## The bar
 
     Read these files FIRST; findings cite them, with exact values, never
@@ -42,7 +48,8 @@ Agent tool (model: opus, effort: xhigh):
 
     Hold the diff to the ten non-negotiable standards: justified motion,
     frequency-appropriate, responsive easing (`ease-in` on UI is a block),
-    sub-300ms UI, origin and physical correctness (never `scale(0)`; modals
+    sub-300ms UI (modals and drawers get the 200–500ms band STANDARDS.md
+    grants them), origin and physical correctness (never `scale(0)`; modals
     exempt from trigger-origin), interruptibility where rapid, GPU-only
     properties, accessibility (reduced motion — gentler not zero — and hover
     gating), asymmetric enter/exit where deliberate, and cohesion with the

@@ -28,11 +28,12 @@ accordingly:
   likely to hit usage limits mid-run.
 - **A Codex account with OpenAI's
   [`codex-cc` plugin](https://github.com/openai/codex-plugin-cc) installed** —
-  strongly suggested. Every skill but Presto and Jam dispatches a cross-model Codex
+  strongly suggested. Every skill but Presto, Jam, and Legato dispatches a cross-model Codex
   agent (reviewer or investigator) through it. Skills degrade gracefully without Codex — they run
   the Opus-only panel and say so in their report — but the cross-model check
   is part of the design. (Presto seats none by design: the cross-model pass
-  earns its wall-clock over a whole branch, not over one scoped change. Jam
+  earns its wall-clock over a whole branch, not over one scoped change.
+  Legato shares Presto's reason — one scoped motion polish. Jam
   seats none because its run is unattended — a hung cross-model call would
   stall a session nobody is watching; its finale pairs a pinned-Opus reviewer
   with a session-model reviewer instead.)
@@ -82,11 +83,12 @@ Repertoire/                       repo root = plugin root = marketplace root
 │   ├── plugin.json               plugin manifest (name: repertoire)
 │   └── marketplace.json          catalog listing this plugin (source "./")
 ├── skills/                       one directory per skill
-│   └── <name>/                   eureka, libretto, score, maestro, coda, encore, tuner, presto, jam
+│   └── <name>/                   eureka, libretto, score, maestro, coda, encore, tuner, presto, jam, legato
 │       ├── SKILL.md
 │       ├── evals/evals.json      committed trigger evals
-│       ├── *-template.md         bundled document structure (libretto, score)
-│       └── *-prompt.md           bundled subagent prompt templates
+│       ├── *-template.md         bundled document structure (libretto, score, legato)
+│       ├── *-prompt.md           bundled subagent prompt templates
+│       └── references/           bundled third-party reference material (legato; MIT-licensed, see its LICENSE)
 ├── shared/
 │   ├── codex-reviewer-core.md    shared Codex invocation contract
 │   └── invariants.md             canonical two-tier model policy

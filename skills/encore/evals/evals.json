@@ -20,5 +20,6 @@
   {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — a requested new change, not an un-asked-for improvement"},
   {"query": "make the sidebar collapsible", "should_trigger": false, "note": "presto's"},
   {"query": "spend a session improving whatever you think this project needs", "should_trigger": false, "note": "jam's — nobody named a target"},
-  {"query": "the dropdown animation feels sluggish — improve it", "should_trigger": false, "note": "legato's — motion polish, not a general enhancement pass"}
+  {"query": "the dropdown animation feels sluggish — improve it", "should_trigger": false, "note": "legato's — motion polish, not a general enhancement pass"},
+  {"query": "audit the settings page and improve it", "should_trigger": true, "note": "encore's — named UI surface but no motion claim; the scan-vs-enhance boundary"}
 ]

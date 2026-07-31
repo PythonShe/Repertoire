@@ -18,7 +18,7 @@
 这些 skill 在设计上就是高 token 消耗的：每次运行都会调度一组全新的、以 medium 至 xhigh 推理强度运行的 subagent 协同工作——构建席位（实现者、修复者、QC 闸门）跑在你的会话模型上，评审席位（调查者、评审小组、校验者）固定用 Opus——而它们的可靠性正源于此。请相应地规划你的账户：
 
 - **Claude Max（5x 或 20x），或 API 计费**——这是预期配置。更轻量的套餐很可能在运行途中就触及用量上限。
-- **安装了 OpenAI [`codex-cc` 插件](https://github.com/openai/codex-plugin-cc)的 Codex 账户**——强烈建议。除 Presto 和 Jam 之外，每个 skill 都会通过它调度一个跨模型的 Codex agent（评审者或调查者）。没有 Codex 时 skill 也能优雅降级——它们会改跑纯 Opus 的小组，并在报告中说明这一点——但跨模型校验本身就是设计的一部分。（Presto 刻意不设这个座位：跨模型这一遍的时间成本值得花在整条分支上，而不是一处范围明确的改动上。Jam 不设则是因为它全程无人值守——一次挂起的跨模型调用会让一场没人盯着的会话就此卡死；它的终章改为让一个固定用 Opus 的评审者与一个跑在会话模型上的评审者搭档。）
+- **安装了 OpenAI [`codex-cc` 插件](https://github.com/openai/codex-plugin-cc)的 Codex 账户**——强烈建议。除 Presto、Jam 和 Legato 之外，每个 skill 都会通过它调度一个跨模型的 Codex agent（评审者或调查者）。没有 Codex 时 skill 也能优雅降级——它们会改跑纯 Opus 的小组，并在报告中说明这一点——但跨模型校验本身就是设计的一部分。（Presto 刻意不设这个座位：跨模型这一遍的时间成本值得花在整条分支上，而不是一处范围明确的改动上。Legato 与 Presto 同理——一处范围明确的动效打磨。Jam 不设则是因为它全程无人值守——一次挂起的跨模型调用会让一场没人盯着的会话就此卡死；它的终章改为让一个固定用 Opus 的评审者与一个跑在会话模型上的评审者搭档。）
 
 > **模型说明：** 这些 skill 分两档运行。**构建席位**——实现者、修复者以及 QC／最终闸门——不固定模型：它们继承你的会话模型，所以请用你能访问到的最强模型来开会话。`/model best` 在你有权限时解析为 **Fable 5**，否则解析为最新的 **Opus**——既在构建席位上用上 Fable 的速度，又自带 Opus 回退，且不写死任何模型名，即便 Fable 再次被暂停也不会失效。**评审席位**——调查者、评审小组、校验者——固定用 **Opus**，作为稳定的对抗性基线。（唯一的刻意例外：Jam 终章的第二位评审者不固定模型、跑在会话模型上——这对跨档搭档记录在 `shared/invariants.md` 中。）请用 `best` 或 `opus` 运行这些 skill——**绝不要用 Sonnet**。
 
@@ -55,11 +55,12 @@ Repertoire/                       仓库根目录 = 插件根目录 = marketplac
 │   ├── plugin.json               插件清单（name: repertoire）
 │   └── marketplace.json          列出本插件的 catalog（source "./"）
 ├── skills/                       每个 skill 一个目录
-│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner、presto、jam
+│   └── <name>/                   eureka、libretto、score、maestro、coda、encore、tuner、presto、jam、legato
 │       ├── SKILL.md
 │       ├── evals/evals.json      已提交的 trigger evals
-│       ├── *-template.md         内置的文档结构（libretto、score）
-│       └── *-prompt.md           内置的 subagent prompt 模板
+│       ├── *-template.md         内置的文档结构（libretto、score、legato）
+│       ├── *-prompt.md           内置的 subagent prompt 模板
+│       └── references/           内置的第三方参考材料（legato；MIT 许可，见该目录的 LICENSE）
 ├── shared/
 │   ├── codex-reviewer-core.md    共享的 Codex 调用契约
 │   └── invariants.md             两档模型策略的权威定义

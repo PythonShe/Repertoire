@@ -1,7 +1,7 @@
 ---
 name: legato
-description: Animation and motion polish session for a named UI surface — a read-only Opus scout audits the named pages or widgets against a bundled motion-craft bar (Emil Kowalski's MIT-licensed standards), the user locks direction at one AskUserQuestion gate (their goal grilled, or at most three proposed directions when they have none), one implementer builds the approved motion spec, a fresh Opus reviewer holds it to the ten standards, and a build-and-test QC gate seals the branch. Decisions land in the target project's docs/repertoire/animation.md — standing guidance, not a changelog. Commits as it goes, pushes only on request, never merges.
-when_to_use: Use when the user wants UI animation or motion improved, redesigned, or polished on a surface they name, or asks to scan named pages or widgets for it — "polish the modal open animation", "the dropdown feels sluggish", "scan the checkout flow for motion polish", "run Legato on this". Medium-to-small scope only — an app-wide motion overhaul goes to libretto, score, maestro. A non-motion change goes to presto; broader improvement of working code goes to encore; an animation that is broken rather than wrong-feeling goes to tuner; "improve things, you pick" with nothing named goes to jam.
+description: Animation and motion polish session for a named UI surface — a read-only Opus scout audits the named pages or widgets against a bundled motion-craft bar (Emil Kowalski's MIT-licensed standards), the user locks direction at one AskUserQuestion gate, one implementer builds the approved motion spec, a fresh Opus reviewer holds it to the ten standards, and a build-and-test QC gate seals the branch. Decisions land in the target project's docs/repertoire/animation.md — standing guidance, not a changelog. Commits as it goes, pushes only on request, never merges.
+when_to_use: Use when the user wants UI animation or motion added, improved, redesigned, or polished on a surface they name, or asks to scan named pages or widgets for it — "polish the modal open animation", "the dropdown animation feels sluggish", "scan the checkout flow for animation improvements", "run Legato on this". Medium-to-small scope only — an app-wide motion overhaul starts at libretto, score, maestro. A non-motion change goes to presto; broader improvement of working code goes to encore; an animation that is broken rather than wrong-feeling goes to tuner; a session with no surface named goes to jam.
 ---
 
 # Legato
@@ -83,8 +83,12 @@ stated scope.
 
 The floor and the ceiling both matter. Below the floor — one obvious property
 on one element, with a right answer the references settle (`ease-in` →
-`ease-out`, an unbounded `transition: all`) — just make the change, cite the
-standard, tell the user you skipped the pipeline, and stop. Above the
+`ease-out`, an unbounded `transition: all`) — skip the pipeline entirely:
+this exit happens before Phase 1 or not at all. Make the one-line change as
+an ordinary edit on the current branch — no commit, none of the pipeline's
+machinery — cite the standard, tell the user you skipped the pipeline, and
+stop. If Legato fired without being named, state the fix and confirm before
+touching the file. Above the
 ceiling — an app-wide motion overhaul, a motion design system, a scan of
 "everything" — this is not the room: point at `/repertoire:libretto`, then
 `/repertoire:score`, then `/repertoire:maestro`, and offer to run Legato on
@@ -116,7 +120,7 @@ At a glance — the phase prose below is authoritative.
 3. Build — one implementer subagent builds the approved spec and commits.
 4. Review — one Opus reviewer on BASE..HEAD against the ten standards,
    always dispatched, never skipped.
-5. Fix — clean PASS → skip; otherwise one fixer pass.
+5. Fix — PASS or minor-only findings → skip; otherwise one fixer pass.
 6. QC — build + tests + acceptance + reduced-motion: SHIPPABLE → Phase 7;
    NOT_SHIPPABLE → route blockers, retry; second strike → stop and escalate.
 7. The record — create or update `docs/repertoire/animation.md` in the
@@ -125,10 +129,12 @@ At a glance — the phase prose below is authoritative.
 ### Phase 0 — Downbeat
 
 1. **If resuming:** read TodoWrite and `git log --oneline` first. The todos
-   carry `BASE` (in the `Review` todo), the mode, and the QC strike count;
-   the commits carry the rest. Resume at the first phase not marked done. If
-   `BASE` is genuinely lost, ask the user which commit the branch started
-   from — never guess a range.
+   carry what the commits cannot: `BASE` and the mode in the `Review` todo,
+   the locked motion spec with `BUILD`/`TEST`/`VIEW` in the `Build` todo
+   once the gate has cleared, and the strike count in the `QC` todo. Resume
+   at the first phase not marked done — a resumed run re-reads the locked
+   spec instead of re-opening the gate. If `BASE` is genuinely lost, ask the
+   user which commit the branch started from — never guess a range.
 2. **Restate the request as the brief** — the mode (`POLISH: <target>` or
    `SCAN: <pages/widgets>`), what the user wants in one or two lines, and
    **acceptance**: the feel goal in words plus anything mechanical (builds,
@@ -137,11 +143,12 @@ At a glance — the phase prose below is authoritative.
    target project, read it now — it is guidance for this run, and its
    documented decisions are honored, not re-litigated. Note any decision that
    touches the named surface; it goes into every brief.
-4. **Scope check.** Below the floor → fix it directly, cite the standard,
-   stop. Above the ceiling (app-wide overhaul, motion system, unscoped
-   "everything") → name the spec-to-maestro door and offer the one-surface
-   alternative. Otherwise proceed; the scout's size call settles doubt at the
-   gate.
+4. **Scope check.** Below the floor → take the floor exit exactly as *When
+   to use* defines it — an ordinary uncommitted edit, confirmed first when
+   Legato wasn't named — and stop. Above the ceiling (app-wide overhaul,
+   motion system, unscoped "everything") → name the spec-to-maestro door and
+   offer the one-surface alternative. Otherwise proceed; the scout's size
+   call settles doubt at the gate.
 5. **Decide `BRANCH` — but do not cut it yet.** Absent instruction: the
    current branch when it is already a feature branch, otherwise plan
    `legato/<slug>`. **Never build on main or master** without explicit
@@ -198,20 +205,27 @@ At a glance — the phase prose below is authoritative.
 3. **When the user doesn't know what they want:** propose **at most three**
    coherent directions, recommended first, each with its exact values —
    option previews showing the before/after CSS or config are worth the
-   space. One AskUserQuestion; their pick becomes the motion spec.
+   space, and `references/VOCABULARY.md` supplies the precise names, so the
+   user picks with the right words. One AskUserQuestion; their pick becomes
+   the motion spec.
 4. **When the size call is L** — or the work rests on an unmade design
    decision — make escalation an option here, naming the door
    (`/repertoire:libretto` → `/repertoire:score` → `/repertoire:maestro`).
    The user choosing it ends the run successfully.
 5. **Nothing is written before this gate clears.** Fold any adjustment back
    into the spec and restate it; build on the answer, never on half of it.
+6. **Persist the outcome.** Write the locked motion spec (compact, values
+   included), the rejected directions, `BUILD`/`TEST` (including a
+   `none (user-confirmed)` token), and `VIEW` into the `Build` todo's text.
+   The todos are the only state that survives a resume; a spec that lives
+   nowhere but this conversation does not survive an interrupt.
 
 ### Phase 3 — Build
 
 1. **One implementer subagent** (`implementer-prompt.md`, unpinned), fresh,
    with the brief, the approved motion spec verbatim, the scout's inventory
-   for the touched surface, the record's constraints, the references paths,
-   `BRANCH`, and `TEST`. It builds exactly the spec, extends the project's
+   for the touched surface, the record's constraints, the
+   `references/STANDARDS.md` path, `BRANCH`, and `TEST`. It builds exactly the spec, extends the project's
    existing motion tokens rather than inventing parallel ones, honors
    reduced motion, and commits its own work.
 2. **Never two writers.** One implementer, dispatched alone; you do not edit
@@ -220,36 +234,51 @@ At a glance — the phase prose below is authoritative.
 ### Phase 4 — Review
 
 1. Dispatch **one Opus reviewer** (`reviewer-prompt.md`), scope `BASE..HEAD`,
-   with the brief, the motion spec, the references paths, and `VIEW` when it
-   exists. It holds the diff to the ten non-negotiable standards and reports
-   findings as a Before/After/Why table with severities, `PASS` or `FAIL`.
+   with the brief, the motion spec, the references paths, the record's
+   constraints, everything the implementer raised — concerns and open feel
+   questions travel on *any* status, not only `DONE_WITH_CONCERNS` — and
+   `VIEW` when it exists. It holds the diff to the ten non-negotiable
+   standards and reports findings as a Before/After/Why table with
+   severities, `PASS` or `FAIL`.
 2. **Always a subagent, always dispatched** — there is exactly one review in
    this pipeline; skipping it leaves none.
+3. A live look here verifies the build as reviewed; whatever Phase 5 changes
+   afterward is not re-observed live — it lands in the report's feel checks
+   for the user instead.
 
 ### Phase 5 — Fix
 
-1. **Clean `PASS` → skip.** A fixer with an empty finding list is a wasted
-   seat.
-2. Otherwise **one fixer subagent** (`fixer-prompt.md`, unpinned), one pass,
+1. **`PASS` → skip.** A fixer with an empty finding list is a wasted seat.
+2. **`FAIL` where every finding is `minor` → also skip.** The reviewer
+   priced those rows below a round ("worth a row, not worth a round"); carry
+   them into the QC brief and the report instead of spending a seat.
+3. Otherwise **one fixer subagent** (`fixer-prompt.md`, unpinned), one pass,
    all findings pasted with their exact target values. Anything it disputes
    or cannot fix goes into the QC brief verbatim; do not loop Phase 5.
-3. The fixer commits.
+4. The fixer commits.
 
 ### Phase 6 — QC gate
 
 1. Dispatch the **QC agent** (`qc-prompt.md`, unpinned) with `BASE..HEAD`,
-   `BUILD`, `TEST`, the brief and motion spec, and any unfixed or disputed
-   findings. It runs the build and tests, confirms the spec is satisfied *by
-   the code*, checks reduced-motion handling exists where movement was
-   added, and scans for ship-blockers.
-2. **`SHIPPABLE`** → Phase 7. **`NOT_SHIPPABLE`** → route each blocker —
-   `[defect]` to a fixer, `[implementation]` back to an implementer — then
-   re-run QC in retry mode (prior blockers + fix SHAs pasted; full build and
-   tests, close-read only the fixes).
+   `BUILD`, `TEST`, the brief and motion spec, the record's constraints, the
+   reviewer's feel notes — they flow to QC whether or not Phase 5 ran — and
+   any unfixed, disputed, or minor-only findings. It runs the build and
+   tests, confirms the spec is satisfied *by the code*, checks
+   reduced-motion handling exists where movement was added, and scans for
+   ship-blockers.
+2. **`SHIPPABLE`** → Phase 7. **`NOT_SHIPPABLE`** → route the blockers one
+   seat at a time — never two writers at once: `[implementation]` goes back
+   to an implementer first, folding in any `[defect]` that touches the same
+   work; a fixer takes what remains. Then re-run QC in retry mode (prior
+   blockers + fix SHAs pasted; full build and tests, close-read only the
+   fixes).
 3. **Two strikes, then the user.** On the second `NOT_SHIPPABLE`, stop and
    escalate with AskUserQuestion — offering `/repertoire:maestro` (work was
    mis-sized) or `/repertoire:tuner` (what is failing is a bug) among the
    options. Update the `QC (strikes N/2)` todo as strikes accrue.
+   Escalating still ends with the report — QC's evidence showing the failing
+   state — but the record is not written: `docs/repertoire/animation.md`
+   records what shipped, and a twice-failed run shipped nothing.
 
 ### Phase 7 — The record
 
@@ -257,8 +286,8 @@ At a glance — the phase prose below is authoritative.
    from `guidance-template.md`. New decisions land as rows; changed decisions
    **supersede their old rows in place**; directions the user rejected at the
    gate are recorded so no future session re-proposes them. Stamp the doc
-   with the date and commit. It states what *is*, never the history of how it
-   got there.
+   with the date and the branch's `git rev-parse --short HEAD` at the time
+   of writing. It states what *is*, never the history of how it got there.
 2. **First creation only:** ask via AskUserQuestion whether to add a one-line
    pointer to the doc in the project's `CLAUDE.md`, its `AGENTS.md`, or
    neither. Never edit those files without this consent.
@@ -278,9 +307,11 @@ At a glance — the phase prose below is authoritative.
 
 ## The ensemble budget
 
-Four agents on the floor — scout, implementer, reviewer, QC. **Six on the
-nominal path** — a second scout for an external library surface, and a fixer.
-QC retry rounds spend past six; that is what the two-strike budget bounds.
+Four agents on the floor — scout, implementer, reviewer, QC. **Six is the
+ceiling of the non-retry path** — a fixer when the review found something
+worth a round, and the exceptional second scout for an external library
+surface; neither is routine. QC retry rounds spend past six; that is what
+the two-strike budget bounds.
 What the budget forbids is growing the ensemble **by design** — a review
 panel, a cross-model seat, a third scout, an app-wide sweep. That ensemble
 belongs to the production line; say so and name the door.
@@ -290,8 +321,9 @@ belongs to the production line; say so and name the door.
 **Scout:** inventory + proposals + size call → the gate. A thin result is
 still a result; `BLOCKED` → surface it at the gate with what it did find.
 
-**Implementer:** `DONE` → review. `DONE_WITH_CONCERNS` → concerns go
-verbatim into the reviewer's brief. `NEEDS_CONTEXT` → supply what was
+**Implementer:** `DONE` → review — any concern or feel question it raised
+still goes verbatim into the reviewer's brief. `DONE_WITH_CONCERNS` → the
+same, and the concerns never evaporate. `NEEDS_CONTEXT` → supply what was
 missing and re-dispatch; never re-dispatch unchanged. `BLOCKED` → more
 context, or back to the user; if the approved spec itself is wrong, that is
 a gate decision.
@@ -305,7 +337,8 @@ into the QC brief verbatim.
 ## Red flags
 
 - Editing a file before the Phase 2 gate cleared, or implementing anything
-  above the floor yourself — the conductor never plays here.
+  yourself once the pipeline has started — the floor exit happens before
+  Phase 1 or not at all, and the conductor never plays here.
 - Approximating a value the references state exactly, or letting a proposal
   reach the gate without concrete values.
 - Re-proposing a direction the record already rejects, or re-litigating a
@@ -334,7 +367,9 @@ into the QC brief verbatim.
   acceptance, reduced motion, ship-blockers.
 - `guidance-template.md` — the scaffold for the target project's
   `docs/repertoire/animation.md`.
-- `references/` — the bundled motion-craft bar: `STANDARDS.md`, `AUDIT.md`,
-  and `VOCABULARY.md`, copied from Emil Kowalski's MIT-licensed
-  [skills repository](https://github.com/emilkowalski/skills) with his
-  license and provenance in `references/LICENSE`.
+- `references/` — the bundled motion-craft bar (`STANDARDS.md`, `AUDIT.md`)
+  plus the naming glossary `VOCABULARY.md` (for the gate conversation and
+  the record, not part of the judging bar), copied from Emil Kowalski's
+  MIT-licensed [skills repository](https://github.com/emilkowalski/skills) —
+  the vocabulary minus its upstream frontmatter, otherwise verbatim; license
+  and provenance in `references/LICENSE`.

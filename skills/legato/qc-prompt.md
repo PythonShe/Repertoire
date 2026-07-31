@@ -25,9 +25,16 @@ Agent tool (effort: xhigh):
 
     ## Carried forward
 
-    [Findings the fixer disputed or could not fix, and any feel notes from
-    the reviewer, verbatim — or `none`. A disputed finding is yours to
-    settle: agree with the fixer, or block on it.]
+    [Findings the fixer disputed or could not fix, minor findings no fixer
+    was dispatched for, and any feel notes from the reviewer, verbatim — or
+    `none`. A disputed finding is yours to settle: agree with the fixer, or
+    block on it.]
+
+    ## Decisions already on the record (omit when none)
+
+    [Rows from the project's docs/repertoire/animation.md that constrain
+    this work, verbatim. These are settled: code that follows them is not a
+    blocker.]
 
     ## Scope, build, and test
 

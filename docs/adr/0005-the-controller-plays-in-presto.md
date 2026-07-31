@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted (2026-07-25).
+Accepted (2026-07-25). Superseded on the "only skill without a Codex agent"
+fact by ADR 0006 (Jam) and ADR 0007 (Legato) — `shared/invariants.md` holds
+the current roster; the decision itself stands.
 
 ## Context
 
