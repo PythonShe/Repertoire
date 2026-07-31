@@ -1,0 +1,21 @@
+[
+  {"query": "run Legato on the settings page", "should_trigger": true},
+  {"query": "/legato polish the dropdown animation", "should_trigger": true},
+  {"query": "polish the animations on the checkout flow", "should_trigger": true},
+  {"query": "the modal open animation feels sluggish, make it feel right", "should_trigger": true},
+  {"query": "redesign the sidebar collapse transition", "should_trigger": true},
+  {"query": "scan the dashboard widgets for animation improvements and ship them", "should_trigger": true},
+  {"query": "make the toast entrance feel smoother", "should_trigger": true},
+  {"query": "add a press animation to the buy button", "should_trigger": true},
+  {"query": "improve the motion on the onboarding screens", "should_trigger": true},
+  {"query": "make the sidebar collapsible", "should_trigger": false, "note": "presto's — behavior change, not motion"},
+  {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — non-motion scoped change"},
+  {"query": "optimize the exporter module", "should_trigger": false, "note": "encore's — working code made better, not motion"},
+  {"query": "the drawer animation never fires on Safari — debug it", "should_trigger": false, "note": "tuner's — broken, not wrong-feeling"},
+  {"query": "find some quick wins and ship them, you pick", "should_trigger": false, "note": "jam's — nothing named"},
+  {"query": "design a motion system for the whole app and spec it out", "should_trigger": false, "note": "libretto's — app-wide overhaul starts at the spec"},
+  {"query": "execute the animation plan in docs/plans with subagents", "should_trigger": false, "note": "maestro's — a written plan exists"},
+  {"query": "brainstorm animation ideas we could add to this product", "should_trigger": false, "note": "eureka's — discovery, not a named surface to polish"},
+  {"query": "make the strings sound legato in this MIDI generator", "should_trigger": false, "note": "homonym — musical articulation in domain code"},
+  {"query": "what's the term for the bouncy effect when a popover opens", "should_trigger": false, "note": "vocabulary lookup — naming a motion, not building one"}
+]

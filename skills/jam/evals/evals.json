@@ -22,5 +22,6 @@
   {"query": "my printer says paper jam — how do I clear it?", "should_trigger": false},
   {"query": "what chords work for a blues jam session?", "should_trigger": false},
   {"query": "the message queue is jammed with stuck deliveries, figure out why", "should_trigger": false, "note": "homonym inside a codebase — this is a bug report, tuner's"},
-  {"query": "recipe for strawberry jam without pectin", "should_trigger": false}
+  {"query": "recipe for strawberry jam without pectin", "should_trigger": false},
+  {"query": "polish the animations on the checkout flow", "should_trigger": false, "note": "legato's — a named surface, not an unattended session"}
 ]

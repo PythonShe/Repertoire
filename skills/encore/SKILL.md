@@ -1,7 +1,7 @@
 ---
 name: encore
 description: Post-ship enhancement pass over finished, working code — a read-only scout profiles the user-named target, the user picks a lens roster (performance, security, robustness, DX, observability, …), parallel diverse-lens Opus hunters surface enhancement calls, a read-only verifier confirms each against the code, and only user-picked calls are implemented on a fresh encore/ branch — sealed by an evidence-based QC gate plus one cross-model Codex review, landing a committed dossier. Pushes and offers a PR behind one approval; never merges.
-when_to_use: Use when the user wants working code made better — "optimize this module", "harden security here", "clean up tech debt", "audit and improve the exporter", "run Encore on the auth module". The code must already work; a bug goes to tuner, open-PR review feedback to coda, new-feature ideation to eureka, and an unattended pass where nobody names the target goes to jam.
+when_to_use: Use when the user wants working code made better — "optimize this module", "harden security here", "clean up tech debt", "audit and improve the exporter", "run Encore on the auth module". The code must already work; a bug goes to tuner, open-PR review feedback to coda, new-feature ideation to eureka, UI animation or motion polish goes to legato, and an unattended pass where nobody names the target goes to jam.
 ---
 
 # Encore

@@ -1,7 +1,7 @@
 ---
 name: jam
 description: Fully autonomous improvement session that finds its own worklist and ships it — three parallel read-only Opus scouts study the repo from its end users' perspective (new non-breaking features, quick fixes, UI/UX polish), a selector distills their candidates into a 3-5 job docket sized to one session, fresh implementers build each job with per-job Opus review at the conductor's discretion, and the whole branch is sealed by a two-reviewer final gate (pinned Opus beside the session's best model) plus an evidence-based QC. Announces the docket rather than gating on it, runs on a fresh jam/ branch, commits as it goes, pushes only on request, never merges.
-when_to_use: Use when the user wants the project improved without naming what — "find some quick wins and ship them", "make this repo better, you pick what to do", "spend a session improving whatever users need most", "run Jam". The user naming the one concrete change goes to presto; a written plan to execute goes to maestro; improving one named target with user-picked lenses goes to encore; discovering ideas that should end in a shortlist, not code, goes to eureka; a reported bug goes to tuner.
+when_to_use: Use when the user wants the project improved without naming what — "find some quick wins and ship them", "make this repo better, you pick what to do", "spend a session improving whatever users need most", "run Jam". The user naming the one concrete change goes to presto; a written plan to execute goes to maestro; improving one named target with user-picked lenses goes to encore; discovering ideas that should end in a shortlist, not code, goes to eureka; a reported bug goes to tuner; motion polish on a named surface goes to legato.
 ---
 
 # Jam
