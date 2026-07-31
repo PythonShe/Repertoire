@@ -1,7 +1,7 @@
 ---
 name: presto
 description: Fast-lane implementation session for one scoped change — 1-2 read-only scouts investigate the codebase and weigh approaches, the user picks at a single AskUserQuestion gate, then the work is built (by the controller itself when it is small, by one implementer subagent when it is not), reviewed by one Opus subagent that is never skipped, fixed in a single pass, and sealed by a short build-and-test QC gate. Runs on a named or fresh branch, commits as it goes, pushes only on request, never merges.
-when_to_use: Use when the user wants one concrete change built right now, with no spec or plan written first — "add a --json flag to the export command", "wire this endpoint to the new service", "make the sidebar collapsible", "just build it", "run Presto on this". A written plan already exists → maestro; a bug to diagnose → tuner; improving working code nobody asked to change → encore; a change that needs designing or planning before anyone builds it → libretto, then score.
+when_to_use: Use when the user wants one concrete change built right now, with no spec or plan written first — "add a --json flag to the export command", "wire this endpoint to the new service", "make the sidebar collapsible", "just build it", "run Presto on this". A written plan already exists → maestro; a bug to diagnose → tuner; improving working code nobody asked to change → encore; a change that needs designing or planning before anyone builds it → libretto, then score; no named change at all — "just improve things, you pick" → jam.
 ---
 
 # Presto
@@ -46,8 +46,9 @@ gate that actually runs the tests.
   `/repertoire:libretto`; work that needs a written plan goes to
   `/repertoire:score` and then `/repertoire:maestro`. Escalating at the gate is
   a successful Presto run, not a failed one.
-- **No cross-model seat, by design.** Presto is the only skill in the line
-  without a Codex reviewer. The cross-model pass is worth its wall-clock on a
+- **No cross-model seat, by design.** Presto seats no Codex reviewer — a
+  variance it shares only with jam, each for its own reason
+  (`shared/invariants.md` records both). The cross-model pass is worth its wall-clock on a
   whole branch built by a fleet; on one scoped change it is the slowest thing
   in a pipeline whose entire premise is speed. When a change deserves that
   scrutiny, it deserved Maestro.

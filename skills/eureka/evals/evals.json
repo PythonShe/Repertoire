@@ -13,6 +13,7 @@
   {"query": "execute the plan in docs/plan.md", "should_trigger": false, "note": "maestro's"},
   {"query": "audit the payments module and improve it", "should_trigger": false, "note": "encore's"},
   {"query": "figure out why this test started failing and fix it", "should_trigger": false, "note": "tuner's"},
+  {"query": "find improvements in this repo and ship them yourself — you decide what", "should_trigger": false, "note": "jam's — discovery that ends in shipped code, unattended"},
   {"query": "I just had a eureka moment about the caching bug", "should_trigger": false},
   {"query": "find me a cheap hotel in Eureka, California", "should_trigger": false},
   {"query": "is the Eureka TV series worth watching?", "should_trigger": false},

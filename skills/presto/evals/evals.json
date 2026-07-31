@@ -16,6 +16,7 @@
   {"query": "debug why the upload test is failing", "should_trigger": false, "note": "tuner's"},
   {"query": "address the reviewer feedback on PR 42", "should_trigger": false, "note": "coda's"},
   {"query": "optimize the exporter module and clean up the tech debt", "should_trigger": false, "note": "encore's"},
+  {"query": "make this repo better — pick some quick wins and build them", "should_trigger": false, "note": "jam's — no single named change"},
   {"query": "rename this config variable across the file", "should_trigger": true, "note": "in territory — Phase 0.3 fires, recognizes it as below the floor, makes the edit and says it skipped the pipeline. Firing then short-circuiting is the designed handling; a negative here would guard territory the routing surface plainly owns"},
   {"query": "what does presto mean in sheet music?", "should_trigger": false},
   {"query": "is the Presto SQL engine still maintained, or did everyone move to Trino?", "should_trigger": false},

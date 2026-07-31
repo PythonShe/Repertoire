@@ -18,5 +18,6 @@
   {"query": "how do I define a service in Encore.dev?", "should_trigger": false},
   {"query": "deploy my Encore.ts backend to production", "should_trigger": false},
   {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — a requested new change, not an un-asked-for improvement"},
-  {"query": "make the sidebar collapsible", "should_trigger": false, "note": "presto's"}
+  {"query": "make the sidebar collapsible", "should_trigger": false, "note": "presto's"},
+  {"query": "spend a session improving whatever you think this project needs", "should_trigger": false, "note": "jam's — nobody named a target"}
 ]

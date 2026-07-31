@@ -1,7 +1,7 @@
 ---
 name: eureka
 description: Conversation-led idea and feature discovery — establishes a talking range (an existing codebase, an open domain, or a half-formed spark) and a focus dimension, hunts ideas through a paced dialogue with a running idea board and on-demand ensemble bursts of 3-4 diverse-lens ideators, then drives finalists through a sequential vetting funnel where every kill verdict needs user confirmation. Ends at a ranked, vetted shortlist with an optional champion — never a spec, never a plan, never code.
-when_to_use: Use when the user wants to discover what to build — "brainstorm feature ideas", "what should I add to this project", "what should I build next", "hunt ideas for this repo", "run Eureka". An idea the user already holds and wants designed ("spec this out", "design this feature") goes to libretto.
+when_to_use: Use when the user wants to discover what to build — "brainstorm feature ideas", "what should I add to this project", "what should I build next", "hunt ideas for this repo", "run Eureka". An idea the user already holds and wants designed ("spec this out", "design this feature") goes to libretto; improvements the user wants found and shipped in one unattended session, not talked through, go to jam.
 ---
 
 # Eureka

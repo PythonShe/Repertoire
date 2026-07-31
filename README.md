@@ -28,11 +28,14 @@ accordingly:
   likely to hit usage limits mid-run.
 - **A Codex account with OpenAI's
   [`codex-cc` plugin](https://github.com/openai/codex-plugin-cc) installed** —
-  strongly suggested. Every skill but Presto dispatches a cross-model Codex
+  strongly suggested. Every skill but Presto and Jam dispatches a cross-model Codex
   agent (reviewer or investigator) through it. Skills degrade gracefully without Codex — they run
   the Opus-only panel and say so in their report — but the cross-model check
   is part of the design. (Presto seats none by design: the cross-model pass
-  earns its wall-clock over a whole branch, not over one scoped change.)
+  earns its wall-clock over a whole branch, not over one scoped change. Jam
+  seats none because its run is unattended — a hung cross-model call would
+  stall a session nobody is watching; its finale pairs a pinned-Opus reviewer
+  with a session-model reviewer instead.)
 
 > **Model note:** These skills run on two tiers. The **build seats** —
 > implementers, fixers, and the QC/final gates — are *unpinned*: they inherit
@@ -41,8 +44,10 @@ accordingly:
 > latest **Opus** — Fable's speed on the build seats, an automatic Opus fallback,
 > and no hardcoded model name to break if Fable is ever suspended again. The
 > **review seats** — investigators, review panels, and verifiers — stay pinned
-> to **Opus** for a stable adversarial baseline. Run these skills on `best` or
-> `opus` — **never Sonnet**.
+> to **Opus** for a stable adversarial baseline. (The one deliberate
+> exception: Jam's second finale reviewer runs unpinned on the session
+> model — the cross-tier pairing recorded in `shared/invariants.md`.) Run
+> these skills on `best` or `opus` — **never Sonnet**.
 
 ## Skills
 
@@ -54,7 +59,8 @@ accordingly:
 | **Maestro** | `/repertoire:maestro` | Conducts subagent-driven execution of an implementation plan: groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate — while the conductor keeps its own context lean. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
 | **Coda** | `/repertoire:coda` | Works an open PR's review feedback to a close: a clerk harvests every review, inline thread, conversation comment, and failing CI check; one read-only verifier tests each item against codebase reality (fix, push back, or ask — evidence decides); sequential fixers repair what survives; big or risky fixes face a 3-lens Opus panel, and every run is sealed by a staged final verdict — an evidence-based QC that reads each fix in full, then one cross-model Codex pass over the whole PR once QC clears; one approval gate covers pushing and posting the drafted thread replies. Never merges, never resolves threads. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
 | **Encore** | `/repertoire:encore` | Revisits a finished codebase, feature, or module and enhances what already works: a scout profiles the target and proposes a lens roster (performance, security, robustness, DX, …), parallel diverse-lens Opus hunters call out opportunities, and one read-only verifier tests every call against codebase reality — refuted calls die on the record, feature-sized ones route to Libretto or Score, never built here. Only what the user picks at the set-list gate gets implemented, on a fresh `encore/` branch by sequential fixers; big or risky changes face a 3-lens Opus panel, and every run is sealed by the staged final verdict — evidence-based QC, then one cross-model Codex pass. Pushes and offers a PR behind one approval gate, never merges. Auto-invokes on matching requests. |
-| **Presto** | `/repertoire:presto` | The fast lane beside the production line: one scoped change, built in a sitting, with no spec or plan in front of it. 1-2 read-only Opus scouts map the landing zone and weigh approaches, and the user picks at a single AskUserQuestion gate — nothing is written before it clears. Then the size gate decides the seat: the controller implements a small change itself rather than paying for a handoff, one implementer subagent takes anything bigger. One Opus reviewer always follows — most of all when the controller was the author — then a single fix pass (the controller repairs what it wrote or what is trivial, a fixer subagent takes the rest), then a short build-and-test QC gate. Three agents on the floor, six on the nominal path; a run that wants to grow by design — a third scout, a second review round, a panel — has outgrown the fast lane, and there are two doors out: oversized work leaves at the approval gate for Libretto or Score, and a change that fails QC twice is handed to Maestro. Deliberately the one skill with no cross-model Codex seat — that pass is worth its wall-clock on a whole branch, not on one change. Auto-invokes on matching requests; when not named explicitly, it confirms the brief and branch before recon runs. |
+| **Presto** | `/repertoire:presto` | The fast lane beside the production line: one scoped change, built in a sitting, with no spec or plan in front of it. 1-2 read-only Opus scouts map the landing zone and weigh approaches, and the user picks at a single AskUserQuestion gate — nothing is written before it clears. Then the size gate decides the seat: the controller implements a small change itself rather than paying for a handoff, one implementer subagent takes anything bigger. One Opus reviewer always follows — most of all when the controller was the author — then a single fix pass (the controller repairs what it wrote or what is trivial, a fixer subagent takes the rest), then a short build-and-test QC gate. Three agents on the floor, six on the nominal path; a run that wants to grow by design — a third scout, a second review round, a panel — has outgrown the fast lane, and there are two doors out: oversized work leaves at the approval gate for Libretto or Score, and a change that fails QC twice is handed to Maestro. One of the two skills with no cross-model Codex seat (the other is Jam, which lacks it for its own reason) — here because that pass is worth its wall-clock on a whole branch, not on one change. Auto-invokes on matching requests; when not named explicitly, it confirms the brief and branch before recon runs. |
+| **Jam** | `/repertoire:jam` | The autonomous session: the user hands over the keys, and Jam finds its own worklist and ships it. Three read-only Opus scouts study the repo in parallel from its end users' perspective — new non-breaking features, quick fixes users are silently paying for, and UI/UX polish — then an Opus selector distills their candidates into a 3-5 job docket sized to one session, announced to the user rather than gated on approval. Fresh implementers build each job sequentially with per-job Opus review at the conductor's discretion (required for anything behavior-touching, skippable only for docs and cosmetics), and a job that blocks twice is dropped rather than fought. The finale is never thinned: two whole-branch reviewers in parallel — one pinned to Opus, one on the session model, the cross-tier pairing that replaces the Codex seat this unattended run deliberately lacks — then an evidence-based QC gate that builds, tests, and can amputate an unshippable job by clean revert. Two QC strikes escalate to the user; pushes only on request, never merges. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
 | **Tuner** | `/repertoire:tuner` | Hunts a bug to its root cause with two rival investigators — a Codex agent at xhigh reasoning effort dispatched the moment the bug brief exists, and a systematic Opus investigator (also at xhigh effort) primed by a triage scout's ranked fault surfaces — then cross-examines the two hypotheses as the confidence gate. The repair is test-first: a fixer commits a deliberately-red repro test before the minimal fix, a skeptical reviewer gates the fix, and a mechanical verifier proves red→green plus a green suite. Commits on a feature branch, never merges. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
 
 ## Local development
@@ -75,7 +81,7 @@ Repertoire/                       repo root = plugin root = marketplace root
 │   ├── plugin.json               plugin manifest (name: repertoire)
 │   └── marketplace.json          catalog listing this plugin (source "./")
 ├── skills/                       one directory per skill
-│   └── <name>/                   eureka, libretto, score, maestro, coda, encore, tuner, presto
+│   └── <name>/                   eureka, libretto, score, maestro, coda, encore, tuner, presto, jam
 │       ├── SKILL.md
 │       ├── evals/evals.json      committed trigger evals
 │       ├── *-template.md         bundled document structure (libretto, score)

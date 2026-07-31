@@ -12,6 +12,7 @@
   {"query": "rename this config variable across the file", "should_trigger": false, "note": "presto's — single scoped change, no plan"},
   {"query": "add a --json flag to the export command", "should_trigger": false, "note": "presto's — one scoped change, nothing written to execute"},
   {"query": "just build this on a new branch, no plan needed", "should_trigger": false, "note": "presto's — explicitly plan-less"},
+  {"query": "improve this repo — spin up subagents and handle it", "should_trigger": false, "note": "jam's — no written plan, no named change; subagent phrasing alone is not a plan"},
   {"query": "spec this feature idea out first", "should_trigger": false, "note": "libretto's"},
   {"query": "address the reviewer feedback on PR 42", "should_trigger": false, "note": "coda's"},
   {"query": "debug why the build is failing on main", "should_trigger": false, "note": "tuner's"},
