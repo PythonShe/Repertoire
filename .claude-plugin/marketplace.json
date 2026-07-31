@@ -10,8 +10,8 @@
     {
       "name": "repertoire",
       "source": "./",
-      "version": "2.2.0",
-      "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, post-ship enhancement, and debugging — plus a fast lane for scoped changes that need no plan. More to come.",
+      "version": "2.3.0",
+      "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, post-ship enhancement, and debugging — plus a fast lane for scoped changes that need no plan and an autonomous session that finds its own worklist and ships it. More to come.",
       "author": {
         "name": "PythonShe",
         "email": "dev@zheng-she.com"
@@ -31,6 +31,7 @@
         "presto",
         "eureka",
         "encore",
+        "jam",
         "brainstorming",
         "ideation",
         "spec",
@@ -39,7 +40,8 @@
         "enhancement",
         "debugging",
         "root-cause",
-        "fast-lane"
+        "fast-lane",
+        "autonomous"
       ]
     }
   ]
