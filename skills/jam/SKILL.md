@@ -28,7 +28,10 @@ being asked.
   subagent, and what returns to you is a compact report. The bookkeeping
   carve-out is the same as Maestro's: reading subagent *reports* and running
   read-only git metadata commands (`merge-base`, `rev-parse`,
-  `log --oneline`, `status`) is conducting; reading code is playing.
+  `log --oneline`, `status`) is conducting; reading code is playing. The
+  backlog record (`docs/repertoire/jam-backlog.md`) is bookkeeping on both
+  ends — reading it to brief the scouts, writing it in Phase 5 — because it
+  is composed from reports, never from code.
 - **Sit in the user's seat.** Every scout hunts for what this project's
   actual users — CLI users, library consumers, site visitors, plugin
   installers — would notice and thank you for. The maintainer's backlog is
@@ -53,6 +56,13 @@ being asked.
 - **One writer at a time; everyone who writes commits.** Never two
   implementers, never a fixer beside an implementer. Commits are the unit of
   progress and the same-session resume trail.
+- **The road not taken is kept, not lost.** A run that shipped ends by
+  writing `docs/repertoire/jam-backlog.md` in the target project: the
+  selector's scored rejects plus any dropped or amputated jobs, sorted by
+  lens, one line each with a priority score — capped at twelve and
+  superseded in place, never a changelog. The next session's scouts read
+  their lens's entries and re-verify each against current code before it
+  may compete as a candidate again.
 - **No cross-model seat, by design.** Jam seats no Codex agent — a variance
   it shares only with Presto, for its own reason: an unattended session
   cannot babysit a cross-model call that hangs, and a hung seat here stalls
@@ -97,15 +107,20 @@ not here.
 0. Warm-up — dirty-tree check, BUILD/TEST, cost gate if Jam wasn't named,
    *then* cut `jam/<date>` branch, capture BASE, TodoWrite.
 1. Scouting — 3 read-only Opus scouts in parallel, one lens each: features ·
-   fixes · polish. Candidates from the user's perspective.
+   fixes · polish. Candidates from the user's perspective; each scout
+   re-verifies its lens's backlog carry-overs.
 2. The docket — one Opus selector merges, scores, and sizes: 3-5 jobs with
-   review flags and build order. Announce it and go.
+   review flags and build order, plus backlog scores on the rejects.
+   Announce it and go.
 3. Build loop — per job: fresh implementer → per-job Opus review at your
    discretion → fixer when findings. Blocked twice → drop and move on.
 4. Finale — two whole-branch reviewers in parallel (pinned Opus + session
-   model) → sequential fixers → QC (build + tests): SHIPPABLE → report (push
-   only on request, never merge); NOT_SHIPPABLE → route blockers, retry;
-   second strike → stop + AskUserQuestion.
+   model) → sequential fixers → QC (build + tests): SHIPPABLE → Phase 5;
+   NOT_SHIPPABLE → route blockers, retry; second strike → stop +
+   AskUserQuestion.
+5. The backlog — create or update `docs/repertoire/jam-backlog.md` from the
+   selector's scored rejects and any dropped jobs, capped and superseded in
+   place; commit it, then report (push only on request, never merge).
 
 ### Phase 0 — Warm-up
 
@@ -130,7 +145,7 @@ not here.
    on collision). **Never build on main or master.** Capture
    `BASE` = `git rev-parse HEAD`; every whole-branch review is `BASE..HEAD`.
 6. Create a TodoWrite list: `Scouts`, `Docket`, `Finale: review pair
-   (BASE: <sha>)`, `Finale: QC (strikes 0/2)`, `Report`. Job items are
+   (BASE: <sha>)`, `Finale: QC (strikes 0/2)`, `Backlog`, `Report`. Job items are
    inserted after Phase 2, when they exist. `BASE` lives in the finale
    todo's text as the cheap copy; because the branch is always cut fresh, a
    resume that lost the todo can still recover it from the merge-base with
@@ -150,15 +165,22 @@ not here.
      onboarding and docs readability, naming, formatting, accessibility.
      Where an installed skill covers a surface (design, animation,
      performance), the scout names it as leverage in the candidate.
-2. Scouts **read only** — no edits, no builds, no tests. Parallel dispatch is
+2. **Brief in the backlog.** If `docs/repertoire/jam-backlog.md` exists in
+   the target project, read it (bookkeeping) and paste each lens's entries
+   verbatim into that scout's brief. Scouts re-verify every carried entry
+   against current code before it may return as a candidate; entries found
+   stale, shipped, or no longer anchored come back on a `Stale backlog`
+   line so Phase 5 prunes them. Carried entries count toward the
+   six-candidate cap and compete on merit, never on seniority.
+3. Scouts **read only** — no edits, no builds, no tests. Parallel dispatch is
    safe precisely because nobody writes.
-3. Each returns at most six candidates — title, user-visible benefit,
+4. Each returns at most six candidates — title, user-visible benefit,
    `file:line` evidence, size (S/M), risk, and a breaking? flag that must be
    `no` — plus the local patterns and constraints an implementer of its
    candidates must respect, naming an installed skill as leverage where one
    applies. Breaking ideas are listed out-of-scope for the report, never as
    candidates.
-4. **One thin lens does not stall the run.** A scout returning `NONE` or
+5. **One thin lens does not stall the run.** A scout returning `NONE` or
    `BLOCKED` is noted for the report and the other lenses proceed. If all
    three return nothing real, report that honestly and end — an empty docket
    on a polished repo is a finding, not a failure.
@@ -174,7 +196,10 @@ not here.
    `review: required` for anything touching behavior, logic, public surface,
    security, or data handling; `review: optional` only for pure docs, copy,
    or cosmetic changes. Plus the notable rejects, each with its one-line
-   reason.
+   reason and a backlog score — 1-5 for how much a future session should
+   want it, or `no` for entries that must not be carried (dead anchors,
+   merged duplicates, breaking or L-sized work that can never enter a jam
+   docket).
 2. **Sanity-check scope only.** If a docket job violates the non-breaking
    rule or plainly cannot fit the session, strike it — striking is your
    call, adding is not. Fewer than three survivors is acceptable when the
@@ -254,6 +279,29 @@ For each docket job, in order, one at a time:
    failing is a bug). Escalate whether the run is interactive or autonomous;
    this is one of the two questions the automation never skips.
 
+### Phase 5 — The backlog
+
+1. **Create or update `docs/repertoire/jam-backlog.md`** in the target
+   project — the conductor's own pen, bookkeeping, composed entirely from
+   the selector's report and the settled docket, never from code. Three
+   sections by lens (features · fixes · polish); one line per entry:
+   `[P<score>] Title — benefit · evidence · rejected <date> | dropped
+   <date> (<reason>)`. The selector's backlog scores carry over verbatim;
+   dropped and amputated jobs enter at P4 with their drop reason — they
+   earned a docket slot once, and the friction that killed them is on the
+   line for the next session to weigh.
+2. **Supersede in place, cap at twelve.** Remove entries that shipped this
+   session, that a scout's `Stale backlog` line retired, or that the
+   selector scored `no`; a re-carried entry updates its row rather than
+   adding one. Over the cap, the lowest scores go. Stamp the doc with the
+   date and `git rev-parse --short HEAD`. It states what is still worth
+   doing — never the history of how it got there.
+3. **Commit the doc on the branch**, then report. An EMPTY-docket run still
+   writes the selector's scored rejects before its report, and an escalated
+   run that ships after amputation writes on its way out; only a run the
+   user abandons at the escalation, or one where all three scouts returned
+   nothing, writes nothing.
+
 ### The report
 
 - **The docket, settled** — per job: shipped (with commit SHAs), dropped
@@ -264,6 +312,8 @@ For each docket job, in order, one at a time:
 - **Seats spent** — scouts, selector, implementers, which jobs got per-job
   review and which skipped it (and why), fixers, the finale pair, QC rounds.
 - **QC evidence** — the build result and test summary, real output lines.
+- **The backlog** — what `docs/repertoire/jam-backlog.md` now holds: entries
+  written, superseded, and pruned this session.
 - **The user's call** — the merge is never yours; push only if asked, and
   say what is on the branch either way.
 
@@ -315,6 +365,9 @@ steps describe.
 - Guessing `BUILD` or `TEST`, or letting QC run on an invented command.
 - Building on main or master; pushing without being asked; merging ever.
 - Looping QC past two strikes instead of escalating.
+- Letting the backlog grow past its cap or become a changelog — it is
+  superseded in place and states only what is still worth doing — or
+  scheduling a carried entry no scout re-verified this session.
 
 ## Bundled files
 

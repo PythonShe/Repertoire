@@ -59,6 +59,17 @@ Agent tool (model: opus, effort: xhigh):
       change. The controller may still send a reviewer; optional only means
       it may also not.
 
+    ## The backlog score
+
+    Your rejects feed `docs/repertoire/jam-backlog.md` — the carried
+    candidate pool the next session's scouts re-verify. Score each notable
+    reject 1-5 for how much a future session should want it (5 = first
+    pick next time, 1 = barely worth the line). Score `no` for anything
+    that must not be carried: dead anchors, merged duplicates, and
+    breaking or L-sized work that can never enter a jam docket. A carried
+    candidate (`carried: yes`) you reject again keeps a score unless it
+    died to verification.
+
     ## Report format (compact — the controller stays lean)
 
     - **Status:** DOCKET | EMPTY
@@ -70,9 +81,11 @@ Agent tool (model: opus, effort: xhigh):
       - Patterns: the conventions/constraints and any skill leverage,
         carried from the scouts (or `none`).
       - Risk: one line.
-    - **Rejected (notable):** one line each — title · which rule killed it.
-      Include every merged duplicate and every candidate that died to
-      verification, so the road not taken is on the record.
+    - **Rejected (notable):** one line each — title · which rule killed
+      it · `backlog: <1-5>|no` · benefit and evidence carried from the
+      scout when the score is numeric. Include every merged duplicate and
+      every candidate that died to verification, so the road not taken is
+      on the record.
     - **Out of scope (breaking):** the scouts' OUT_OF_SCOPE lines,
       deduplicated and carried verbatim — these reach the user's report — or
       `none`.

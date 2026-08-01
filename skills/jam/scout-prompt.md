@@ -5,7 +5,10 @@ Three scouts dispatch in parallel, one lens each: `features`, `fixes`,
 never edit, and never run builds or tests — parallel dispatch is safe only
 because nobody writes.
 
-Fill `[LENS BLOCK]` with the matching block below, verbatim.
+Fill `[LENS BLOCK]` with the matching block below, verbatim. Fill
+`[BACKLOG BLOCK]` with this lens's section of the target project's
+`docs/repertoire/jam-backlog.md`, verbatim — or `none` when the file or the
+section does not exist.
 
 **features**
 > New capabilities this project's users would ask for next. Non-breaking
@@ -51,6 +54,19 @@ Agent tool (model: opus, effort: xhigh):
 
     Work from: [directory]
 
+    ## Carried from previous sessions — re-verify before trusting
+
+    [BACKLOG BLOCK]
+
+    Each entry above was found by a past session and never shipped. The
+    code has moved since: re-verify every entry against the current source
+    before it may compete. One that still holds returns as a normal
+    candidate — keep or adjust its priority, and append `carried: yes` to
+    its line. One that is stale, already shipped, or no longer anchored
+    goes on the Stale backlog line instead, never among the candidates.
+    Carried entries count toward your six and compete with fresh finds on
+    merit, never on seniority.
+
     ## What each candidate needs
 
     At most **six** candidates, each:
@@ -90,4 +106,6 @@ Agent tool (model: opus, effort: xhigh):
       constraints an implementer of these candidates must respect, or
       `none`.
     - **OUT_OF_SCOPE:** breaking-but-interesting, one line each, or `none`.
+    - **Stale backlog:** carried entries you re-verified and found stale,
+      shipped, or unanchored — one line each with why — or `none`.
 ```
