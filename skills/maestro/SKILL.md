@@ -22,10 +22,12 @@ you can keep coordinating clearly all the way to the end.
 - **You conduct; you never play.** You do not read source files or diffs, write
   code, or apply fixes — every change happens inside a subagent, and what comes
   back to you is a short report, never a diff. The one carve-out is *bookkeeping*:
-  you may read the **plan** and run read-only git **metadata** commands
+  you may read the **plan** — and, when it is one file of a plan set, that
+  set's `00-overview.md` — and run read-only git **metadata** commands
   (`git merge-base`, `rev-parse`, `log --oneline`, `status`) to capture commit
-  ranges and the branch base. Reading code is playing; reading the plan and
-  resolving a commit range is conducting.
+  ranges and the branch base; on a stacked chain, `gh stack link` at push time
+  is sanctioned alongside pushing itself. Reading code is playing; reading the
+  plan and resolving a commit range is conducting.
 - **Sequential groups, fresh agents.** Related tasks are grouped and built one
   group at a time, each with its own fresh implementer. Never run two
   implementers at once — they would collide on the branch.
@@ -80,14 +82,21 @@ not here.
    state file — re-derive the groups from the plan, then resume at the first group
    or phase not marked done, re-running its cycle from its last commit. Read the
    QC strike count from its todo if you are mid-QC.
-2. Read the plan once. Extract every task with its full text and surrounding
-   context — you will paste this into subagents, so they never read the plan file.
+2. If the plan's header carries an `**Overview:**` line, it is one file of a
+   Score plan set — read that `00-overview.md` first (bookkeeping; see
+   *Conducting a plan from a plan set*). Then read the plan once. Extract every
+   task with its full text and surrounding context — you will paste this into
+   subagents, so they never read the plan file.
 3. **Group related tasks** (see *Grouping tasks*) into sequential units.
 4. Confirm you are on a feature branch, not main/master. If not, create one (or
-   get the user's consent). Starting on main is a red flag.
+   get the user's consent). Starting on main is a red flag. On a plan-set
+   stacked chain, a dependent plan's branch is created off its parent plan's
+   branch — and standing on the parent's branch does **not** count as "already
+   on a feature branch"; see *Conducting a plan from a plan set*.
 5. **Capture the base ref** once: `git merge-base HEAD <main-or-base>` → keep it as
    `BASE`. This is the diff base for whole-branch reviews. (Read-only bookkeeping,
-   allowed.)
+   allowed.) On a plan-set **stacked chain**, a dependent plan's base is its
+   parent plan's branch, not main — see *Conducting a plan from a plan set*.
 6. **Determine the build and test commands** from the plan, README, or package
    manifest. Keep them as `BUILD` and `TEST`; you will hand them to every agent
    that builds or tests. If you cannot find them, ask the user — do not let agents
@@ -159,7 +168,9 @@ Run this only after every group has passed Phase 1.
 2. Read the verdict and decide:
    - **MERGEABLE** → push the branch and report to the user. **Never merge
      yourself.** Pushing and reporting is where your authority ends; the merge is
-     the user's call.
+     the user's call. On a plan-set stacked chain, pushing includes linking the
+     branch into the stack (see *Conducting a plan from a plan set*);
+     `gh stack merge` is a merge and stays forbidden.
    - **NOT_MERGEABLE** → route each blocker by type, then re-run QC (step 1):
      - a *localized defect* → a fixer (sequentially, as in Phase 2),
      - a *missing or incorrect implementation / design gap* a fixer cannot
@@ -233,6 +244,42 @@ report. Never silently drop a reviewer.
 **Reviewer / QC** report `PASS`/`FAIL` and `MERGEABLE`/`NOT_MERGEABLE`; handle them
 as the phase steps describe.
 
+## Conducting a plan from a plan set
+
+A plan that is one file of a Score plan set names the set's `00-overview.md`
+on the `**Overview:**` line of its header. Read that overview before the plan
+(bookkeeping) — it carries the cross-plan contracts, the execution order, and
+the set's **execution shape** — then still conduct only your one plan, and
+never read its siblings.
+
+- **`parallel`** — no plan depends on a sibling. Nothing changes: branch off
+  main as usual.
+- **`stacked chain`** — at least one plan builds on a sibling's unmerged code,
+  and each dependent plan lands as one layer of a GitHub stacked pull request:
+  - **Phase 0:** a plan whose overview row depends on a sibling branches off
+    that **parent plan's branch**, not main, and captures `BASE` as
+    `git merge-base HEAD <parent-branch>` so reviews and QC see only this
+    plan's layer. Verify the ground with read-only metadata only —
+    `git rev-parse --verify <parent-branch>` for existence, `git status` for a
+    rebase or conflict in progress. If the parent branch is missing, or the
+    stack looks mid-rebase or conflicted, stop and ask the user — never run a
+    stack sync or resolve a cascading rebase yourself. A plan in the set with
+    no dependency branches off main, as in `parallel`.
+  - **Reviews and QC:** add one line to every reviewer and QC brief on a
+    dependent plan: "this branch is one layer of a stack; code below `BASE`
+    was built by the parent plan and is out of scope."
+  - **Phase 3:** on MERGEABLE, push as usual. If the layer's pull request
+    already exists, link it into the stack with `gh stack link`; otherwise put
+    the exact next steps in your report — open the PR with
+    `--base <parent-branch>`, then `gh stack link`. If `gh stack` is
+    unavailable or the link fails for any reason (no preview access; a
+    fork-based branch — stacks are same-repo only), fall back to the plain
+    push and the PR-against-parent, and say so in your report: the chain still
+    works, it just loses GitHub's automatic rebase-and-retarget when a lower
+    layer merges.
+  - **`gh stack merge` is forbidden.** It is a merge. Landing any layer — or
+    the whole stack in one click — belongs to the user, exactly as before.
+
 ## Committing and branch policy
 
 - Every implementer and fixer commits its own work; you may commit too (e.g. to
@@ -244,8 +291,8 @@ as the phase steps describe.
 ## Red flags
 
 - Reading source files or editing code yourself → you are playing, not
-  conducting. Dispatch a subagent. (Reading the plan and resolving commit ranges
-  is fine — that is bookkeeping.)
+  conducting. Dispatch a subagent. (Reading the plan — and a plan set's
+  `00-overview.md` — and resolving commit ranges is fine — that is bookkeeping.)
 - Running two implementers (or two fixers) in parallel → branch conflicts.
 - A reviewer that trusts the implementer's report instead of reading the code.
 - Handing a reviewer or QC agent an unresolved `[range]` or guessed build/test
@@ -253,7 +300,7 @@ as the phase steps describe.
 - Skipping the Phase 2 panel because Phase 1 "already reviewed" — Phase 1 is a
   light per-group gate; the panel reviews the integrated whole.
 - Looping QC past three failures instead of escalating.
-- Merging the branch yourself.
+- Merging the branch yourself — `gh stack merge` on a stacked chain included.
 
 ## Prompt templates
 

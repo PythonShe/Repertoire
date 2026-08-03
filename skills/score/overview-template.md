@@ -29,8 +29,10 @@ splits along these seams.
 | 01 | `plan-01-<slug>.md` | one line | — |
 | 02 | `plan-02-<slug>.md` | one line | 01 |
 
-Execution notes, only where the table alone would mislead: which plans could
-run on parallel branches, what "done" looks like after each lands.
+**Execution shape:** `parallel` | `stacked chain` — keep exactly one.
+
+Execution notes, only where the table alone would mislead: what "done" looks
+like after each plan lands, and anything the shape line alone would obscure.
 
 ## Shared contracts
 
@@ -62,6 +64,16 @@ Conventions worth keeping to:
 - **Number plans in execution order**; the overview is `00` so it sorts first.
 - **A shared contract lives here or nowhere.** A shape defined only inside
   plan 01 that plan 03 consumes is a seam failure — hoist it into this file.
+- **Declare the execution shape honestly.** `parallel` means no plan depends
+  on a sibling: every plan branches off main. `stacked chain` means at least
+  one plan consumes a sibling's unmerged code: each dependent plan branches
+  off its parent plan's branch, and Maestro links the layers into a GitHub
+  stacked pull request the user can review layer by layer and merge
+  bottom-to-top, or all at once — while plans in the set with no dependency
+  still branch off main. The shape follows from the Depends-on column; a
+  shape that contradicts the table is a review finding. Never stack
+  independent plans — a stack fabricates an ordering every review and merge
+  must then honor.
 - **The header's Build/Test commands are load-bearing** here exactly as in a
   single plan — and each plan file repeats them in its own header, because
   Maestro reads only the plan it is conducting.

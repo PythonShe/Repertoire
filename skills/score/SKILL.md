@@ -157,7 +157,8 @@ between spec and finished plan.
    that will live in the overview.
 3. **Present the structure compactly** — the file map, the movements, and the
    one-line intent of each; for a set, lead with the partition (each plan, its
-   one-line deliverable, the dependency order) and keep the per-plan detail to
+   one-line deliverable, the dependency order, and the execution shape it
+   implies — `parallel` or `stacked chain`) and keep the per-plan detail to
    a movement sketch — and get the user's approval before writing the full
    plan. Use AskUserQuestion for discrete choices, prose for open ones. A wrong
    decomposition caught here costs a paragraph; caught after the panel, it costs
@@ -179,8 +180,10 @@ shared:
 
 1. **Author `00-overview.md` yourself**, following `overview-template.md`. It
    carries what no single plan can: the goal, the plan inventory with its
-   dependency order, the shared interfaces and data shapes that cross plan
-   boundaries, project-wide conventions, and the build/test commands. You hold
+   dependency order, the **execution shape** (`parallel` branches or a
+   `stacked chain` — the template defines both), the shared interfaces and
+   data shapes that cross plan boundaries, project-wide conventions, and the
+   build/test commands. You hold
    the spec and the approved structure, so the global document is yours —
    and writing it *first* pins the contracts the writers build against.
 2. **Dispatch one plan writer per plan file, in parallel**, using
@@ -281,8 +284,9 @@ For a **plan set**, one lens of the panel must be:
 
 - **Cross-plan coherence** — shared contracts in the overview that no plan
   implements, interfaces that drift between the defining and consuming plans,
-  spec requirements that fall between plans or land in two, and dependency
-  order between plans that contradicts the overview.
+  spec requirements that fall between plans or land in two, dependency
+  order between plans that contradicts the overview, and a declared execution
+  shape that contradicts the Depends-on column.
 
 Adjust to the work (a migration-heavy plan might swap in a *rollback &
 ordering* lens). Hand each reviewer exactly one lens. The Codex reviewer does a
