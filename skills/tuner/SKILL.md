@@ -249,8 +249,10 @@ is different: it is a *diagnosis*, which is exactly what the rescue runtime's
 read-only behavior available for investigation without edits.
 `codex-investigator-prompt.md` carries the full contract: effort pinned to
 xhigh, no `--write`, `--wait` so the forwarder cannot park the investigation in
-a background job and hand back only a job ID, the bare `codex exec` fallback,
-and the absence rule. The parallelism comes from dispatching the rescue agent
+a background job and hand back only a job ID, the bare `codex exec` fallback
+(stdin from `/dev/null`, prompt and verdict files, a wall-clock cap — the
+shape `shared/invariants.md` fixes, because a bare `codex exec` on an open
+pipe hangs forever), and the absence rule. The parallelism comes from dispatching the rescue agent
 itself in the background via the Agent tool — never from the flags.
 
 ## Red flags

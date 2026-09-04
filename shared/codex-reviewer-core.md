@@ -8,6 +8,19 @@ text, and the timing rule. The conductor reads both and assembles one brief.
 A different model sees different things — it catches what a room full of
 Claudes will agree to overlook.
 
+## The seat is a subagent, never a conductor Bash call
+
+Whichever path below applies, the conductor does not invoke Codex itself. It
+dispatches one Codex-seat subagent (Agent tool, in the background, alongside
+the Opus reviewers) whose brief is this core plus the stub, and *that*
+subagent runs the companion or the bare CLI in its own foreground with the
+Bash tool's `timeout` set to about 10 minutes (600000 ms). The reason is
+mechanical: a Codex call that hangs blocks whoever ran it until a timeout
+fires or a human interrupts, and in the conductor's own Bash call that is
+the entire run stalled — the seat has to be able to fail without taking the
+panel with it. The subagent's report is the compact verdict below, or
+"Codex absent" with the reason quoted.
+
 ## Use the adversarial-review runtime, not codex-rescue
 
 The right tool is Codex's **adversarial-review runtime**, purpose-built to
@@ -71,18 +84,51 @@ reviewers use and fold it into the consolidated findings:
 ## Fallback: bare `codex exec`
 
 If the plugin companion is absent but the `codex` CLI exists, run a headless
-review with the stub's inline adversarial prompt:
+review with the stub's inline adversarial prompt. **Use exactly this shape** —
+every part of it is load-bearing:
 
 ```bash
-codex exec --cd "[repo dir]" "$(cat <<'PROMPT'
+S="[scratchpad dir]"
+cat > "$S/codex-prompt.txt" <<'PROMPT'
 [the stub's fallback review prompt]
 PROMPT
-)"
+codex exec --cd "[repo dir]" -s read-only --ephemeral -o "$S/codex-out.txt" \
+  "$(cat "$S/codex-prompt.txt")" < /dev/null > "$S/codex-run.log" 2>&1
+echo "exit=$?"; cat "$S/codex-out.txt"
 ```
 
-- **Replace every placeholder — `${BASE}`, file paths, paste blocks, and the
-  repo dir — before sending**: the single-quoted heredoc does not expand
-  variables.
+- **`< /dev/null` is mandatory.** `codex exec` reads stdin to EOF whenever
+  stdin is not a TTY — even with a prompt argument — and a subagent or
+  background shell inherits an open pipe nobody writes to, so without the
+  redirect the process wedges forever at 0% CPU, printing at most
+  `Reading additional input from stdin...` (upstream openai/codex #20919,
+  open as of 2026-09; no `--no-stdin` flag exists). Never drop the redirect
+  "because it worked once".
+- **Prompt from a file, verdict to a file.** Writing the prompt to a file
+  first keeps the shell argument free of quoting accidents, and `-o` writes
+  Codex's final message alone, so you read the verdict from
+  `codex-out.txt` instead of scraping the event stream in `codex-run.log`.
+- **The conductor never runs this call itself.** A hung `codex exec` blocks
+  whoever ran it until a timeout fires or a human interrupts — in the
+  conductor's own Bash call that is the whole run stalled. So the fallback
+  is always executed by the Codex reviewer *subagent*, dispatched in the
+  background, running the call in its own foreground with the Bash tool's
+  `timeout` set to about 10 minutes (600000 ms). If it hangs anyway, the
+  subagent times out and the conductor records Codex as absent; the run
+  keeps moving.
+- **It must be right the first time.** There is no relaunch: a second
+  attempt doubles the wall-clock the panel already paid, and the first hang
+  is proof the shape was wrong, not bad luck. Check the four parts — prompt
+  file, `-o` file, `< /dev/null`, `timeout` — before sending, not after.
+- **Hang signature.** If `codex-out.txt` is empty or missing when the call
+  returns, `Reading additional input from stdin` in `codex-run.log` means
+  the redirect was lost. Record Codex as absent with that line quoted in
+  the report so the conductor can see why. A non-zero exit or an empty
+  output file is a failed reviewer, never a pass.
+- `-s read-only` keeps the reviewer from editing the tree; `--ephemeral`
+  skips writing a session file. Replace every placeholder — `${BASE}`, file
+  paths, paste blocks, the repo dir, the scratchpad dir — before sending: the
+  single-quoted heredoc does not expand variables.
 - Verify flags with `codex exec --help` — they vary by version.
 
 Either way, the conductor never reads the diff or the artifact itself — only

@@ -30,7 +30,7 @@
   並在報告中說明——但跨模型檢查本來就是設計的一部分。（Presto 刻意不設這個席位：
   跨模型這一輪的時間成本值得花在整條分支上，而不是一處範圍明確的變更上。Legato 與 Presto 同理——一處範圍明確的動效打磨。Jam 不設
   則是因為它全程無人值守——一次掛起的跨模型呼叫會讓一場沒人盯著的會話就此卡住；
-  它的終章改為讓一位固定用 Opus 的審查員與一位跑在會話模型上的審查員搭檔。）
+  它的終章改為讓一位固定用 Opus 的審查員與一位跑在會話模型上的審查員搭檔。）若外掛的 companion 腳本缺失，skill 會回退到裸 `codex` CLI——而 `codex exec` 在 stdin 是一條無寫入方的開啟管道時會永久卡死（上游 [openai/codex#20919](https://github.com/openai/codex/issues/20919)），因此每次回退呼叫都帶上 `< /dev/null`、prompt 檔案、輸出檔案和一個牆鐘逾時，且只由背景子代理執行、必須一次成功；確切寫法見 `shared/codex-reviewer-core.md`。
 - **安裝了 GitHub [`gh-stack` 擴充](https://github.com/github/gh-stack)的 `gh` CLI**——可選。讓 Maestro 把 `stacked chain`（堆疊鏈）計畫集掛入 GitHub 的 stacked pull request（公開預覽中）。沒有它時鏈條會優雅降級為普通推送，每個 PR 以其父計畫的分支為目標。
 
 > **模型說明：** 這些 skill 分兩檔運行。**建置席位**——實作者、修復者以及 QC／最終把關——不固定模型：它們繼承你的會話模型，所以請用你能存取到的最強模型來開會話。`/model best` 在你有權限時解析為 **Fable 5**，否則解析為最新的 **Opus**——既在建置席位上用上 Fable 的速度，又自帶 Opus 回退，且不寫死任何模型名，即便 Fable 再次被暫停也不會失效。**審查席位**——調查員、審查小組、驗證者——固定用 **Opus**，作為穩定的對抗性基線。（唯一的刻意例外：Jam 終章的第二位審查員不固定模型、跑在會話模型上——這對跨檔搭檔記錄在 `shared/invariants.md` 中。）請用 `best` 或 `opus` 運行這些 skill——**絕不要用 Sonnet**。

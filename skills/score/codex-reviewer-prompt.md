@@ -7,7 +7,7 @@ invocation mechanics; this stub carries what to review.
 **Object under review:** the whole implementation plan against its spec — a
 **general** pass that complements the single-lens Opus reviewers rather than
 repeating one of them; it catches the underspecified task and the unstated
-dependency a room full of Claudes will read right past. Run the call **in the
+dependency a room full of Claudes will read right past. Dispatch the seat **in the
 same batch** as the Opus reviewer dispatches so they all run together. This
 is a document review: no `--base` flag; keep both full paths in the prompt so
 the runtime knows which files to read. If no written spec exists (the

@@ -25,3 +25,20 @@ gates, those seats stand in for the user's judgment.
   most capable model you have — `/model best` resolves to Fable 5 where you
   have access, otherwise Opus — never on Sonnet. The only non-Claude agent is
   the Codex reviewer, cross-model by design.
+
+# Codex fallback hygiene — canonical source
+
+`shared/codex-reviewer-core.md` ("Fallback: bare `codex exec`") is the one
+shape every bare-CLI Codex call takes, reviewer or investigator: prompt
+written to a scratchpad file, `-o` verdict file, `-s read-only --ephemeral`,
+**`< /dev/null` on the call**, run under the Bash tool's ~10-minute
+`timeout`, foreground inside a background subagent — never in the
+conductor's own Bash call, because a hung `codex exec` blocks whoever ran it
+until a timeout or a human intervenes, and never relaunched: the shape must
+be right on the first try. The redirect exists
+because `codex exec` drains stdin to EOF whenever stdin is not a TTY — prompt
+argument or not — and a subagent or background shell hands it a pipe nobody
+closes (openai/codex #20919, open as of 2026-09). An empty output file is a
+failed seat, never a pass; `Reading additional input from stdin` in the run
+log means the redirect was lost, and the seat is recorded absent. Tuner's `codex-investigator-prompt.md`
+carries a marked copy of the same shape and must not drift from it.

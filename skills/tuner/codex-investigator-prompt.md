@@ -99,12 +99,16 @@ If the rescue subagent is unavailable, check for the CLI:
 command -v codex >/dev/null && echo "cli: $(command -v codex)"
 ```
 
-If it exists, run the investigation headless, in a background Bash call.
-Verify flags with `codex exec --help` first — they vary by version; the
-reasoning-effort override is commonly the config form shown here.
+If it exists, run the investigation headless in the **same shape the shared
+reviewer contract uses** (`shared/codex-reviewer-core.md`, "Fallback"): prompt
+from a file, verdict to a file, stdin redirected from `/dev/null`, and the
+Bash tool's `timeout` set to about 10 minutes. Verify flags with
+`codex exec --help` first — they vary by version; the reasoning-effort
+override is commonly the config form shown here.
 
 ```bash
-codex exec --cd "[repo dir]" --sandbox read-only -c model_reasoning_effort="xhigh" "$(cat <<'PROMPT'
+S="[scratchpad dir]"
+cat > "$S/codex-investigation.txt" <<'PROMPT'
 You are a root-cause investigator. Find the mechanism of this bug, not the
 vicinity. A rival investigation runs in parallel and your report will be
 cross-examined, so back every claim with evidence. Do not modify any files.
@@ -120,8 +124,25 @@ expectation. Report ONLY:
 - PROPOSED MINIMAL FIX: described, not applied
 - CONFIDENCE: HIGH | MEDIUM | LOW + what would change your mind
 PROMPT
-)"
+codex exec --cd "[repo dir]" -s read-only --ephemeral \
+  -c model_reasoning_effort="xhigh" -o "$S/codex-report.txt" \
+  "$(cat "$S/codex-investigation.txt")" < /dev/null > "$S/codex-run.log" 2>&1
+echo "exit=$?"; cat "$S/codex-report.txt"
 ```
+
+**`< /dev/null` is not optional.** `codex exec` reads stdin to EOF whenever
+stdin is not a TTY, prompt argument or not, and a subagent or background
+shell hands it an open pipe nobody writes to — the process wedges at 0% CPU
+with at most `Reading additional input from stdin...` on the log (upstream
+openai/codex #20919, still open). A hung call blocks whoever ran it until a
+timeout fires or a human interrupts — so the conductor never runs this call
+itself: dispatch a background *subagent* that runs it in its own foreground
+under the Bash tool's ~10-minute `timeout`, and let that subagent's timeout
+be the failure path. There is no second launch — the shape must be right
+the first time, so check its four parts (prompt file, `-o` file,
+`< /dev/null`, `timeout`) before sending. An empty `codex-report.txt` when
+the call returns is a failed investigator: quote the stdin line from the run
+log if it is there, then apply the absence rule.
 
 The rebuttal works the same way on this route — a second `codex exec` with
 Codex's original report and the rival's both pasted in.

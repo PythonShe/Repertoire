@@ -36,7 +36,13 @@ accordingly:
   Legato shares Presto's reason — one scoped motion polish. Jam
   seats none because its run is unattended — a hung cross-model call would
   stall a session nobody is watching; its finale pairs a pinned-Opus reviewer
-  with a session-model reviewer instead.)
+  with a session-model reviewer instead.) If the plugin's companion script is
+  missing, skills fall back to the bare `codex` CLI — and `codex exec` wedges
+  forever when its stdin is an open, writer-less pipe (upstream
+  [openai/codex#20919](https://github.com/openai/codex/issues/20919)), so
+  every fallback call ships with `< /dev/null`, a prompt file, an output
+  file, and a wall-clock cap; the exact shape is in
+  `shared/codex-reviewer-core.md`.
 - **The `gh` CLI with GitHub's
   [`gh-stack` extension](https://github.com/github/gh-stack)** — optional.
   Lets Maestro link a stacked-chain plan set into a GitHub stacked pull

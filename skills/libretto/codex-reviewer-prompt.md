@@ -7,7 +7,7 @@ invocation mechanics; this stub carries what to review.
 **Object under review:** the whole committed spec — a **general** pass that
 complements the single-lens Opus reviewers rather than repeating one of them;
 it catches the ambiguity and the unstated assumption a room full of Claudes
-will read right past. Run the call **in the same batch** as the Opus reviewer
+will read right past. Dispatch the seat **in the same batch** as the Opus reviewer
 dispatches so they all run together. This is a document review: no `--base`
 flag; keep the spec's full path in the prompt so the runtime knows which file
 to read. If Codex is unavailable, run the Opus lenses only and say so in your

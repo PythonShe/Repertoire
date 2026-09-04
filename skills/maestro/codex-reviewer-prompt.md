@@ -6,7 +6,7 @@ invocation mechanics; this stub carries what to review.
 
 **Object under review:** the whole branch (`BASE..HEAD`) against the plan —
 the 4th panel reviewer in Phase 2, a general pass beside the 3 single-lens
-Opus reviewers. Run the call **in the same batch** as the 3 Opus reviewer
+Opus reviewers. Dispatch the seat **in the same batch** as the 3 Opus reviewer
 dispatches so all four run together. `$BASE` is the base ref you captured in
 Phase 0; pass it as `--base "$BASE"`. If Codex is unavailable, run the 3 Opus
 reviewers only and say so in your report.
