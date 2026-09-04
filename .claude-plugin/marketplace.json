@@ -10,7 +10,7 @@
     {
       "name": "repertoire",
       "source": "./",
-      "version": "2.5.0",
+      "version": "2.5.1",
       "description": "A growing repertoire of self-authored Claude Code skills — conductor-style subagent pipelines that carry an idea from discovery through spec, plan, build, PR-review closure, post-ship enhancement, and debugging — plus a fast lane for scoped changes that need no plan, an autonomous session that finds its own worklist and ships it, and a motion lane that polishes UI animation against a bundled craft bar. More to come.",
       "author": {
         "name": "PythonShe",
