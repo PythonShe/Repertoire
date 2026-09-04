@@ -18,63 +18,53 @@ e.g. `/repertoire:maestro`.
 
 ## Recommended setup
 
-These skills are deliberately token-heavy: every run conducts an ensemble of
-fresh subagents at medium-to-xhigh effort — build seats (implementers, fixers, QC gates)
-on your session model, review seats (investigators, review panels, verifiers)
-pinned to Opus — and that is where their reliability comes from. Plan accounts
-accordingly:
+These skills are designed for deep reasoning and orchestrate specialized
+subagents running at medium-to-xhigh effort — build roles (implementers,
+fixers, QC gates) on your session model, and review roles (investigators,
+review panels, verifiers) pinned to Opus. Recommended setup:
 
-- **Claude Max (5x or 20x), or API billing** — expected. Lighter plans are
-  likely to hit usage limits mid-run.
-- **A Codex account with OpenAI's
-  [`codex-cc` plugin](https://github.com/openai/codex-plugin-cc) installed** —
-  strongly suggested. Every skill but Presto, Jam, and Legato dispatches a cross-model Codex
-  agent (reviewer or investigator) through it. Skills degrade gracefully without Codex — they run
-  the Opus-only panel and say so in their report — but the cross-model check
-  is part of the design. (Presto seats none by design: the cross-model pass
-  earns its wall-clock over a whole branch, not over one scoped change.
-  Legato shares Presto's reason — one scoped motion polish. Jam
-  seats none because its run is unattended — a hung cross-model call would
-  stall a session nobody is watching; its finale pairs a pinned-Opus reviewer
-  with a session-model reviewer instead.) If the plugin's companion script is
-  missing, skills fall back to the bare `codex` CLI — and `codex exec` wedges
-  forever when its stdin is an open, writer-less pipe (upstream
-  [openai/codex#20919](https://github.com/openai/codex/issues/20919)), so
-  every fallback call ships with `< /dev/null`, a prompt file, an output
-  file, and a wall-clock cap; the exact shape is in
-  `shared/codex-reviewer-core.md`.
-- **The `gh` CLI with GitHub's
-  [`gh-stack` extension](https://github.com/github/gh-stack)** — optional.
-  Lets Maestro link a stacked-chain plan set into a GitHub stacked pull
-  request (public preview). Without it the chain degrades gracefully to plain
-  pushes, each PR targeting its parent plan's branch.
+- **Claude Max (5x or 20x) or API billing** — recommended. Lighter plans may
+  reach usage limits during intensive runs.
+- **A Codex account with OpenAI's [`codex-cc` plugin](https://github.com/openai/codex-plugin-cc) installed** —
+  recommended. Most skills dispatch an independent cross-model Codex agent
+  (reviewer or investigator) for adversarial verification. If Codex is
+  unavailable, skills gracefully fall back to Opus-only review panels.
+  (Presto and Legato omit Codex review to keep latency low on focused, scoped
+  changes; Jam omits it to ensure unattended runs never stall on external calls,
+  pairing Opus with the session model instead.) If the plugin's companion script
+  is missing, fallback calls to the `codex` CLI include stdin redirection
+  (`< /dev/null`), file-based I/O, and execution timeouts to prevent hangs
+  ([openai/codex#20919](https://github.com/openai/codex/issues/20919); see
+  `shared/codex-reviewer-core.md`).
+- **The `gh` CLI with GitHub's [`gh-stack` extension](https://github.com/github/gh-stack)** —
+  optional. Enables Maestro to link multi-plan `stacked chain` sets into
+  GitHub stacked pull requests (public preview). Without it, dependent plans
+  are pushed as standard branches targeting the parent plan.
 
-> **Model note:** These skills run on two tiers. The **build seats** —
-> implementers, fixers, and the QC/final gates — are *unpinned*: they inherit
-> your session model, so start the session on the most capable model you have.
-> `/model best` resolves to **Fable 5** where you have access, otherwise the
-> latest **Opus** — Fable's speed on the build seats, an automatic Opus fallback,
-> and no hardcoded model name to break if Fable is ever suspended again. The
-> **review seats** — investigators, review panels, and verifiers — stay pinned
-> to **Opus** for a stable adversarial baseline. (The one deliberate
-> exception: Jam's second finale reviewer runs unpinned on the session
-> model — the cross-tier pairing recorded in `shared/invariants.md`.) Run
-> these skills on `best` or `opus` — **never Sonnet**.
+> **Model note:** These skills use a two-tier model policy. The **build roles** —
+> implementers, fixers, and QC gates — are unpinned and inherit your session model.
+> Start the session with the most capable model available: `/model best`
+> resolves to **Fable 5** where available, otherwise the latest **Opus**.
+> The **review roles** — investigators, review panels, and verifiers — stay
+> pinned to **Opus** for a consistent adversarial baseline. (The one deliberate
+> exception: Jam's second finale reviewer runs unpinned on the session model,
+> as documented in `shared/invariants.md`.) Run these skills on `best` or
+> `opus` — **never Sonnet**.
 
 ## Skills
 
 | Skill | Invoke | What it does |
 | :---- | :----- | :----------- |
-| **Eureka** | `/repertoire:eureka` | Hunts ideas before anything is built: establishes a talking range (an existing codebase, an open domain, or the neighborhood of a half-formed spark) and a focus dimension, then finds candidates through a paced dialogue — seed sketches, a running idea board, and on-demand bursts of 3-4 diverse-lens ideators — converges finalists, and drives them through a sequential vetting funnel (identity → compliance → demand → feasibility) where every kill verdict needs the user's confirmation before an idea dies. Ends at a ranked, vetted shortlist with an optional champion handed to Libretto — never a spec, never code. Auto-invokes on matching requests. |
-| **Libretto** | `/repertoire:libretto` | Turns a rough idea into a build-ready spec through a guided design dialogue, then hardens it with an adversarial subagent review panel (2-3 diverse-lens Opus skeptics + a cross-model Codex reviewer) before a final user-approval gate. Delegates only context-gathering and review; ends at an approved spec and points to Maestro to build it — never auto-chains. Auto-invokes on matching requests. |
-| **Score** | `/repertoire:score` | Turns an approved spec into a decision-complete implementation plan — movements of Maestro-ready task groups with exact paths, interfaces, and test expectations, but no function bodies — then hardens it with the same adversarial review panel before a final user-approval gate. When one goal needs several plans it scales to a plan set: a `00-overview.md` carrying the cross-plan contracts, authored by the controller, plus one plan file per part written by parallel plan-writer subagents (a single plan gets no overview). The overview declares the set's execution shape — parallel branches, or a stacked chain that Maestro lands as a GitHub stacked pull request. One structural checkpoint with the user; ends at an approved plan and points to Maestro to conduct it — never auto-chains. Auto-invokes on matching requests. |
-| **Maestro** | `/repertoire:maestro` | Conducts subagent-driven execution of an implementation plan: groups related tasks, builds each group with a fresh implementer, then gates the whole branch behind an adversarial review panel (3 diverse-lens Opus skeptics + a cross-model Codex reviewer) and an evidence-based quality-control merge gate — while the conductor keeps its own context lean. Conducts a stacked-chain plan set one plan per run, dependent plans landing as layers of a GitHub stacked pull request — linked on push, merged only ever by the user. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
-| **Coda** | `/repertoire:coda` | Works an open PR's review feedback to a close: a clerk harvests every review, inline thread, conversation comment, and failing CI check; one read-only verifier tests each item against codebase reality (fix, push back, or ask — evidence decides); sequential fixers repair what survives; big or risky fixes face a 3-lens Opus panel, and every run is sealed by a staged final verdict — an evidence-based QC that reads each fix in full, then one cross-model Codex pass over the whole PR once QC clears; one approval gate covers pushing and posting the drafted thread replies. Never merges, never resolves threads. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
-| **Encore** | `/repertoire:encore` | Revisits a finished codebase, feature, or module and enhances what already works: a scout profiles the target and proposes a lens roster (performance, security, robustness, DX, …), parallel diverse-lens Opus hunters call out opportunities, and one read-only verifier tests every call against codebase reality — refuted calls die on the record, feature-sized ones route to Libretto or Score, never built here. Only what the user picks at the set-list gate gets implemented, on a fresh `encore/` branch by sequential fixers; big or risky changes face a 3-lens Opus panel, and every run is sealed by the staged final verdict — evidence-based QC, then one cross-model Codex pass. Pushes and offers a PR behind one approval gate, never merges. Auto-invokes on matching requests. |
-| **Presto** | `/repertoire:presto` | The fast lane beside the production line: one scoped change, built in a sitting, with no spec or plan in front of it. 1-2 read-only Opus scouts map the landing zone and weigh approaches, and the user picks at a single AskUserQuestion gate — nothing is written before it clears. Then the size gate decides the seat: the controller implements a small change itself rather than paying for a handoff, one implementer subagent takes anything bigger. One Opus reviewer always follows — most of all when the controller was the author — then a single fix pass (the controller repairs what it wrote or what is trivial, a fixer subagent takes the rest), then a short build-and-test QC gate. Three agents on the floor, six on the nominal path; a run that wants to grow by design — a third scout, a second review round, a panel — has outgrown the fast lane, and there are two doors out: oversized work leaves at the approval gate for Libretto or Score, and a change that fails QC twice is handed to Maestro. One of the three skills with no cross-model Codex seat (with Legato, which shares the reason, and Jam, which has its own) — here because that pass is worth its wall-clock on a whole branch, not on one change. Auto-invokes on matching requests; when not named explicitly, it confirms the brief and branch before recon runs. |
-| **Jam** | `/repertoire:jam` | The autonomous session: the user hands over the keys, and Jam finds its own worklist and ships it. Three read-only Opus scouts study the repo in parallel from its end users' perspective — new non-breaking features, quick fixes users are silently paying for, and UI/UX polish — then an Opus selector distills their candidates into a 3-5 job docket sized to one session, announced to the user rather than gated on approval. Fresh implementers build each job sequentially with per-job Opus review at the conductor's discretion (required for anything behavior-touching, skippable only for docs and cosmetics), and a job that blocks twice is dropped rather than fought. The finale is never thinned: two whole-branch reviewers in parallel — one pinned to Opus, one on the session model, the cross-tier pairing that replaces the Codex seat this unattended run deliberately lacks — then an evidence-based QC gate that builds, tests, and can amputate an unshippable job by clean revert. Two QC strikes escalate to the user; pushes only on request, never merges. The road not taken persists: a shipped run writes the selector's scored rejects and any dropped jobs to `docs/repertoire/jam-backlog.md` in the target project — sorted by lens with priority scores, capped and superseded in place — and the next session's scouts re-verify those entries back into the candidate pool. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
-| **Legato** | `/repertoire:legato` | The motion lane: animation polish for a UI surface the user names, at medium-to-small scope. One read-only Opus scout audits the named pages or widgets against a bundled motion-craft bar — Emil Kowalski's animation standards, copied under his MIT license into `references/` — and returns an inventory plus proposals with exact values, never approximations. The user locks direction at a single AskUserQuestion gate: a concrete goal is evaluated against the standards and grilled, an undecided user gets at most three coherent directions with a recommendation. One implementer subagent builds the approved motion spec, one fresh Opus reviewer holds the diff to the ten non-negotiable standards (Before/After/Why findings), and a build-and-test QC gate seals the branch — with an optional live look through a browser when the app is already running. Ends by writing the decisions into the target project's `docs/repertoire/animation.md` — standing guidance future runs honor, superseded in place, never a changelog. One of the three skills with no cross-model Codex seat (Presto shares the reason). An app-wide motion overhaul is out of scope — that goes to Libretto, Score, and Maestro. Auto-invokes on matching requests; when not named explicitly, it confirms the brief and branch before the scout runs. |
-| **Tuner** | `/repertoire:tuner` | Hunts a bug to its root cause with two rival investigators — a Codex agent at xhigh reasoning effort dispatched the moment the bug brief exists, and a systematic Opus investigator (also at xhigh effort) primed by a triage scout's ranked fault surfaces — then cross-examines the two hypotheses as the confidence gate. The repair is test-first: a fixer commits a deliberately-red repro test before the minimal fix, a skeptical reviewer gates the fix, and a mechanical verifier proves red→green plus a green suite. Commits on a feature branch, never merges. Auto-invokes on matching requests; when not named explicitly, it confirms scope and cost before dispatching. |
+| **Eureka** | `/repertoire:eureka` | Discovers and evaluates ideas before implementation. Establishes a search domain and focus area, then explores candidates through guided dialogue, idea boards, and multi-perspective ideation subagents. Finalists pass through a sequential validation funnel (identity alignment, compliance, demand, feasibility) where candidate elimination requires user confirmation. Produces a ranked, vetted shortlist for Libretto without generating specs or code. Auto-invokes on matching requests. |
+| **Libretto** | `/repertoire:libretto` | Transforms a concept into a production-ready specification through a guided design dialogue, hardened by an adversarial subagent review panel (2–3 diverse-perspective Opus reviewers + a cross-model Codex reviewer) before a final user-approval gate. Delegates context gathering and review to subagents while keeping orchestrator context lean. Concludes with an approved specification ready for Score or Maestro. Auto-invokes on matching requests. |
+| **Score** | `/repertoire:score` | Converts an approved specification into a decision-complete implementation plan with exact file paths, interfaces, and test expectations, validated by an adversarial review panel before a user-approval gate. For larger initiatives, Score scales to a multi-plan set: an orchestrator-authored `00-overview.md` defining cross-plan contracts, alongside individual plan files authored by parallel subagents. The overview declares the execution shape (`parallel` branches, or a `stacked chain` linked via GitHub stacked pull requests). Concludes with an approved plan ready for Maestro. Auto-invokes on matching requests. |
+| **Maestro** | `/repertoire:maestro` | Orchestrates plan execution using specialized subagents: groups related tasks, executes each group with a fresh implementer, and validates the branch with an adversarial review panel (3 diverse-perspective Opus reviewers + a cross-model Codex reviewer) and an evidence-based QC merge gate. For `stacked chain` plan sets, Maestro executes one plan per run and links dependent branches into GitHub stacked pull requests (`gh stack link`), with merges strictly managed by the user. Auto-invokes on matching requests, confirming scope and cost before starting. |
+| **Coda** | `/repertoire:coda` | Resolves pull request review feedback and CI failures to completion. Gathers all reviews, inline threads, discussion comments, and failing checks; verifies each item against the codebase with a read-only analyzer (to fix, push back, or clarify); and applies fixes sequentially. High-risk fixes face a 3-perspective Opus panel, followed by build/test QC and a cross-model Codex review. Pushing changes and posting reply comments are confirmed in a single user approval gate. Never merges PRs or resolves threads autonomously. Auto-invokes on matching requests, confirming scope and cost before starting. |
+| **Encore** | `/repertoire:encore` | Audits a completed codebase, feature, or module to uncover enhancement opportunities across performance, security, robustness, and developer experience. Specialized Opus subagents identify improvements, which are verified against codebase reality by a read-only analyzer. Only user-selected items from an interactive selection gate are implemented on a dedicated `encore/` branch, sealed by build/test QC and cross-model Codex verification. Submits a pull request upon user approval; never merges directly. Auto-invokes on matching requests. |
+| **Presto** | `/repertoire:presto` | A streamlined workflow for small, well-scoped changes completed in a single session without requiring upfront specifications or multi-stage plans. Opus scouts inspect the target code and propose implementation options for user approval before changes begin. Small tasks (≤150 lines, ≤3 files) are implemented directly by the controller to minimize latency, while larger tasks are delegated to an implementer subagent. Concludes with an independent Opus review, a repair pass, and build/test QC. If scope expands or QC fails repeatedly, tasks smoothly escalate to Libretto, Score, or Maestro. Operates without cross-model Codex review to optimize speed for localized edits. Auto-invokes on matching requests, confirming the brief and branch before scouting. |
+| **Jam** | `/repertoire:jam` | An autonomous, unattended development session that independently discovers, implements, and verifies repository improvements. Three parallel Opus scouts analyze the repository from an end-user perspective (non-breaking features, bug fixes, UI/UX polish); an Opus selector curates a balanced 3–5 task docket for the session. Subagents build and review tasks sequentially, cleanly reverting unviable changes rather than stalling. Concludes with parallel whole-branch reviews (pairing an Opus reviewer with the session model) and build/test QC verification. Unselected candidates and deferred tasks are recorded in `docs/repertoire/jam-backlog.md` for subsequent runs. Pushes only upon request; never merges directly. Auto-invokes on matching requests, confirming scope and cost before starting. |
+| **Legato** | `/repertoire:legato` | A dedicated motion design skill for UI animation polish on user-specified surfaces. An Opus scout audits target components against Emil Kowalski's motion standards (bundled under MIT license in `references/`), proposing precise timing and easing values. The user confirms direction at an interactive checkpoint, followed by subagent implementation, an Opus review against core animation principles, and build/test QC verification (with optional browser inspection for running apps). Saves durable motion guidance to `docs/repertoire/animation.md` for future sessions. Application-wide redesigns route to Libretto, Score, or Maestro. Auto-invokes on matching requests, confirming the brief and branch before scouting. |
+| **Tuner** | `/repertoire:tuner` | Investigates bugs to their root cause using dual investigators — a Codex agent and an Opus investigator guided by triage fault analysis — cross-evaluating their hypotheses before applying fixes. Follows a test-driven repair process: commits a failing reproduction test before implementing minimal fixes, followed by independent review and red-to-green verification. Commits to a feature branch; never merges directly. Auto-invokes on matching requests, confirming scope and cost before starting. |
 
 ## Local development
 
@@ -117,7 +107,7 @@ Repertoire/                       repo root = plugin root = marketplace root
    Bundle any supporting prompt/reference files alongside it, plus trigger
    evals at `skills/<name>/evals/evals.json`.
 2. Add a row to the **Skills** table above.
-3. `claude plugin validate .` then commit. New skills are discovered
+3. Run `claude plugin validate .` then commit. New skills are discovered
    automatically — the whole repo is one plugin, so the catalog never needs a
    new entry.
 
