@@ -124,7 +124,7 @@ expectation. Report ONLY:
 - PROPOSED MINIMAL FIX: described, not applied
 - CONFIDENCE: HIGH | MEDIUM | LOW + what would change your mind
 PROMPT
-codex exec --cd "[repo dir]" -s read-only --ephemeral \
+codex exec --cd "[repo dir]" -s read-only \
   -c model_reasoning_effort="xhigh" -o "$S/codex-report.txt" \
   "$(cat "$S/codex-investigation.txt")" < /dev/null > "$S/codex-run.log" 2>&1
 echo "exit=$?"; cat "$S/codex-report.txt"

@@ -30,7 +30,7 @@ gates, those seats stand in for the user's judgment.
 
 `shared/codex-reviewer-core.md` ("Fallback: bare `codex exec`") is the one
 shape every bare-CLI Codex call takes, reviewer or investigator: prompt
-written to a scratchpad file, `-o` verdict file, `-s read-only --ephemeral`,
+written to a scratchpad file, `-o` verdict file, `-s read-only` (never `--ephemeral`),
 **`< /dev/null` on the call**, run under the Bash tool's ~10-minute
 `timeout`, foreground inside a background subagent — never in the
 conductor's own Bash call, because a hung `codex exec` blocks whoever ran it

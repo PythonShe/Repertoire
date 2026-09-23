@@ -92,7 +92,7 @@ S="[scratchpad dir]"
 cat > "$S/codex-prompt.txt" <<'PROMPT'
 [the stub's fallback review prompt]
 PROMPT
-codex exec --cd "[repo dir]" -s read-only --ephemeral -o "$S/codex-out.txt" \
+codex exec --cd "[repo dir]" -s read-only -o "$S/codex-out.txt" \
   "$(cat "$S/codex-prompt.txt")" < /dev/null > "$S/codex-run.log" 2>&1
 echo "exit=$?"; cat "$S/codex-out.txt"
 ```
@@ -125,8 +125,10 @@ echo "exit=$?"; cat "$S/codex-out.txt"
   the redirect was lost. Record Codex as absent with that line quoted in
   the report so the conductor can see why. A non-zero exit or an empty
   output file is a failed reviewer, never a pass.
-- `-s read-only` keeps the reviewer from editing the tree; `--ephemeral`
-  skips writing a session file. Replace every placeholder — `${BASE}`, file
+- `-s read-only` keeps the reviewer from editing the tree. Never add
+  `--ephemeral`: it skips writing the session rollout under
+  `~/.codex/sessions`, so the run's token usage goes untracked by local
+  usage tools. Replace every placeholder — `${BASE}`, file
   paths, paste blocks, the repo dir, the scratchpad dir — before sending: the
   single-quoted heredoc does not expand variables.
 - Verify flags with `codex exec --help` — they vary by version.
