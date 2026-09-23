@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.5.2 — 2026-09-23
+- Fixed the Codex fallback CLI (`codex exec`) running with `--ephemeral`, which skipped the session file and left those runs' token usage untracked by local usage tools.
+
 ## v2.5.1 — 2026-09-04
 - Fixed an issue where the Codex fallback CLI (`codex exec`) could hang indefinitely when stdin is left open ([openai/codex#20919](https://github.com/openai/codex/issues/20919)).
 
