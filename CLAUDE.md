@@ -1,65 +1,51 @@
-# CLAUDE.md
+# Repertoire
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+A single Claude Code plugin of self-authored skills, shipped through its own one-entry marketplace. The repo root is the marketplace root, the plugin root and the source tree: `.claude-plugin/marketplace.json` lists one plugin with `source: "./"`, and `.claude-plugin/plugin.json` is its manifest. No build step: skills are Markdown and installing ships the repo as-is.
 
-## What this is
+## Plugin topology
 
-Repertoire is a single Claude Code **plugin** that bundles self-authored skills and ships through its own one-entry **marketplace**. The repo root is simultaneously the marketplace root, the plugin root, and the source tree: `.claude-plugin/marketplace.json` lists exactly one plugin whose `source` is `"./"`, and `.claude-plugin/plugin.json` is that plugin's manifest. There is no build step and no compiled artifact — skills are Markdown, and installing the plugin ships the repo as-is.
-
-One topology fact drives everything else: **adding a skill never touches the marketplace.** A new `skills/<name>/SKILL.md` is discovered automatically because the entire repo is one plugin. What *does* live in `marketplace.json` is the plugin's **catalog entry** — the display surface the `/plugin` browse/manage list reads (description, version, author, homepage, category, tags), mirrored from `plugin.json`.
-
-The lever that makes existing installs update is the plugin `version`, and it lives in **two** places that must be bumped together: `version` in `.claude-plugin/plugin.json` drives resolution and caching (it wins silently), while `version` in the `marketplace.json` entry drives the number the `/plugin` UI shows. Keep them identical — if they drift, the UI shows one version while installs resolve another. Bumping either reaches users only after they run `/plugin marketplace update`.
+- Adding a skill never touches the marketplace: `skills/<name>/SKILL.md` is discovered automatically. `marketplace.json` holds only the catalog entry the `/plugin` UI reads (description, version, author, homepage, category, tags), mirrored from `plugin.json`.
+- `version` lives in both `plugin.json` (drives resolution and caching, wins silently) and the `marketplace.json` entry (what the UI shows). Bump both to the same value; the same goes for the user-facing `description`. Users get it after `/plugin marketplace update`.
+- Installed skills are namespaced: `/repertoire:maestro`.
 
 ## Commands
 
-No test/lint/build toolchain exists. Validation and iteration happen through the Claude CLI:
+No test, lint or build toolchain.
 
 ```bash
-claude plugin validate .     # validate the marketplace manifest ONLY — it does not parse skill frontmatter
-ruby -ryaml -e 'Dir.glob("skills/*/SKILL.md").each { |f| YAML.safe_load(File.read(f).split("---")[1]) }' && echo OK   # frontmatter YAML check (strict parsers reject bare ': ' in scalars)
-claude --plugin-dir .        # run Claude with this repo loaded as a local plugin (no install)
-/reload-plugins              # in-session, after editing a skill — picks up changes without a restart
+claude plugin validate .     # marketplace manifest only; does not parse skill frontmatter
+ruby -ryaml -e 'Dir.glob("skills/*/SKILL.md").each { |f| YAML.safe_load(File.read(f).split("---")[1]) }' && echo OK   # frontmatter YAML (strict parsers reject bare ': ' in scalars)
+claude --plugin-dir .        # run with this repo as a local plugin
+/reload-plugins              # in-session, after editing a skill
 ```
 
-Once installed, skills are namespaced by plugin name: invoke Maestro as `/repertoire:maestro`.
+## Skill anatomy
 
-## Anatomy of a skill
+- `skills/<name>/SKILL.md` with frontmatter `name`, `description`, `when_to_use`; bundled prompt and reference files beside it; trigger evals committed at `skills/<name>/evals/evals.json`.
+- `description` + `when_to_use` is the routing surface: every skill auto-invokes. `description` says what the skill does to what object; `when_to_use` carries positive triggers plus one adjacency clause per confusable neighbor, never negative trigger lists. Keep the pair under ~1,200 characters (the listing truncates at 1,536 silently). Doctrine and eval loop: `docs/authoring/skill-descriptions.md`.
+- Behavior and routing surface are one contract: when a skill's behavior changes, update its routing surface in the same edit and re-run its trigger evals.
+- Skills that dispatch subagents before any user gate (Maestro, Coda, Tuner, Presto, Jam, Legato) carry a cost gate: confirm scope via AskUserQuestion when not invoked by name.
+- Bundled `*-prompt.md` files are pasted into freshly dispatched subagents at runtime, not loaded into the controller's context. A phase described in `SKILL.md` is realized by its prompt file; keep the two consistent.
+- Judgment, adaptation or follow-up questions belong in a skill; deterministic checks or lookups belong in a bundled script or reference file.
 
-A skill is a directory `skills/<name>/` containing `SKILL.md` (YAML frontmatter: `name`, `description`, `when_to_use`) plus any bundled prompt or reference files beside it, and committed trigger evals at `skills/<name>/evals/evals.json`.
+## Design doctrine
 
-The `description` + `when_to_use` pair is the **routing surface** — since v2.0.0 every skill auto-invokes, and Claude reads this pair to route requests. `description` states what the skill does and to what object; `when_to_use` carries positive triggers plus one adjacency clause per confusable neighbor — never negative trigger lists, which embed the very phrases they guard against. Keep the combined pair under ~1,200 characters: the skill listing truncates at 1,536, silently. Skills whose pipelines dispatch subagents before any user gate (Maestro, Coda, Tuner, Presto, Jam, Legato) carry an in-skill **cost gate** — confirm scope via AskUserQuestion when the skill wasn't invoked by name. The full doctrine and the eval loop live in `docs/authoring/skill-descriptions.md`. When you change what a skill does, update its routing surface in the same edit and re-run the trigger evals — the routing surface and the behavior are one contract.
+- **The conductor never plays** (Maestro is the template). The controller dispatches subagents and never reads source or diffs itself; only compact reports return. Reading the plan and read-only git metadata is bookkeeping and allowed.
+- **Presto is the scoped exception** ([ADR 0005](docs/adr/0005-the-controller-plays-in-presto.md)): its controller implements directly inside a size gate (<=~3 files, <=~150 lines, one module, no new subsystem, dependency, schema or public interface). Two guards must survive any edit: the reviewer is always a fresh subagent, and outgrowing the gate mid-build is a stop-and-hand-off.
+- **Jam runs unattended** ([ADR 0006](docs/adr/0006-jam-runs-unattended.md)): scouts and an Opus selector stand in for the user; the docket is announced, not approved.
+- Model-policy variances (which seats pin Opus, which skills have no Codex seat) and the required shape of every bare `codex exec` fallback live in `shared/invariants.md`; each SKILL.md carries a marked copy that must not drift from it.
+- Maestro plan sets may declare a `stacked chain` execution shape that lands as GitHub stacked PRs ([ADR 0008](docs/adr/0008-stacked-chains-land-as-stacked-prs.md)).
+- `skills/legato/references/` holds MIT-licensed copies from Emil Kowalski's skills repo ([ADR 0007](docs/adr/0007-legato-borrows-its-taste-and-keeps-a-record.md)). Keep `references/LICENSE`; never edit the copies except to re-sync upstream.
+- Jam and Legato write standing records into the target project (`docs/repertoire/jam-backlog.md`, `docs/repertoire/animation.md`), superseded in place, never a changelog.
 
-Bundled `*-prompt.md` files are not loaded into the active context wholesale. The skill body names them, and they are pasted into freshly dispatched subagents at runtime — keeping the controlling context lean while each subagent gets a complete, purpose-built brief.
+## Adding a skill
 
-## Maestro: the subagent-driven pattern
+1. Create `skills/<name>/` as above. Keep the name consistent across `plugin.json` keywords, `SKILL.md` frontmatter, the README tables and the invocation path.
+2. Add a row to the Skills table in `README.md` and in `README.ja.md`, `README.zh-CN.md`, `README.zh-TW.md`.
+3. `claude plugin validate .`, re-run trigger evals if the routing surface changed, commit.
+4. To release, bump `version` in both manifests and record the release in `CHANGELOG.md` with a short paragraph on why.
 
-Maestro (`skills/maestro/`) is the one substantive skill and the template for future ones. Understanding it requires reading `SKILL.md` together with its five role prompts — they form one system:
+## Conventions
 
-- **The conductor never plays.** The skill controller dispatches subagents and never reads source files or diffs itself; only compact reports and verdicts return to it, so its context survives a long plan. Reading the *plan* and running read-only git metadata (`merge-base`, `rev-parse`, `log`, `status`) is "bookkeeping" and allowed; reading *code* is "playing" and is delegated.
-- **Three-phase pipeline.** Phase 1 builds each task group with a fresh implementer, one broad review, and a fix when the review found something. Phase 2 runs a whole-branch adversarial panel — 3 diverse-lens Opus skeptics plus 1 cross-model Codex reviewer. Phase 3 is an evidence-based QC merge gate that **pushes but never merges**, escalating via `AskUserQuestion` after 3 `NOT_MERGEABLE` rounds. Since v2.5.0 a Score plan set declares an **execution shape** in its `00-overview.md`: `parallel` (unchanged default) or `stacked chain`, where each Maestro run conducts one plan and dependent plans land as layers of a GitHub stacked pull request — branched off the parent plan's branch, linked on push via `gh stack link`, `gh stack merge` forbidden, plain-push fallback while the feature is in public preview ([ADR 0008](docs/adr/0008-stacked-chains-land-as-stacked-prs.md)).
-- **One prompt per role.** `implementer-prompt.md`, `reviewer-prompt.md` (parameterized by lens — broad for Phase 1, one lens each for the panel), `codex-reviewer-prompt.md`, `fixer-prompt.md`, and `qc-prompt.md` are the subagent contexts. A phase described in `SKILL.md` is realized by its prompt file, so the two must stay consistent when you change behavior.
-
-**Presto is the counterpattern, and the exception is scoped on purpose.** Since v2.2.0 `skills/presto/` runs a fast lane for one scoped change, and its controller *does* play — implementing directly inside a four-term size gate (≤~3 files, ≤~150 lines, one module, no new subsystem/dependency/schema/public interface), because dispatching a subagent to rebuild context the controller already holds is pure latency at that size. Two things keep it honest and must survive any future compression: the reviewer is always a fresh subagent — most of all when the controller was the author — and outgrowing the gate mid-build is a stop-and-hand-off, not a licence to continue. The reasoning is in [ADR 0005](docs/adr/0005-the-controller-plays-in-presto.md).
-
-**Jam is the autonomous lane.** Since v2.3.0 `skills/jam/` runs a fully unattended improvement session: the conductor never plays (Maestro's doctrine, not Presto's carve-out), but no user gates the work either — three lens scouts (features, quick fixes, UI/UX polish) and an Opus selector stand in for the user's judgment, composing a 3-5 job docket that is *announced, not approved*. The run stops only for the auto-invoke cost gate, Phase-0 blockers, and QC's two-strike escalation. Since v2.4.1 a shipped run also ends by writing `docs/repertoire/jam-backlog.md` into the *target* project — the selector's scored rejects plus dropped/amputated jobs, sorted by lens with priority scores, capped at twelve and superseded in place (Legato's standing-record pattern) — and the next session's scouts re-verify their lens's entries against current code before those re-enter the candidate pool. Presto, Jam, and Legato are the only skills without a cross-model Codex seat — Presto and Legato because the pass earns its wall-clock over a whole branch rather than one scoped change, Jam because an unattended run cannot babysit a cross-model call that hangs; Jam's finale instead pairs a pinned-Opus reviewer with a session-model reviewer (cross-tier, not cross-model — [ADR 0006](docs/adr/0006-jam-runs-unattended.md)). All sanctioned model-policy variances are recorded in `shared/invariants.md`, as is the one shape every bare `codex exec` fallback must take (`< /dev/null`, prompt and verdict files, a timeout) — the CLI drains a non-TTY stdin to EOF and hangs on a writer-less pipe (openai/codex #20919), which is the hang that cost Jam its Codex seat.
-
-**Legato is the motion lane.** Since v2.4.0 `skills/legato/` runs a medium-to-small animation polish session over a user-named surface: one pinned-Opus scout audits the named pages or widgets against a bundled motion-craft bar, the user locks direction at one AskUserQuestion gate (their goal grilled, or at most three proposed directions), then one unpinned implementer, one pinned-Opus reviewer, and a QC gate close the run — conductor never plays, no Codex seat (Presto's rationale). Two things are unique to it: `skills/legato/references/` carries files copied from Emil Kowalski's MIT-licensed [skills repo](https://github.com/emilkowalski/skills) (license and provenance in `references/LICENSE` — keep that file when touching the copies, and never edit the copies except to re-sync upstream), and Phase 7 writes standing guidance into the *target* project at `docs/repertoire/animation.md` — decisions superseded in place, never a changelog ([ADR 0007](docs/adr/0007-legato-borrows-its-taste-and-keeps-a-record.md)).
-
-## Authoring conventions
-
-To add a skill (keep this in sync with the README's process section):
-
-1. Create `skills/<name>/SKILL.md` with `name` + `description` + `when_to_use` frontmatter (doctrine: `docs/authoring/skill-descriptions.md`); bundle any prompt/reference files alongside it, plus trigger evals at `skills/<name>/evals/evals.json`. A skill that dispatches subagents before any user gate needs a cost gate.
-2. Add a row to the **Skills** table in `README.md`.
-3. `claude plugin validate .`, re-run the trigger evals if the routing surface changed, then commit.
-4. Bump `version` in **both** `.claude-plugin/plugin.json` and the `marketplace.json` plugin entry — same value — when you want existing installs to pick it up. If you changed the plugin's user-facing `description`, edit it in both places too: the `marketplace.json` entry is what the `/plugin` UI displays. Record the release in `CHANGELOG.md` — a short paragraph on *why*, not just what.
-
-Keep the skill name consistent across `plugin.json` keywords, `SKILL.md` frontmatter, the README table, and the invocation path.
-
-**Commit convention.** Use `{type}: {description}`, where `type` is one of `feat`, `fix`, `refactor`, `docs`, or `chore`. Keep the subject imperative and scoped to one concern; split unrelated changes (a new skill vs. docs vs. a `version` bump) into separate commits.
-
-When deciding where new behavior belongs, choose the layer deliberately: work that needs judgment, adaptation, or follow-up questions is a **skill**; deterministic, same-input-same-output checks or lookups belong in a bundled script or reference file, not a new skill.
-
-## Local-only workspaces
-
-`*-workspace/` directories sit beside a skill and are gitignored — never commit them. They hold skill-creator eval/optimizer *scratch*: run logs and optimizer output. The trigger-eval *cases* themselves are not scratch — since v2.0.0 they are committed at `skills/<name>/evals/evals.json` and encode each skill's auto-invoke routing contract (in-territory requests fire, even generic ones; neighbors' requests and homonyms stay silent). Treat workspaces as disposable, evals as source.
+- Commit subjects have no scope: `type: description`, type one of `feat`, `fix`, `refactor`, `docs`, `chore`. A new skill, docs and a version bump are separate commits.
+- `*-workspace/` directories beside skills are gitignored skill-creator scratch; never commit them. Trigger evals under `skills/<name>/evals/` are source.
